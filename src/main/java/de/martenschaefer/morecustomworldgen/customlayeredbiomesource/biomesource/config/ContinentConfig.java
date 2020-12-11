@@ -7,7 +7,7 @@ public class ContinentConfig {
     public static final Codec<ContinentConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.INT.fieldOf("continent_chance").forGetter(ContinentConfig::getContinentChance),
-            Codec.INT.fieldOf("island_chance").forGetter(ContinentConfig::getContinentChance)
+            Codec.INT.fieldOf("island_chance").forGetter(ContinentConfig::getIslandChance)
         ).apply(instance, instance.stable(ContinentConfig::new))
     );
     
