@@ -42,7 +42,7 @@ public class RiverConfig {
 
     public List<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
         List<Supplier<Biome>> riverBiomes = this.getOverrides().stream()
-            .map(RiverConfig.Override::getRiver)
+            .map(Override::getRiver)
             .<Supplier<Biome>>map(riverBiome -> () -> biomeRegistry.get(riverBiome))
             .collect(Collectors.toList());
 
