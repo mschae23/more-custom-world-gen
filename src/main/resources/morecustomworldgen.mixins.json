@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.martenschaefer.morecustomworldgen.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "layeredbiomesource.GeneratorOptionsMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "morecustomworldgen",
+  "version": "${version}",
+
+  "name": "More Custom World Generation",
+  "description": "Test",
+  "authors": [
+    "mschae23"
+  ],
+  "contact": {
+  },
+
+  "license": "MIT License",
+  "icon": "assets/morecustomworldgen/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.martenschaefer.morecustomworldgen.MoreCustomWorldGenMod"
+    ],
+    "client": [
+      "de.martenschaefer.morecustomworldgen.MoreCustomWorldGenModClient"
+    ]
+  },
+  "mixins": [
+    "morecustomworldgen.mixins.json"
+  ],
+  "accessWidener": "morecustomworldgen.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+  }
+}
