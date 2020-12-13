@@ -60,7 +60,6 @@ public class SetBaseBiomesLayer implements ConvertingLayer<RegistryKey<Biome>, C
             case RARE_ISLAND:
                 return pick(context, this.config.getRareIslandBiomes());
 
-            case UNPROCESSED_OCEAN:
             case OCEAN:
                 return this.oceanBiomes.getOcean();
             case DEEP_OCEAN:

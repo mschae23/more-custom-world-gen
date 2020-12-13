@@ -13,7 +13,7 @@ public enum AddColdClimatesLayer implements ConvertingLayer<ClimateCategory, Con
 
     public ClimateCategory sample(LayerRandomnessSource context, ContinentCategory se) {
         if (se == ContinentCategory.OCEAN) {
-            return ClimateCategory.UNPROCESSED_OCEAN;
+            return ClimateCategory.OCEAN;
         } else {
             int i = context.nextInt(6);
             if (i == 0) {

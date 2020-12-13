@@ -7,7 +7,6 @@ import net.minecraft.util.StringIdentifiable;
 import com.mojang.serialization.Codec;
 
 public enum ClimateCategory implements StringIdentifiable {
-    UNPROCESSED_OCEAN("unprocessed_ocean"),
     OCEAN("ocean"),
     DEEP_OCEAN("deep_ocean"),
     DRY("dry"),
@@ -43,10 +42,10 @@ public enum ClimateCategory implements StringIdentifiable {
     }
 
     public static boolean isOcean(ClimateCategory category) {
-        return category == UNPROCESSED_OCEAN || category == OCEAN || category == DEEP_OCEAN;
+        return category == OCEAN || category == DEEP_OCEAN;
     }
 
     public static boolean isShallowOcean(ClimateCategory category) {
-        return category == UNPROCESSED_OCEAN || category == OCEAN;
+        return category == OCEAN;
     }
 }
