@@ -13,19 +13,26 @@ import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 public class RiverConfig {
     public static final Codec<RiverConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
+            Codec.BOOL.fieldOf("generate_rivers").orElse(true).forGetter(RiverConfig::shouldGenerateRivers),
             Override.CODEC.listOf().fieldOf("overrides").forGetter(RiverConfig::getOverrides),
             RegistryKeys.BIOME_CODEC.fieldOf("river").forGetter(RiverConfig::getRiver),
             Codec.INT.fieldOf("river_size").forGetter(RiverConfig::getRiverSize)
         ).apply(instance, instance.stable(RiverConfig::new)));
-    
+
+    private final boolean generateRivers;
     private final List<Override> overrides;
     private final RegistryKey<Biome> river;
     private final int riverSize;
 
-    public RiverConfig(List<Override> overrides, RegistryKey<Biome> river, int riverSize) {
+    public RiverConfig(boolean generateRivers, List<Override> overrides, RegistryKey<Biome> river, int riverSize) {
+        this.generateRivers = generateRivers;
         this.overrides = overrides;
         this.river = river;
         this.riverSize = riverSize;
+    }
+
+    public boolean shouldGenerateRivers() {
+        return this.generateRivers;
     }
 
     public List<Override> getOverrides() {

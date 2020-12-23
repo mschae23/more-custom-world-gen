@@ -14,6 +14,26 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenMod;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BaseBiomesConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeCategory;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeLayoutConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeWeightEntry;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ClimateConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ContinentConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.CustomLayeredBiomeSourceConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.EdgeBiomesConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig.ComplexHillBiomeEntry;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig.HillBiomeEntry;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig.SpecialHillBiomeEntry;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.InnerBiomeConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.OceanBiomesConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.RiverConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ShoreBiomesConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.BiomeLayerSampler;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla.VanillaLayers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
@@ -23,25 +43,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenMod;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BaseBiomesConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeCategory;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeLayoutConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeWeightEntry;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ContinentConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.EdgeBiomesConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig.ComplexHillBiomeEntry;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig.HillBiomeEntry;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig.SpecialHillBiomeEntry;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.InnerBiomeConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.CustomLayeredBiomeSourceConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.OceanBiomesConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.RiverConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ShoreBiomesConfig;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.BiomeLayerSampler;
-import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla.VanillaLayers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +51,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
         instance.group(
             Codec.LONG.fieldOf("seed").stable().forGetter(biomeSource -> biomeSource.seed),
             CustomLayeredBiomeSourceConfig.CODEC.fieldOf("config").forGetter(biomeSource -> biomeSource.config),
-            RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(biomeSource -> biomeSource.biomeRegistry)
+            RegistryLookupCodec.of(Registry.BIOME_KEY).stable().forGetter(biomeSource -> biomeSource.biomeRegistry)
         ).apply(instance, CustomLayeredBiomeSource::new));
 
     public static final Codec<CustomLayeredBiomeSource> CODEC = Codec.mapEither(Instance.CODEC, CUSTOM_CODEC).xmap(
@@ -78,10 +79,11 @@ public class CustomLayeredBiomeSource extends BiomeSource {
         BiomeLayerSampler<ClimateCategory> climateLayer = VanillaLayers.buildClimateLayer(seed,
             VanillaLayers.buildContinentLayer(
                 seed,
-                this.config.getContinents()
-            )
+                this.config.getContinentConfig()
+            ),
+            this.config.getClimateConfig()
         );
-        
+
         BiomeLayerSampler<Integer> noiseLayer = VanillaLayers.buildNoiseLayer(seed,
             climateLayer);
 
@@ -92,7 +94,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                     noiseLayer
                 ),
                 this.config.getBiomeCategories(),
-                this.config.getOceanBiomes(), 
+                this.config.getOceanBiomes(),
                 this.config.getBiomeLayout(),
                 this.config.getOceanCategory()
             ),
@@ -217,7 +219,12 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                         new BiomeCategory(BiomeKeys.TAIGA_HILLS, "taiga"),
                         new BiomeCategory(BiomeKeys.TAIGA_MOUNTAINS, "taiga")
                     ),
-                    new ContinentConfig(10, 2),
+                    new ContinentConfig(10, true, 2),
+                    new ClimateConfig(
+                        1, 1, 4,
+                        2,
+                        100
+                    ),
                     new BiomeLayoutConfig(
                         new BaseBiomesConfig(
                             ImmutableList.of( // Dry biomes
@@ -344,7 +351,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                                 new HillBiomeEntry(BiomeKeys.BIRCH_FOREST, BiomeKeys.BIRCH_FOREST_HILLS),
                                 new HillBiomeEntry(BiomeKeys.DARK_FOREST, BiomeKeys.PLAINS),
                                 new HillBiomeEntry(BiomeKeys.TAIGA, BiomeKeys.TAIGA_HILLS),
-                                new HillBiomeEntry(BiomeKeys.GIANT_TREE_TAIGA, BiomeKeys.GIANT_SPRUCE_TAIGA_HILLS),
+                                new HillBiomeEntry(BiomeKeys.GIANT_TREE_TAIGA, BiomeKeys.GIANT_TREE_TAIGA_HILLS),
                                 new HillBiomeEntry(BiomeKeys.SNOWY_TAIGA, BiomeKeys.SNOWY_TAIGA_HILLS),
                                 new HillBiomeEntry(BiomeKeys.SNOWY_TUNDRA, BiomeKeys.SNOWY_MOUNTAINS),
                                 new HillBiomeEntry(BiomeKeys.JUNGLE, BiomeKeys.JUNGLE_HILLS),
@@ -546,6 +553,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                     ),
                     "ocean",
                     new RiverConfig(
+                        true,
                         ImmutableList.of(
                             new RiverConfig.Override(
                                 ImmutableList.of(
@@ -565,6 +573,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                         4
                     ),
                     new OceanBiomesConfig( // Ocean biomes
+                        true,
                         BiomeKeys.OCEAN,
                         BiomeKeys.WARM_OCEAN,
                         BiomeKeys.LUKEWARM_OCEAN,
@@ -599,7 +608,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                     Optional.ofNullable(Preset.BY_IDENTIFIER.get(identifier)).map(DataResult::success).orElseGet(
                         () -> DataResult.error("Unknown preset: " + identifier)), preset ->
                     DataResult.success(preset.id)).fieldOf("preset").stable().forGetter(Instance::getPreset),
-                RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(Instance::getBiomeRegistry),
+                RegistryLookupCodec.of(Registry.BIOME_KEY).stable().forGetter(Instance::getBiomeRegistry),
                 Codec.LONG.fieldOf("seed").stable().forGetter(Instance::getSeed)
             ).apply(instance, instance.stable(Instance::new)));
         private final Preset preset;

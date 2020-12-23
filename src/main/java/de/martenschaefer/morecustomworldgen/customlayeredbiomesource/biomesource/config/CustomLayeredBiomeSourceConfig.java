@@ -12,7 +12,8 @@ public class CustomLayeredBiomeSourceConfig {
     public static final Codec<CustomLayeredBiomeSourceConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             BiomeCategory.CODEC.listOf().fieldOf("biome_categories").forGetter(CustomLayeredBiomeSourceConfig::getBiomeCategories),
-            ContinentConfig.CODEC.fieldOf("continents").forGetter(CustomLayeredBiomeSourceConfig::getContinents),
+            ContinentConfig.CODEC.fieldOf("continents").forGetter(CustomLayeredBiomeSourceConfig::getContinentConfig),
+            ClimateConfig.CODEC.fieldOf("climates").forGetter(CustomLayeredBiomeSourceConfig::getClimateConfig),
             BiomeLayoutConfig.CODEC.fieldOf("biome_layout").forGetter(CustomLayeredBiomeSourceConfig::getBiomeLayout),
             Codec.STRING.fieldOf("ocean_category").forGetter(CustomLayeredBiomeSourceConfig::getOceanCategory),
             RiverConfig.CODEC.fieldOf("rivers").forGetter(CustomLayeredBiomeSourceConfig::getRivers),
@@ -21,14 +22,16 @@ public class CustomLayeredBiomeSourceConfig {
 
     private final List<BiomeCategory> biomeCategories;
     private final ContinentConfig continents;
+    private final ClimateConfig climates;
     private final BiomeLayoutConfig biomeLayout;
     private final String oceanCategory;
     private final RiverConfig rivers;
     private final OceanBiomesConfig oceanBiomes;
 
-    public CustomLayeredBiomeSourceConfig(List<BiomeCategory> biomeCategories, ContinentConfig continents, BiomeLayoutConfig biomeLayout, String oceanCategory, RiverConfig rivers, OceanBiomesConfig oceanBiomes) {
+    public CustomLayeredBiomeSourceConfig(List<BiomeCategory> biomeCategories, ContinentConfig continents, ClimateConfig climates, BiomeLayoutConfig biomeLayout, String oceanCategory, RiverConfig rivers, OceanBiomesConfig oceanBiomes) {
         this.biomeCategories = biomeCategories;
         this.continents = continents;
+        this.climates = climates;
         this.biomeLayout = biomeLayout;
         this.oceanCategory = oceanCategory;
         this.rivers = rivers;
@@ -39,8 +42,12 @@ public class CustomLayeredBiomeSourceConfig {
         return this.biomeCategories;
     }
 
-    public ContinentConfig getContinents() {
+    public ContinentConfig getContinentConfig() {
         return this.continents;
+    }
+
+    public ClimateConfig getClimateConfig() {
+        return this.climates;
     }
 
     public BiomeLayoutConfig getBiomeLayout() {

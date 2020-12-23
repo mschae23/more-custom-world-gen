@@ -283,7 +283,16 @@ Example world settings for a vanilla overworld:
             ],
             "continents": {
               "continent_chance": 10,
+              "origin_continent": true,
               "island_chance": 2
+            },
+            "climates": {
+              "snowy_climate_weight": 1,
+              "cool_climate_weight": 1,
+              "dry_climate_weight": 4,
+
+              "climate_size": 2,
+              "rare_island_chance": 100
             },
             "biome_layout": {
               "base_biomes": {
@@ -553,7 +562,7 @@ Example world settings for a vanilla overworld:
                   },
                   {
                     "biome": "minecraft:giant_tree_taiga",
-                    "hill_biome": "minecraft:giant_spruce_taiga_hills"
+                    "hill_biome": "minecraft:giant_tree_taiga_hills"
                   },
                   {
                     "biome": "minecraft:snowy_taiga",
@@ -788,6 +797,7 @@ Example world settings for a vanilla overworld:
             },
             "ocean_category": "ocean",
             "rivers": {
+              "generate_rivers": true,
               "overrides": [
                 {
                   "biomes": [
@@ -807,6 +817,7 @@ Example world settings for a vanilla overworld:
               "river_size": 4
             },
             "ocean_biomes": {
+              "apply_ocean_temperatures": true,
               "ocean": "minecraft:ocean",
               "warm_ocean": "minecraft:warm_ocean",
               "lukewarm_ocean": "minecraft:lukewarm_ocean",
@@ -819,7 +830,7 @@ Example world settings for a vanilla overworld:
               "deep_frozen_ocean": "minecraft:deep_frozen_ocean"
             }
           },
-          "type": "layeredbiomesource:custom_layered"
+          "type": "morecustomworldgen:custom_layered"
         },
         "seed": 123456789,
         "settings": "minecraft:overworld",

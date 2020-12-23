@@ -9,6 +9,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeLayoutConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ClimateConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ContinentConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.OceanBiomesConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.RiverConfig;
@@ -27,7 +28,7 @@ public final class VanillaLayers {
         ScaleLayer<ContinentCategory> normalScaleLayer = ScaleLayer.normal();
         ScaleLayer<ContinentCategory> fuzzyScaleLayer = ScaleLayer.fuzzy();
 
-        LayerFactory<ContinentCategory, T> continents = new ContinentLayer(config.getContinentChance()).create(contextProvider.apply(1L));
+        LayerFactory<ContinentCategory, T> continents = new ContinentLayer(config.getContinentChance(), config.shouldGenerateOriginContinent()).create(contextProvider.apply(1L));
         continents = fuzzyScaleLayer.create(contextProvider.apply(2000L), continents);
         continents = IncreaseEdgeCurvatureContinentLayer.INSTANCE.create(contextProvider.apply(1L), continents);
         continents = normalScaleLayer.create(contextProvider.apply(2001L), continents);
@@ -45,17 +46,17 @@ public final class VanillaLayers {
     }
 
     // Climate layer
-    public static <T extends LayerSampler<ClimateCategory>, T2 extends LayerSampler<ContinentCategory>, C extends LayerSampleContext<ClimateCategory, ClimateCategory, ClimateCategory, T, T, T>, C2 extends LayerSampleContext<ClimateCategory, ContinentCategory, ContinentCategory, T, T2, T2>> LayerFactory<ClimateCategory, T> buildClimateLayerFactory(LayerFactory<ContinentCategory, T2> continentLayer, LongFunction<C2> convertingContextProvider, LongFunction<C> contextProvider) {
+    public static <T extends LayerSampler<ClimateCategory>, T2 extends LayerSampler<ContinentCategory>, C extends LayerSampleContext<ClimateCategory, ClimateCategory, ClimateCategory, T, T, T>, C2 extends LayerSampleContext<ClimateCategory, ContinentCategory, ContinentCategory, T, T2, T2>> LayerFactory<ClimateCategory, T> buildClimateLayerFactory(LayerFactory<ContinentCategory, T2> continentLayer, LongFunction<C2> convertingContextProvider, ClimateConfig config, LongFunction<C> contextProvider) {
         ScaleLayer<ClimateCategory> normalScaleLayer = ScaleLayer.normal();
 
-        LayerFactory<ClimateCategory, T> climates = AddColdClimatesLayer.INSTANCE.create(convertingContextProvider.apply(2L), continentLayer);
+        LayerFactory<ClimateCategory, T> climates = new AddBaseClimatesLayer(config).create(convertingContextProvider.apply(2L), continentLayer);
         climates = IncreaseEdgeCurvatureClimateLayer.INSTANCE.create(contextProvider.apply(3L), climates);
         climates = AddClimateLayers.AddTemperateBiomesLayer.INSTANCE.create(contextProvider.apply(2L), climates);
         climates = AddClimateLayers.AddCoolBiomesLayer.INSTANCE.create(contextProvider.apply(2L), climates);
         climates = AddClimateLayers.AddSpecialBiomesLayer.INSTANCE.create(contextProvider.apply(3L), climates);
-        climates = stack(2002L, normalScaleLayer, climates, 2, contextProvider);
+        climates = stack(2002L, normalScaleLayer, climates, config.getClimateSize(), contextProvider);
         climates = IncreaseEdgeCurvatureClimateLayer.INSTANCE.create(contextProvider.apply(4L), climates);
-        climates = AddRareIslandLayer.INSTANCE.create(contextProvider.apply(5L), climates);
+        climates = new AddRareIslandLayer(config.getRareIslandChance()).create(contextProvider.apply(5L), climates);
         climates = AddDeepOceanLayer.INSTANCE.create(contextProvider.apply(4L), climates);
 
         climates = stack(1000L, normalScaleLayer, climates, 0, contextProvider);
@@ -63,9 +64,9 @@ public final class VanillaLayers {
         return climates;
     }
 
-    public static BiomeLayerSampler<ClimateCategory> buildClimateLayer(long seed, BiomeLayerSampler<ContinentCategory> continentLayer) {
+    public static BiomeLayerSampler<ClimateCategory> buildClimateLayer(long seed, BiomeLayerSampler<ContinentCategory> continentLayer, ClimateConfig config) {
         return LayerHelper.<ClimateCategory, ClimateCategory, ClimateCategory>createLayerSampler(seed,
-            contextProvider -> buildClimateLayerFactory(continentLayer::getSampler, LayerHelper.createContextProvider(seed), contextProvider));
+            contextProvider -> buildClimateLayerFactory(continentLayer::getSampler, LayerHelper.createContextProvider(seed), config, contextProvider));
     }
 
     // Noise layer
@@ -124,8 +125,10 @@ public final class VanillaLayers {
 
     // Biome layer
     public static <T extends LayerSampler<RegistryKey<Biome>>, T2 extends LayerSampler<Integer>, T3 extends LayerSampler<OceanCategory>, C2 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, Integer, T, T, T2>, C3 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, OceanCategory, T, T, T3>> LayerFactory<RegistryKey<Biome>, T> buildBiomeLayerFactory(LayerFactory<RegistryKey<Biome>, T> biomeLayoutLayer, LayerFactory<Integer, T2> riverLayer, LayerFactory<OceanCategory, T3> oceanLayer, List<BiomeCategory> categories, String oceanCategory, RiverConfig riverConfig, OceanBiomesConfig oceanBiomes, LongFunction<C2> riverMergingContextProvider, LongFunction<C3> oceanMergingContextProvider) {
-        LayerFactory<RegistryKey<Biome>, T> biomes = new AddRiversLayer(categories, oceanCategory, riverConfig).create(riverMergingContextProvider.apply(100L), biomeLayoutLayer, riverLayer);
-        biomes = new ApplyOceanTemperatureLayer(categories, oceanCategory, oceanBiomes).create(oceanMergingContextProvider.apply(100L), biomes, oceanLayer);
+        LayerFactory<RegistryKey<Biome>, T> biomes = biomeLayoutLayer;
+
+        if(riverConfig.shouldGenerateRivers()) biomes = new AddRiversLayer(categories, oceanCategory, riverConfig).create(riverMergingContextProvider.apply(100L), biomes, riverLayer);
+        if(oceanBiomes.shouldApplyOceanTemperatures()) biomes = new ApplyOceanTemperatureLayer(categories, oceanCategory, oceanBiomes).create(oceanMergingContextProvider.apply(100L), biomes, oceanLayer);
 
         return biomes;
     }

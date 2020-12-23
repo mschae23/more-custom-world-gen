@@ -28,10 +28,6 @@ public enum AddDeepOceanLayer implements CrossSamplingLayer<ClimateCategory> {
             }
 
             if (i > 3) {
-                if (center == ClimateCategory.OCEAN) {
-                    return ClimateCategory.DEEP_OCEAN;
-                }
-
                 return ClimateCategory.DEEP_OCEAN;
             }
         }

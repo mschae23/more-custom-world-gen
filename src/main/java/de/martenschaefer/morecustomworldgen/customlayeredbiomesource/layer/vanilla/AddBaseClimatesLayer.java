@@ -4,22 +4,28 @@ import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
 import net.minecraft.world.biome.layer.util.NorthWestCoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.ContinentCategory;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ClimateConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampleContext;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.ConvertingLayer;
 
-public enum AddColdClimatesLayer implements ConvertingLayer<ClimateCategory, ContinentCategory>, NorthWestCoordinateTransformer {
-    INSTANCE;
+public class AddBaseClimatesLayer implements ConvertingLayer<ClimateCategory, ContinentCategory>, NorthWestCoordinateTransformer {
+    private final ClimateConfig config;
+
+    public AddBaseClimatesLayer(ClimateConfig config) {
+        this.config = config;
+    }
 
     public ClimateCategory sample(LayerRandomnessSource context, ContinentCategory se) {
         if (se == ContinentCategory.OCEAN) {
             return ClimateCategory.OCEAN;
         } else {
-            int i = context.nextInt(6);
-            if (i == 0) {
+            int i = context.nextInt(this.config.getWeightSum());
+            if (i < this.config.getSnowyClimateWeight()) {
                 return ClimateCategory.SNOWY;
             } else {
-                return i == 1 ? ClimateCategory.COOL : ClimateCategory.DRY;
+                return i < this.config.getSnowyClimateWeight() + this.config.getCoolClimateWeight() ?
+                    ClimateCategory.COOL : ClimateCategory.DRY;
             }
         }
     }

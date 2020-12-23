@@ -6,7 +6,7 @@ import net.fabricmc.api.ModInitializer;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.CustomLayeredBiomeSource;
 
 public class MoreCustomWorldGenMod implements ModInitializer {
-    public static final String MODID = "layeredbiomesource";
+    public static final String MODID = "morecustomworldgen";
     
     @Override
     public void onInitialize() {

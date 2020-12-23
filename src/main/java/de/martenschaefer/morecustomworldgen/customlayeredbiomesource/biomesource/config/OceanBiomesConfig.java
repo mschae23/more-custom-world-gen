@@ -14,6 +14,7 @@ import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 public class OceanBiomesConfig {
     public static final Codec<OceanBiomesConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
+            Codec.BOOL.fieldOf("apply_ocean_temperatures").orElse(true).forGetter(OceanBiomesConfig::shouldApplyOceanTemperatures),
             RegistryKeys.BIOME_CODEC.fieldOf("ocean").forGetter(OceanBiomesConfig::getOcean),
             RegistryKeys.BIOME_CODEC.fieldOf("warm_ocean").forGetter(OceanBiomesConfig::getWarmOcean),
             RegistryKeys.BIOME_CODEC.fieldOf("lukewarm_ocean").forGetter(OceanBiomesConfig::getLukewarmOcean),
@@ -27,6 +28,7 @@ public class OceanBiomesConfig {
         ).apply(instance, instance.stable(OceanBiomesConfig::new))
     );
 
+    private final boolean applyOceanTemperatures;
     private final RegistryKey<Biome> ocean;
     private final RegistryKey<Biome> warmOcean;
     private final RegistryKey<Biome> lukewarmOcean;
@@ -38,7 +40,8 @@ public class OceanBiomesConfig {
     private final RegistryKey<Biome> deepColdOcean;
     private final RegistryKey<Biome> deepFrozenOcean;
 
-    public OceanBiomesConfig(RegistryKey<Biome> ocean, RegistryKey<Biome> warmOcean, RegistryKey<Biome> lukewarmOcean, RegistryKey<Biome> coldOcean, RegistryKey<Biome> frozenOcean, RegistryKey<Biome> deepOcean, RegistryKey<Biome> deepWarmOcean, RegistryKey<Biome> deepLukewarmOcean, RegistryKey<Biome> deepColdOcean, RegistryKey<Biome> deepFrozenOcean) {
+    public OceanBiomesConfig(boolean applyOceanTemperatures, RegistryKey<Biome> ocean, RegistryKey<Biome> warmOcean, RegistryKey<Biome> lukewarmOcean, RegistryKey<Biome> coldOcean, RegistryKey<Biome> frozenOcean, RegistryKey<Biome> deepOcean, RegistryKey<Biome> deepWarmOcean, RegistryKey<Biome> deepLukewarmOcean, RegistryKey<Biome> deepColdOcean, RegistryKey<Biome> deepFrozenOcean) {
+        this.applyOceanTemperatures = applyOceanTemperatures;
         this.ocean = ocean;
         this.warmOcean = warmOcean;
         this.lukewarmOcean = lukewarmOcean;
@@ -49,6 +52,10 @@ public class OceanBiomesConfig {
         this.deepLukewarmOcean = deepLukewarmOcean;
         this.deepColdOcean = deepColdOcean;
         this.deepFrozenOcean = deepFrozenOcean;
+    }
+
+    public boolean shouldApplyOceanTemperatures() {
+        return this.applyOceanTemperatures;
     }
 
     public RegistryKey<Biome> getOcean() {
