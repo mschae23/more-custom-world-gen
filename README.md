@@ -1,6 +1,8 @@
 # More Custom World Generation
 
-Example world settings for a vanilla overworld: 
+## Custom layered biome source
+Example world settings for a vanilla overworld, using `morecustomworldgen:custom_layered`:
+
 ```
 {
   "bonus_chest": false,
@@ -656,11 +658,7 @@ Example world settings for a vanilla overworld:
 
                     ],
                     "or_bordering_biomes": [
-                      "minecraft:ocean",
-                      "minecraft:warm_ocean",
-                      "minecraft:lukewarm_ocean",
-                      "minecraft:cold_ocean",
-                      "minecraft:frozen_ocean"
+
                     ],
                     "shore_biome": "minecraft:mushroom_field_shore"
                   },
@@ -792,9 +790,13 @@ Example world settings for a vanilla overworld:
                 "minecraft:frozen_ocean"
               ],
               "forest_biome": "minecraft:forest",
-              "plains_biome": "minecraft:plains",
-              "biome_size": 4
+              "plains_biome": "minecraft:plains"
             },
+            "biome_size": {
+              "biome_size": 4,
+              "river_size": 1,
+              "ocean_climate_size": 6
+            }
             "ocean_category": "ocean",
             "rivers": {
               "generate_rivers": true,
@@ -813,8 +815,7 @@ Example world settings for a vanilla overworld:
                   "river": "minecraft:mushroom_field_shore"
                 }
               ],
-              "river": "minecraft:river",
-              "river_size": 4
+              "river": "minecraft:river"
             },
             "ocean_biomes": {
               "apply_ocean_temperatures": true,

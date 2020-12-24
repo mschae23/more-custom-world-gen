@@ -92,7 +92,7 @@ public final class VanillaLayers {
     }
 
     // Biome layout layer
-    public static <T extends LayerSampler<RegistryKey<Biome>>, T2 extends LayerSampler<ClimateCategory>, T3 extends LayerSampler<Integer>, C extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, RegistryKey<Biome>, T, T, T>, C2 extends LayerSampleContext<RegistryKey<Biome>, ClimateCategory, ClimateCategory, T, T2, T2>, C3 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, Integer, T, T, T3>> LayerFactory<RegistryKey<Biome>, T> buildBiomeLayoutLayerFactory(LayerFactory<ClimateCategory, T2> climateLayer, LayerFactory<Integer, T3> hillLayer, List<BiomeCategory> categories, OceanBiomesConfig oceanBiomes, BiomeLayoutConfig config, String oceanCategory, LongFunction<C2> convertingContextProvider, LongFunction<C3> mergingNoiseContextProvider, LongFunction<C> contextProvider) {
+    public static <T extends LayerSampler<RegistryKey<Biome>>, T2 extends LayerSampler<ClimateCategory>, T3 extends LayerSampler<Integer>, C extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, RegistryKey<Biome>, T, T, T>, C2 extends LayerSampleContext<RegistryKey<Biome>, ClimateCategory, ClimateCategory, T, T2, T2>, C3 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, Integer, T, T, T3>> LayerFactory<RegistryKey<Biome>, T> buildBiomeLayoutLayerFactory(LayerFactory<ClimateCategory, T2> climateLayer, LayerFactory<Integer, T3> hillLayer, List<BiomeCategory> categories, OceanBiomesConfig oceanBiomes, BiomeLayoutConfig config, int biomeSize, String oceanCategory, LongFunction<C2> convertingContextProvider, LongFunction<C3> mergingNoiseContextProvider, LongFunction<C> contextProvider) {
         ScaleLayer<RegistryKey<Biome>> normalScaleLayer = ScaleLayer.normal();
 
         LayerFactory<RegistryKey<Biome>, T> biomes = new SetBaseBiomesLayer(config.getBaseBiomes(), oceanBiomes).create(convertingContextProvider.apply(200L), climateLayer);
@@ -102,13 +102,13 @@ public final class VanillaLayers {
         biomes = new AddHillsLayer(categories, config.getHillBiomes()).create(mergingNoiseContextProvider.apply(1000L), biomes, hillLayer);
         biomes = new AddInnerBiomesLayer(config.getSpotInnerBiomes()).create(contextProvider.apply(1001L), biomes);
 
-        for (int i = 0; i < config.getBiomeSize(); i++) {
+        for (int i = 0; i < biomeSize; i++) {
             biomes = normalScaleLayer.create(contextProvider.apply((1000 + i)), biomes);
             if (i == 0) {
                 biomes = new IncreaseEdgeCurvatureBiomeLayer(config.getShallowOceanBiomes(), config.getForestBiome(), config.getPlainsBiome()).create(contextProvider.apply(3L), biomes);
             }
 
-            if (i == 1 || config.getBiomeSize() == 1) {
+            if (i == 1 || biomeSize == 1) {
                 biomes = new AddShoresLayer(categories, oceanCategory, config.getShoreBiomes()).create(contextProvider.apply(1000L), biomes);
             }
         }
@@ -118,24 +118,28 @@ public final class VanillaLayers {
         return biomes;
     }
 
-    public static BiomeLayerSampler<RegistryKey<Biome>> buildBiomeLayoutLayer(long seed, BiomeLayerSampler<ClimateCategory> climateLayer, BiomeLayerSampler<Integer> hillLayer, List<BiomeCategory> categories, OceanBiomesConfig oceanBiomes, BiomeLayoutConfig config, String oceanCategory) {
+    public static BiomeLayerSampler<RegistryKey<Biome>> buildBiomeLayoutLayer(long seed, BiomeLayerSampler<ClimateCategory> climateLayer, BiomeLayerSampler<Integer> hillLayer, List<BiomeCategory> categories, OceanBiomesConfig oceanBiomes, BiomeLayoutConfig config, int biomeSize, String oceanCategory) {
         return LayerHelper.<RegistryKey<Biome>, RegistryKey<Biome>, RegistryKey<Biome>>createLayerSampler(seed,
-            contextProvider -> buildBiomeLayoutLayerFactory(climateLayer::getSampler, hillLayer::getSampler, categories, oceanBiomes, config, oceanCategory, LayerHelper.createContextProvider(seed), LayerHelper.createContextProvider(seed), contextProvider));
+            contextProvider -> buildBiomeLayoutLayerFactory(climateLayer::getSampler, hillLayer::getSampler, categories, oceanBiomes, config, biomeSize, oceanCategory, LayerHelper.createContextProvider(seed), LayerHelper.createContextProvider(seed), contextProvider));
     }
 
     // Biome layer
-    public static <T extends LayerSampler<RegistryKey<Biome>>, T2 extends LayerSampler<Integer>, T3 extends LayerSampler<OceanCategory>, C2 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, Integer, T, T, T2>, C3 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, OceanCategory, T, T, T3>> LayerFactory<RegistryKey<Biome>, T> buildBiomeLayerFactory(LayerFactory<RegistryKey<Biome>, T> biomeLayoutLayer, LayerFactory<Integer, T2> riverLayer, LayerFactory<OceanCategory, T3> oceanLayer, List<BiomeCategory> categories, String oceanCategory, RiverConfig riverConfig, OceanBiomesConfig oceanBiomes, LongFunction<C2> riverMergingContextProvider, LongFunction<C3> oceanMergingContextProvider) {
+    public static <T extends LayerSampler<RegistryKey<Biome>>, T2 extends LayerSampler<Integer>, T3 extends LayerSampler<OceanCategory>, C extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, RegistryKey<Biome>, T, T, T>, C2 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, Integer, T, T, T2>, C3 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, OceanCategory, T, T, T3>> LayerFactory<RegistryKey<Biome>, T> buildBiomeLayerFactory(LayerFactory<RegistryKey<Biome>, T> biomeLayoutLayer, LayerFactory<Integer, T2> riverLayer, LayerFactory<OceanCategory, T3> oceanLayer, List<BiomeCategory> categories, RiverConfig riverConfig, int riverSize, String oceanCategory, OceanBiomesConfig oceanBiomes, LongFunction<C2> riverMergingContextProvider, LongFunction<C3> oceanMergingContextProvider, LongFunction<C> contextProvider) {
+        ScaleLayer<RegistryKey<Biome>> normalScaleLayer = ScaleLayer.normal();
+        
         LayerFactory<RegistryKey<Biome>, T> biomes = biomeLayoutLayer;
 
         if(riverConfig.shouldGenerateRivers()) biomes = new AddRiversLayer(categories, oceanCategory, riverConfig).create(riverMergingContextProvider.apply(100L), biomes, riverLayer);
+        if(riverConfig.shouldGenerateRivers()) biomes = stack(1000L, normalScaleLayer, biomes, riverSize - 1, contextProvider);
+        
         if(oceanBiomes.shouldApplyOceanTemperatures()) biomes = new ApplyOceanTemperatureLayer(categories, oceanCategory, oceanBiomes).create(oceanMergingContextProvider.apply(100L), biomes, oceanLayer);
 
         return biomes;
     }
 
-    public static BiomeLayerSampler<RegistryKey<Biome>> buildBiomeLayer(long seed, BiomeLayerSampler<RegistryKey<Biome>> biomeLayoutLayer, BiomeLayerSampler<Integer> riverLayer, BiomeLayerSampler<OceanCategory> oceanLayer, List<BiomeCategory> categories, String oceanCategory, RiverConfig riverConfig, OceanBiomesConfig oceanBiomes) {
+    public static BiomeLayerSampler<RegistryKey<Biome>> buildBiomeLayer(long seed, BiomeLayerSampler<RegistryKey<Biome>> biomeLayoutLayer, BiomeLayerSampler<Integer> riverLayer, BiomeLayerSampler<OceanCategory> oceanLayer, List<BiomeCategory> categories, RiverConfig riverConfig, int riverSize, String oceanCategory, OceanBiomesConfig oceanBiomes) {
         return LayerHelper.<RegistryKey<Biome>, RegistryKey<Biome>, RegistryKey<Biome>>createLayerSampler(seed,
-            contextProvider -> buildBiomeLayerFactory(biomeLayoutLayer::getSampler, riverLayer::getSampler, oceanLayer::getSampler, categories, oceanCategory, riverConfig, oceanBiomes, LayerHelper.createContextProvider(seed), LayerHelper.createContextProvider(seed)));
+            contextProvider -> buildBiomeLayerFactory(biomeLayoutLayer::getSampler, riverLayer::getSampler, oceanLayer::getSampler, categories, riverConfig, riverSize, oceanCategory, oceanBiomes, LayerHelper.createContextProvider(seed), LayerHelper.createContextProvider(seed), contextProvider));
     }
 
     // River layer
@@ -156,18 +160,18 @@ public final class VanillaLayers {
     }
 
     // Ocean layer
-    public static <T extends LayerSampler<OceanCategory>, C extends LayerSampleContext<OceanCategory, OceanCategory, OceanCategory, T, T, T>> LayerFactory<OceanCategory, T> buildOceanLayerFactory(LongFunction<C> contextProvider) {
+    public static <T extends LayerSampler<OceanCategory>, C extends LayerSampleContext<OceanCategory, OceanCategory, OceanCategory, T, T, T>> LayerFactory<OceanCategory, T> buildOceanLayerFactory(int oceanClimateSize, LongFunction<C> contextProvider) {
         ScaleLayer<OceanCategory> normalScaleLayer = ScaleLayer.normal();
 
         LayerFactory<OceanCategory, T> ocean = OceanTemperatureLayer.INSTANCE.create(contextProvider.apply(1L));
-        ocean = stack(2001L, normalScaleLayer, ocean, 6, contextProvider);
+        ocean = stack(2001L, normalScaleLayer, ocean, oceanClimateSize, contextProvider);
 
         return ocean;
     }
 
-    public static BiomeLayerSampler<OceanCategory> buildOceanLayer(long seed) {
+    public static BiomeLayerSampler<OceanCategory> buildOceanLayer(long seed, int oceanClimateSize) {
         return LayerHelper.<OceanCategory, OceanCategory, OceanCategory>createLayerSampler(seed,
-            VanillaLayers::buildOceanLayerFactory);
+            contextProvider -> buildOceanLayerFactory(oceanClimateSize, contextProvider));
     }
 
     private static <T, S extends LayerSampler<T>, C extends LayerSampleContext<T, T, T, S, S, S>> LayerFactory<T, S> stack(long salt, ParentedLayer<T> layer, LayerFactory<T, S> parent, int count, LongFunction<C> contextProvider) {

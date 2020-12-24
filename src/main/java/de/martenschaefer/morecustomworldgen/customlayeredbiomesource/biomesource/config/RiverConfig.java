@@ -15,20 +15,17 @@ public class RiverConfig {
         instance.group(
             Codec.BOOL.fieldOf("generate_rivers").orElse(true).forGetter(RiverConfig::shouldGenerateRivers),
             Override.CODEC.listOf().fieldOf("overrides").forGetter(RiverConfig::getOverrides),
-            RegistryKeys.BIOME_CODEC.fieldOf("river").forGetter(RiverConfig::getRiver),
-            Codec.INT.fieldOf("river_size").forGetter(RiverConfig::getRiverSize)
+            RegistryKeys.BIOME_CODEC.fieldOf("river").forGetter(RiverConfig::getRiver)
         ).apply(instance, instance.stable(RiverConfig::new)));
 
     private final boolean generateRivers;
     private final List<Override> overrides;
     private final RegistryKey<Biome> river;
-    private final int riverSize;
 
-    public RiverConfig(boolean generateRivers, List<Override> overrides, RegistryKey<Biome> river, int riverSize) {
+    public RiverConfig(boolean generateRivers, List<Override> overrides, RegistryKey<Biome> river) {
         this.generateRivers = generateRivers;
         this.overrides = overrides;
         this.river = river;
-        this.riverSize = riverSize;
     }
 
     public boolean shouldGenerateRivers() {
@@ -41,10 +38,6 @@ public class RiverConfig {
 
     public RegistryKey<Biome> getRiver() {
         return this.river;
-    }
-
-    public int getRiverSize() {
-        return this.riverSize;
     }
 
     public List<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {

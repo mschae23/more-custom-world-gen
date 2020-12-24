@@ -19,6 +19,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BaseBiomesConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeLayoutConfig;
+import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeSizeConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeWeightEntry;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ClimateConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ContinentConfig;
@@ -96,16 +97,20 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                 this.config.getBiomeCategories(),
                 this.config.getOceanBiomes(),
                 this.config.getBiomeLayout(),
+                this.config.getBiomeSizeConfig().getBiomeSize(),
                 this.config.getOceanCategory()
             ),
             VanillaLayers.buildRiverLayer(seed,
                 noiseLayer,
-                this.config.getRivers().getRiverSize()
+                this.config.getBiomeSizeConfig().getBiomeSize()
             ),
-            VanillaLayers.buildOceanLayer(seed),
+            VanillaLayers.buildOceanLayer(seed,
+                this.config.getBiomeSizeConfig().getOceanClimateSize()
+            ),
             this.config.getBiomeCategories(),
-            this.config.getOceanCategory(),
             this.config.getRivers(),
+            this.config.getBiomeSizeConfig().getRiverSize(),
+            this.config.getOceanCategory(),
             this.config.getOceanBiomes()
         );
         this.instance = instance;
@@ -548,8 +553,10 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                             BiomeKeys.FROZEN_OCEAN
                         ),
                         BiomeKeys.FOREST,
-                        BiomeKeys.PLAINS,
-                        4
+                        BiomeKeys.PLAINS
+                    ),
+                    new BiomeSizeConfig(
+                        4, 1, 6
                     ),
                     "ocean",
                     new RiverConfig(
@@ -569,8 +576,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                                 BiomeKeys.MUSHROOM_FIELD_SHORE
                             )
                         ),
-                        BiomeKeys.RIVER,
-                        4
+                        BiomeKeys.RIVER
                     ),
                     new OceanBiomesConfig( // Ocean biomes
                         true,

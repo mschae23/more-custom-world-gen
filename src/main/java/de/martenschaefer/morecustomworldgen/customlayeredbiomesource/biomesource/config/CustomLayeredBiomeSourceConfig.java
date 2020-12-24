@@ -15,6 +15,7 @@ public class CustomLayeredBiomeSourceConfig {
             ContinentConfig.CODEC.fieldOf("continents").forGetter(CustomLayeredBiomeSourceConfig::getContinentConfig),
             ClimateConfig.CODEC.fieldOf("climates").forGetter(CustomLayeredBiomeSourceConfig::getClimateConfig),
             BiomeLayoutConfig.CODEC.fieldOf("biome_layout").forGetter(CustomLayeredBiomeSourceConfig::getBiomeLayout),
+            BiomeSizeConfig.CODEC.fieldOf("biome_size").forGetter(CustomLayeredBiomeSourceConfig::getBiomeSizeConfig),
             Codec.STRING.fieldOf("ocean_category").forGetter(CustomLayeredBiomeSourceConfig::getOceanCategory),
             RiverConfig.CODEC.fieldOf("rivers").forGetter(CustomLayeredBiomeSourceConfig::getRivers),
             OceanBiomesConfig.CODEC.fieldOf("ocean_biomes").forGetter(CustomLayeredBiomeSourceConfig::getOceanBiomes)
@@ -24,15 +25,17 @@ public class CustomLayeredBiomeSourceConfig {
     private final ContinentConfig continents;
     private final ClimateConfig climates;
     private final BiomeLayoutConfig biomeLayout;
+    private final BiomeSizeConfig biomeSize;
     private final String oceanCategory;
     private final RiverConfig rivers;
     private final OceanBiomesConfig oceanBiomes;
 
-    public CustomLayeredBiomeSourceConfig(List<BiomeCategory> biomeCategories, ContinentConfig continents, ClimateConfig climates, BiomeLayoutConfig biomeLayout, String oceanCategory, RiverConfig rivers, OceanBiomesConfig oceanBiomes) {
+    public CustomLayeredBiomeSourceConfig(List<BiomeCategory> biomeCategories, ContinentConfig continents, ClimateConfig climates, BiomeLayoutConfig biomeLayout, BiomeSizeConfig biomeSize, String oceanCategory, RiverConfig rivers, OceanBiomesConfig oceanBiomes) {
         this.biomeCategories = biomeCategories;
         this.continents = continents;
         this.climates = climates;
         this.biomeLayout = biomeLayout;
+        this.biomeSize = biomeSize;
         this.oceanCategory = oceanCategory;
         this.rivers = rivers;
         this.oceanBiomes = oceanBiomes;
@@ -52,6 +55,10 @@ public class CustomLayeredBiomeSourceConfig {
 
     public BiomeLayoutConfig getBiomeLayout() {
         return this.biomeLayout;
+    }
+
+    public BiomeSizeConfig getBiomeSizeConfig() {
+        return this.biomeSize;
     }
     
     public String getOceanCategory() {

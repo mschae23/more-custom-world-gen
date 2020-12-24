@@ -40,14 +40,16 @@ public class AddShoresLayer implements CrossSamplingLayer<RegistryKey<Biome>> {
 
             // And bordering biomes
 
-            if (override.isNegative() == contains(override.getAndBorderingBiomes(), n)) {
-                b = false;
-            } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), e)) {
-                b = false;
-            } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), s)) {
-                b = false;
-            } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), w)) {
-                b = false;
+            if(!override.getAndBorderingBiomes().isEmpty()) {
+                if (override.isNegative() == contains(override.getAndBorderingBiomes(), n)) {
+                    b = false;
+                } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), e)) {
+                    b = false;
+                } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), s)) {
+                    b = false;
+                } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), w)) {
+                    b = false;
+                }
             }
 
             if (!b) {

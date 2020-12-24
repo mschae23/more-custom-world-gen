@@ -20,8 +20,7 @@ public class BiomeLayoutConfig {
             ShoreBiomesConfig.CODEC.fieldOf("shore_biomes").forGetter(BiomeLayoutConfig::getShoreBiomes),
             RegistryKeys.BIOME_LIST_CODEC.fieldOf("shallow_ocean_biomes").forGetter(BiomeLayoutConfig::getShallowOceanBiomes),
             RegistryKeys.BIOME_CODEC.fieldOf("forest_biome").forGetter(BiomeLayoutConfig::getForestBiome),
-            RegistryKeys.BIOME_CODEC.fieldOf("plains_biome").forGetter(BiomeLayoutConfig::getPlainsBiome),
-            Codec.INT.fieldOf("biome_size").forGetter(BiomeLayoutConfig::getBiomeSize)
+            RegistryKeys.BIOME_CODEC.fieldOf("plains_biome").forGetter(BiomeLayoutConfig::getPlainsBiome)
         ).apply(instance, instance.stable(BiomeLayoutConfig::new))
     );
 
@@ -34,9 +33,8 @@ public class BiomeLayoutConfig {
     private final List<RegistryKey<Biome>> shallowOceanBiomes;
     private final RegistryKey<Biome> forestBiome;
     private final RegistryKey<Biome> plainsBiome;
-    private final int biomeSize;
 
-    public BiomeLayoutConfig(BaseBiomesConfig baseBiomes, List<InnerBiomeConfig> largeInnerBiomes, EdgeBiomesConfig biomeEdges, HillBiomesConfig hillBiomes, List<InnerBiomeConfig> spotInnerBiomes, ShoreBiomesConfig shoreBiomes, List<RegistryKey<Biome>> shallowOceanBiomes, RegistryKey<Biome> forestBiome, RegistryKey<Biome> plainsBiome, int biomeSize) {
+    public BiomeLayoutConfig(BaseBiomesConfig baseBiomes, List<InnerBiomeConfig> largeInnerBiomes, EdgeBiomesConfig biomeEdges, HillBiomesConfig hillBiomes, List<InnerBiomeConfig> spotInnerBiomes, ShoreBiomesConfig shoreBiomes, List<RegistryKey<Biome>> shallowOceanBiomes, RegistryKey<Biome> forestBiome, RegistryKey<Biome> plainsBiome) {
         this.baseBiomes = baseBiomes;
         this.largeInnerBiomes = largeInnerBiomes;
         this.biomeEdges = biomeEdges;
@@ -46,7 +44,6 @@ public class BiomeLayoutConfig {
         this.shallowOceanBiomes = shallowOceanBiomes;
         this.forestBiome = forestBiome;
         this.plainsBiome = plainsBiome;
-        this.biomeSize = biomeSize;
     }
 
     public BaseBiomesConfig getBaseBiomes() {
@@ -71,10 +68,6 @@ public class BiomeLayoutConfig {
 
     public ShoreBiomesConfig getShoreBiomes() {
         return this.shoreBiomes;
-    }
-
-    public int getBiomeSize() {
-        return this.biomeSize;
     }
 
     public List<RegistryKey<Biome>> getShallowOceanBiomes() {
