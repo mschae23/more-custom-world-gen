@@ -97,19 +97,19 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                 this.config.getBiomeCategories(),
                 this.config.getOceanBiomes(),
                 this.config.getBiomeLayout(),
-                this.config.getBiomeSizeConfig().getBiomeSize(),
+                this.config.getBiomeSizeConfig().getBiomeScale(),
                 this.config.getOceanCategory()
             ),
             VanillaLayers.buildRiverLayer(seed,
                 noiseLayer,
-                this.config.getBiomeSizeConfig().getBiomeSize()
+                this.config.getBiomeSizeConfig().getBiomeScale()
             ),
             VanillaLayers.buildOceanLayer(seed,
                 this.config.getBiomeSizeConfig().getOceanClimateSize()
             ),
             this.config.getBiomeCategories(),
             this.config.getRivers(),
-            this.config.getBiomeSizeConfig().getRiverSize(),
+            this.config.getBiomeSizeConfig().getBiomeAndRiverScale(),
             this.config.getOceanCategory(),
             this.config.getOceanBiomes()
         );
@@ -556,7 +556,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                         BiomeKeys.PLAINS
                     ),
                     new BiomeSizeConfig(
-                        4, 1, 6
+                        4, 0, 6
                     ),
                     "ocean",
                     new RiverConfig(

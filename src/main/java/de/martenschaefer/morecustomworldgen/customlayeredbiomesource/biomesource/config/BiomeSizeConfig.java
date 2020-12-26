@@ -6,28 +6,28 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 public class BiomeSizeConfig {
     public static final Codec<BiomeSizeConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            Codec.INT.fieldOf("biome_size").forGetter(BiomeSizeConfig::getBiomeSize),
-            Codec.INT.fieldOf("river_size").forGetter(BiomeSizeConfig::getRiverSize),
+            Codec.INT.fieldOf("biome_scale").forGetter(BiomeSizeConfig::getBiomeScale),
+            Codec.INT.fieldOf("biome_and_river_scale").forGetter(BiomeSizeConfig::getBiomeAndRiverScale),
             Codec.INT.fieldOf("ocean_climate_size").forGetter(BiomeSizeConfig::getOceanClimateSize)
         ).apply(instance, instance.stable(BiomeSizeConfig::new))
     );
 
-    private final int biomeSize;
-    private final int riverSize;
+    private final int biomeScale;
+    private final int biomeAndRiverScale;
     private final int oceanClimateSize;
 
-    public BiomeSizeConfig(int biomeSize, int riverSize, int oceanClimateSize) {
-        this.biomeSize = biomeSize;
-        this.riverSize = riverSize;
+    public BiomeSizeConfig(int biomeScale, int biomeAndRiverScale, int oceanClimateSize) {
+        this.biomeScale = biomeScale;
+        this.biomeAndRiverScale = biomeAndRiverScale;
         this.oceanClimateSize = oceanClimateSize;
     }
 
-    public int getBiomeSize() {
-        return this.biomeSize;
+    public int getBiomeScale() {
+        return this.biomeScale;
     }
 
-    public int getRiverSize() {
-        return this.riverSize;
+    public int getBiomeAndRiverScale() {
+        return this.biomeAndRiverScale;
     }
 
     public int getOceanClimateSize() {
