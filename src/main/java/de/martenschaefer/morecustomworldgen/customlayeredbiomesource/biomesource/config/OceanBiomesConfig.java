@@ -113,7 +113,7 @@ public class OceanBiomesConfig {
         biomes.add(this.getDeepFrozenOcean());
 
         return biomes.stream()
-            .<Supplier<Biome>>map(key -> () -> biomeRegistry.get(key))
+            .<Supplier<Biome>>map(key -> () -> biomeRegistry.getOrThrow(key))
             .collect(Collectors.toList());
     }
 }

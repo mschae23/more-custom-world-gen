@@ -44,12 +44,12 @@ public class EdgeBiomesConfig {
     public List<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
         List<Supplier<Biome>> categoryEdgeBiomes = this.getCategoryEdgeBiomes().stream()
             .map(CategoryEdgeBiome::getEdgeBiome)
-            .<Supplier<Biome>>map(edgeBiome -> () -> biomeRegistry.get(edgeBiome))
+            .<Supplier<Biome>>map(edgeBiome -> () -> biomeRegistry.getOrThrow(edgeBiome))
             .collect(Collectors.toList());
 
         List<Supplier<Biome>> edgeBiomes = this.getEdgeBiomes().stream()
             .map(EdgeBiome::getEdgeBiome)
-            .<Supplier<Biome>>map(edgeBiome -> () -> biomeRegistry.get(edgeBiome))
+            .<Supplier<Biome>>map(edgeBiome -> () -> biomeRegistry.getOrThrow(edgeBiome))
             .collect(Collectors.toList());
 
         edgeBiomes.addAll(categoryEdgeBiomes);

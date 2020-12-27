@@ -50,7 +50,7 @@ public class InnerBiomeConfig {
     public static List<Supplier<Biome>> getBiomes(List<InnerBiomeConfig> innerBiomes, Registry<Biome> biomeRegistry) {
         return innerBiomes.stream()
             .map(InnerBiomeConfig::getBiome)
-            .<Supplier<Biome>>map(key -> () -> biomeRegistry.get(key))
+            .<Supplier<Biome>>map(key -> () -> biomeRegistry.getOrThrow(key))
             .collect(Collectors.toCollection(ArrayList::new));
     }
 }

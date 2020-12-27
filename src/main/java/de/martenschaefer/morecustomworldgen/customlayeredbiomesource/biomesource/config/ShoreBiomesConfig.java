@@ -45,10 +45,10 @@ public class ShoreBiomesConfig {
     public List<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
         List<Supplier<Biome>> shoreBiomes = this.getOverrides().stream()
             .map(Override::getShoreBiome)
-            .<Supplier<Biome>>map(shoreBiome -> () -> biomeRegistry.get(shoreBiome))
+            .<Supplier<Biome>>map(shoreBiome -> () -> biomeRegistry.getOrThrow(shoreBiome))
             .collect(Collectors.toList());
 
-        shoreBiomes.add(() -> biomeRegistry.get(this.getDefaultBeach()));
+        shoreBiomes.add(() -> biomeRegistry.getOrThrow(this.getDefaultBeach()));
 
         return shoreBiomes;
     }

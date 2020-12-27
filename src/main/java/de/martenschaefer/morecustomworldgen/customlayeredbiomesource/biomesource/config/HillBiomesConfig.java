@@ -95,17 +95,17 @@ public class HillBiomesConfig {
     public List<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
         List<Supplier<Biome>> specialHillBiomes = this.getSpecialHillBiomes().stream()
             .map(SpecialHillBiomeEntry::getSpecialHillBiome)
-            .<Supplier<Biome>>map(hillBiome -> () -> biomeRegistry.get(hillBiome))
+            .<Supplier<Biome>>map(hillBiome -> () -> biomeRegistry.getOrThrow(hillBiome))
             .collect(Collectors.toList());
 
         List<Supplier<Biome>> hillBiomes = this.getHillBiomes().stream()
             .map(HillBiomeEntry::getHillBiome)
-            .<Supplier<Biome>>map(hillBiome -> () -> biomeRegistry.get(hillBiome))
+            .<Supplier<Biome>>map(hillBiome -> () -> biomeRegistry.getOrThrow(hillBiome))
             .collect(Collectors.toList());
 
         List<Supplier<Biome>> complexHillBiomes = this.getComplexHillBiomes().stream()
             .flatMap(entry -> entry.getHillBiomes().stream())
-            .<Supplier<Biome>>map(hillBiome -> () -> biomeRegistry.get(hillBiome))
+            .<Supplier<Biome>>map(hillBiome -> () -> biomeRegistry.getOrThrow(hillBiome))
             .collect(Collectors.toList());
 
         hillBiomes.addAll(specialHillBiomes);

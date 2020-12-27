@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "More Custom World Generation",
-  "description": "Test",
+  "description": "Adds some things to make custom world generation with data packs easier",
   "authors": [
     "mschae23"
   ],

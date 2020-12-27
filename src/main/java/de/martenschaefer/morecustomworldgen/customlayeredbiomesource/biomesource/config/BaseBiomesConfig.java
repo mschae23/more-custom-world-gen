@@ -104,7 +104,7 @@ public class BaseBiomesConfig {
         return biomeEntries.stream()
             .distinct()
             .map(BiomeWeightEntry::getBiome)
-            .<Supplier<Biome>>map(key -> () -> biomeRegistry.get(key))
+            .<Supplier<Biome>>map(key -> () -> biomeRegistry.getOrThrow(key))
             .collect(Collectors.toList());
     }
 }
