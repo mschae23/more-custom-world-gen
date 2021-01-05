@@ -869,4 +869,79 @@ Example world settings for a vanilla overworld, using `morecustomworldgen:custom
 }
 ```
 
+## Decorators
+Example configs for the decorators added by this mod.
+
+### `morecustomworldgen:offset_vertically`
+```
+{
+  "config": {
+    "offset": 10,
+    "factor": 1
+  },
+  "type": "morecustomworldgen:offset_vertically"
+}
+```
+
+### `morecustomworldgen:range_mask`
+Same config as `minecraft:range`.
+```
+{
+  "config": {
+    "bottom_offset": 10,
+    "top_offset": 0,
+    "maximum": 20
+  },
+  "type": "morecustomworldgen:range_mask"
+}
+```
+
+### `morecustomworldgen:count_noise_biased_3d`
+Same config as `minecraft:count_noise_biased`.
+```
+{
+  "config": {
+    "noise_to_count_ratio": 1,
+    "noise_factor": 2.5,
+    "noise_offset": 0
+  },
+  "type": "morecustomworldgen:count_noise_biased_3d"
+}
+```
+
+### `morecustomworldgen:spread_vertically`
+```
+{
+  "config": {
+    "factor": 2
+  },
+  "type": "morecustomworldgen:spread_vertically"
+}
+```
+
+## Features
+Example configs for the features added by this mod.
+
+### `morecustomworldgen:disk`
+Same config as `minecraft:disk`.
+
+### `morecustomworldgen:fill_layers`
+```
+{
+  "config": {
+    "target": {
+      "block": "minecraft:air",
+      "predicate_type": "minecraft:block_match"
+    },
+    "start_height": 10,
+    "height": 5,
+    "state": {
+      "Name": "minecraft:dirt"
+    }
+  },
+  "type": "morecustomworldgen:fill_layers"
+}
+```
+
+
 This mod is available under the MIT License.
