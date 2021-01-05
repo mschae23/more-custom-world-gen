@@ -74,7 +74,7 @@ public class HillBiomesConfig {
         return this.getHillBiomes().stream()
             .filter(entry ->
                 entry.getBiome() != null ? biome.getValue().equals(entry.getBiome().getValue()) :
-                    entry.getCategory() != null && BiomeCategory.getCategory(categories, biome).equals(entry.getCategory()))
+                    entry.getCategory() != null && entry.getCategory().equals(BiomeCategory.getCategory(categories, biome)))
             .map(HillBiomeEntry::getHillBiome)
             .findAny()
             .orElseGet(() -> getComplexHillBiome(context, biome));

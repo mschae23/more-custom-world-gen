@@ -796,7 +796,7 @@ Example world settings for a vanilla overworld, using `morecustomworldgen:custom
               "biome_scale": 4,
               "biome_and_river_scale": 0,
               "ocean_climate_size": 6
-            }
+            },
             "ocean_category": "ocean",
             "rivers": {
               "generate_rivers": true,

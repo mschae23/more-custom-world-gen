@@ -8,8 +8,8 @@ import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.CustomLayeredBiomeSource;
 
-public class LayeredWorldType extends GeneratorType {
-    public LayeredWorldType() {
+public class CustomLayeredWorldType extends GeneratorType {
+    public CustomLayeredWorldType() {
         super("morecustomworldgen.custom_layered");
         GeneratorType.VALUES.add(this);
     }

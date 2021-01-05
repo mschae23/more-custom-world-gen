@@ -11,5 +11,8 @@ public class MoreCustomWorldGenMod implements ModInitializer {
     @Override
     public void onInitialize() {
         Registry.register(Registry.BIOME_SOURCE, new Identifier(MODID, "custom_layered"), CustomLayeredBiomeSource.CODEC);
+
+        MoreCustomWorldGenDecorators.init();
+        MoreCustomWorldGenFeatures.init();
     }
 }
