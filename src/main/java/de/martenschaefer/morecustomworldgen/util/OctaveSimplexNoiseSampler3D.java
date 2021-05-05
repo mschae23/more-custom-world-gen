@@ -42,7 +42,7 @@ public class OctaveSimplexNoiseSampler3D {
                     if (m >= 0 && octaves.contains(l - m)) {
                         this.octaveSamplers[m] = new SimplexNoiseSampler(random);
                     } else {
-                        random.consume(262);
+                        random.skip(262);
                     }
                 }
 
@@ -54,7 +54,7 @@ public class OctaveSimplexNoiseSampler3D {
                         if (o < k && octaves.contains(l - o)) {
                             this.octaveSamplers[o] = new SimplexNoiseSampler(chunkRandom);
                         } else {
-                            chunkRandom.consume(262);
+                            chunkRandom.skip(262);
                         }
                     }
                 }

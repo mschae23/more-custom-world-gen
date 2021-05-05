@@ -1,29 +1,46 @@
 package de.martenschaefer.morecustomworldgen.feature;
 
-import java.util.Random;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.HeightContext;
 import net.minecraft.world.gen.feature.Feature;
-import com.mojang.serialization.Codec;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 public class FillLayersFeature extends Feature<FillLayersFeatureConfig> {
     public FillLayersFeature(Codec<FillLayersFeatureConfig> codec) {
         super(codec);
     }
 
-    public boolean generate(StructureWorldAccess world, ChunkGenerator generator, Random random, BlockPos pos, FillLayersFeatureConfig config) {
+    public boolean generate(FeatureContext<FillLayersFeatureConfig> context) {
+        StructureWorldAccess world = context.getWorld();
+        FillLayersFeatureConfig config = context.getConfig();
+        BlockPos pos = context.getOrigin();
+        
         BlockPos.Mutable mutable = new BlockPos.Mutable();
+        
+        HeightContext heightContext = new HeightContext() {
+            @Override
+            public int getMinY() {
+                return world.getBottomY();
+            }
 
-        for (int i = 0; i < config.getHeight(); i++) {
+            @Override
+            public int getMaxY() {
+                return world.getTopY();
+            }
+        };
+        int minY = config.getMinY().getY(heightContext);
+        int maxY = config.getMaxY().getY(heightContext);
+
+        for (int i = minY; i <= maxY; i++) {
             for (int j = 0; j < 16; ++j) {
                 for (int k = 0; k < 16; ++k) {
                     int x = pos.getX() + j;
                     int z = pos.getZ() + k;
-                    int y = config.getStartHeight() + i;
-                    mutable.set(x, y, z);
+                    mutable.set(x, i, z);
 
-                    if (config.getTarget().test(world.getBlockState(mutable), random)) {
+                    if (config.getTarget().test(world.getBlockState(mutable), context.getRandom())) {
                         world.setBlockState(mutable, config.getState(), 2);
                     }
                 }

@@ -884,13 +884,15 @@ Example configs for the decorators added by this mod.
 ```
 
 ### `morecustomworldgen:range_mask`
-Same config as `minecraft:range`.
 ```
 {
   "config": {
-    "bottom_offset": 10,
-    "top_offset": 0,
-    "maximum": 20
+    "bottom_inclusive": {
+      "above_bottom": 10
+    },
+    "top_inclusive": {
+      "below_top": 32
+    }
   },
   "type": "morecustomworldgen:range_mask"
 }
@@ -933,8 +935,12 @@ Same config as `minecraft:disk`.
       "block": "minecraft:air",
       "predicate_type": "minecraft:block_match"
     },
-    "start_height": 10,
-    "height": 5,
+    "bottom_inclusive": {
+      "above_bottom": 10
+    },
+    "top_inclusive": {
+      "above_bottom": 15
+    },
     "state": {
       "Name": "minecraft:dirt"
     }

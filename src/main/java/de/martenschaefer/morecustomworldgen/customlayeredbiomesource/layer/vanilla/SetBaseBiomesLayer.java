@@ -71,6 +71,6 @@ public class SetBaseBiomesLayer implements ConvertingLayer<RegistryKey<Biome>, C
     }
 
     private static RegistryKey<Biome> pick(LayerSampleContext<RegistryKey<Biome>, ClimateCategory, ClimateCategory, ?, ?, ?> context, List<BiomeWeightEntry> biomes) {
-        return WeightedPicker.getAt(biomes, context.nextInt(WeightedPicker.getWeightSum(biomes))).getBiome();
+        return WeightedPicker.getAt(biomes, context.nextInt(WeightedPicker.getWeightSum(biomes))).map(BiomeWeightEntry::getBiome).orElse(null);
     }
 }

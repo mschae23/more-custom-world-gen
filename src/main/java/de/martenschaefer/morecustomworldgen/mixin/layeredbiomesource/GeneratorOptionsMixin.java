@@ -44,9 +44,9 @@ public class GeneratorOptionsMixin {
             boolean generateStructures = generate_structures == null || Boolean.parseBoolean(generate_structures);
             Registry<DimensionType> dimensionTypes = dynamicRegistryManager.get(Registry.DIMENSION_TYPE_KEY);
             Registry<Biome> biomes = dynamicRegistryManager.get(Registry.BIOME_KEY);
-            Registry<ChunkGeneratorSettings> chunkGeneratorSettings = dynamicRegistryManager.get(Registry.NOISE_SETTINGS_WORLDGEN);
+            Registry<ChunkGeneratorSettings> chunkGeneratorSettings = dynamicRegistryManager.get(Registry.CHUNK_GENERATOR_SETTINGS_KEY);
             SimpleRegistry<DimensionOptions> dimensionOptions = DimensionType.createDefaultDimensionOptions(dimensionTypes, biomes, chunkGeneratorSettings, l);
-            cir.setReturnValue(new GeneratorOptions(l, generateStructures, false, GeneratorOptions.method_28608(dimensionTypes, dimensionOptions, new NoiseChunkGenerator(
+            cir.setReturnValue(new GeneratorOptions(l, generateStructures, false, GeneratorOptions.getRegistryWithReplacedOverworldGenerator(dimensionTypes, dimensionOptions, new NoiseChunkGenerator(
                 CustomLayeredBiomeSource.Preset.VANILLA_OVERWORLD.getBiomeSource(biomes, l), l,
                 () -> chunkGeneratorSettings.getOrThrow(ChunkGeneratorSettings.OVERWORLD)))));
         }
