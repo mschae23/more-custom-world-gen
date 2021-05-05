@@ -10,9 +10,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 public class FillLayersFeatureConfig implements FeatureConfig {
     public static final Codec<FillLayersFeatureConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            RuleTest.field_25012.fieldOf("target").forGetter(FillLayersFeatureConfig::getTarget),
-            Codec.intRange(DimensionType.field_28136, DimensionType.field_28135).fieldOf("start_height").forGetter(FillLayersFeatureConfig::getStartHeight),
-            Codec.intRange(DimensionType.field_28136, DimensionType.field_28135).fieldOf("height").forGetter(FillLayersFeatureConfig::getHeight),
+            RuleTest.TYPE_CODEC.fieldOf("target").forGetter(FillLayersFeatureConfig::getTarget),
+            Codec.intRange(DimensionType.MIN_HEIGHT, DimensionType.MAX_COLUMN_HEIGHT).fieldOf("start_height").forGetter(FillLayersFeatureConfig::getStartHeight),
+            Codec.intRange(DimensionType.MIN_HEIGHT, DimensionType.MAX_COLUMN_HEIGHT).fieldOf("height").forGetter(FillLayersFeatureConfig::getHeight),
             BlockState.CODEC.fieldOf("state").forGetter(FillLayersFeatureConfig::getState)
         ).apply(instance, FillLayersFeatureConfig::new)
     );
@@ -23,7 +23,7 @@ public class FillLayersFeatureConfig implements FeatureConfig {
     private final BlockState state;
 
     public FillLayersFeatureConfig(RuleTest target, int startHeight, int height, BlockState state) {
-        if(startHeight + height > DimensionType.field_28135) throw new IllegalArgumentException("Illegal height: " + (startHeight + height));
+        if(startHeight + height > DimensionType.MAX_COLUMN_HEIGHT) throw new IllegalArgumentException("Illegal height: " + (startHeight + height));
 
         this.target = target;
         this.startHeight = startHeight;

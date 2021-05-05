@@ -14,6 +14,6 @@ public class SpreadVerticallyDecorator extends Decorator<SpreadVerticallyDecorat
 
     @Override
     public Stream<BlockPos> getPositions(DecoratorContext context, Random random, SpreadVerticallyDecoratorConfig config, BlockPos pos) {
-        return pos.getY() == context.getSectionCount() ? Stream.of() : Stream.of(new BlockPos(pos.getX(), context.getSectionCount() + random.nextInt((pos.getY() - context.getSectionCount()) * config.getFactor()), pos.getZ()));
+        return pos.getY() == context.getBottomY() ? Stream.of() : Stream.of(new BlockPos(pos.getX(), context.getBottomY() + random.nextInt((pos.getY() - context.getBottomY()) * config.getFactor()), pos.getZ()));
     }
 }
