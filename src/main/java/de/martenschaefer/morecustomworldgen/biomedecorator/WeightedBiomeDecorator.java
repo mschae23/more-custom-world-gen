@@ -43,7 +43,7 @@ public class WeightedBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeAccess.Storage parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         List<RegistryKey<Biome>> biomeList = this.biomes.stream().collect(ArrayList::new, (list, entry) -> {
             if (entry.getChance().get(random))
                 list.add(entry.getValue());

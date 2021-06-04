@@ -16,5 +16,7 @@ public final class BiomeDecorators {
     public static void register() {
         register("from_biome_source_init", FromBiomeSourceBiomeDecorator.CODEC);
         register("weighted_init", WeightedBiomeDecorator.CODEC);
+        register("scale", ScaleBiomeDecorator.CODEC);
+        register("increase_edge_curvature", IncreaseEdgeCurvatureBiomeDecorator.CODEC);
     }
 }

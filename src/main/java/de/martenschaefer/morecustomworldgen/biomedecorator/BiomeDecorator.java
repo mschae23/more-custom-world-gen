@@ -14,7 +14,7 @@ public abstract class BiomeDecorator {
 
     protected abstract Codec<? extends BiomeDecorator> getCodec();
 
-    public abstract RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeAccess.Storage parent, int x, int y, int z);
+    public abstract RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z);
 
     public abstract List<Biome> getBiomes(Registry<Biome> biomeRegistry);
 }

@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import com.mojang.serialization.Codec;
@@ -70,6 +71,8 @@ public class DecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        return this.biomeRegistry.get(this.decorator.getBiome(this.random, this.biomeSource, biomeX, biomeY, biomeZ));
+        return this.biomeRegistry.get(this.decorator.getBiome(this.random,
+            (x, y, z) -> RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.biomeSource.getBiomeForNoiseGen(x, y, z))),
+            biomeX, biomeY, biomeZ));
     }
 }
