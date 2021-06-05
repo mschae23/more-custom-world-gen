@@ -14,27 +14,25 @@ import net.minecraft.world.biome.source.BiomeSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import org.jetbrains.annotations.Nullable;
 
 public class ArrayDecoratedBiomeSource extends BiomeSource {
     public static final Codec<ArrayDecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.LONG.fieldOf("seed").forGetter(ArrayDecoratedBiomeSource::getSeed),
-            BiomeSource.CODEC.fieldOf("biome_source").orElse(null).forGetter(ArrayDecoratedBiomeSource::getBiomeSource),
+            BiomeSource.CODEC.optionalFieldOf("biome_source").forGetter(ArrayDecoratedBiomeSource::getBiomeSource),
             BiomeDecoratorEntry.CODEC.listOf().fieldOf("decorators").forGetter(ArrayDecoratedBiomeSource::getDecorators),
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(ArrayDecoratedBiomeSource::getBiomeRegistry)
         ).apply(instance, instance.stable(ArrayDecoratedBiomeSource::new))
     );
 
     private final long seed;
-    @Nullable
-    private final BiomeSource biomeSource;
+    private final Optional<BiomeSource> biomeSource;
     private final List<BiomeDecoratorEntry> decorators;
     private final Registry<Biome> biomeRegistry;
 
-    public ArrayDecoratedBiomeSource(long seed, @Nullable BiomeSource biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
+    public ArrayDecoratedBiomeSource(long seed, Optional<BiomeSource> biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
         super(Stream.concat(decorators.stream().map(BiomeDecoratorEntry::getDecorator).flatMap(decorator -> decorator.getBiomes(biomeRegistry).stream()),
-            Optional.ofNullable(biomeSource).map(BiomeSource::getBiomes).map(List::stream).orElseGet(Stream::empty))
+            biomeSource.map(BiomeSource::getBiomes).map(List::stream).orElseGet(Stream::empty))
             .collect(Collectors.toList()));
         this.seed = seed;
         this.biomeSource = biomeSource;
@@ -42,16 +40,19 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
         this.biomeRegistry = biomeRegistry;
     }
 
+    public ArrayDecoratedBiomeSource(long seed, BiomeSource biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
+        this(seed, Optional.of(biomeSource), decorators, biomeRegistry);
+    }
+
     public ArrayDecoratedBiomeSource(long seed, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
-        this(seed, null, decorators, biomeRegistry);
+        this(seed, Optional.empty(), decorators, biomeRegistry);
     }
 
     public long getSeed() {
         return this.seed;
     }
 
-    @Nullable
-    public BiomeSource getBiomeSource() {
+    public Optional<BiomeSource> getBiomeSource() {
         return this.biomeSource;
     }
 
@@ -75,7 +76,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        BiomeSampler firstParent = Optional.ofNullable(this.biomeSource).map(source -> (BiomeSampler) (x, y, z) ->
+        BiomeSampler firstParent = this.biomeSource.map(source -> (BiomeSampler) (x, y, z) ->
             RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(source.getBiomeForNoiseGen(x, y, z)))
         ).orElseGet(() -> (x, y, z) -> BiomeKeys.THE_VOID);
 

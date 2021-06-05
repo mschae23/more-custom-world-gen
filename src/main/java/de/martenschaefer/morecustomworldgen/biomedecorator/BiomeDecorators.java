@@ -3,6 +3,7 @@ package de.martenschaefer.morecustomworldgen.biomedecorator;
 import net.minecraft.util.registry.Registry;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenMod;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenRegistries;
+import de.martenschaefer.morecustomworldgen.biomedecorator.replace.CrossSamplingReplaceBiomeDecorator;
 import com.mojang.serialization.Codec;
 
 public final class BiomeDecorators {
@@ -18,5 +19,6 @@ public final class BiomeDecorators {
         register("weighted_init", WeightedBiomeDecorator.CODEC);
         register("scale", ScaleBiomeDecorator.CODEC);
         register("increase_edge_curvature", IncreaseEdgeCurvatureBiomeDecorator.CODEC);
+        register("cross_sampling_replace", CrossSamplingReplaceBiomeDecorator.CODEC);
     }
 }
