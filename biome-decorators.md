@@ -3,13 +3,15 @@
 Biome decorators are a new, experimental system similar to feature decorators, but for biomes. It should be even more
 customizable than the `custom_layered` biome source.
 
-## `from_biome_source_init`
+## Decorators
+
+### `from_biome_source_init`
 
 This decorator ignores biomes from a parent biome source, and uses the specified biome source instead.
 
 - `biome_source`: The biome source it will use.
 
-## `weighted_init`
+### `weighted_init`
 
 Ignores parent biome source. Chooses from a list of biomes to place.
 
@@ -20,17 +22,30 @@ Ignores parent biome source. Chooses from a list of biomes to place.
     - `biome`: Registry ID of biome to place.
 - `default_biome`: Registry ID of biome to place if none of the biomes in the list match (random).
 
-## `scale`
+### `scale`
 
 Scales the biome layout. TODO: Make this more configurable.
 
 - `scale_type`: Can be either `normal`, `simple` or `fuzzy`.
 
-## `increase_edge_curvature`
+### `increase_edge_curvature`
 
 Increases edge curvature of biome layout. TODO: Replace this with something more configurable.
 
 No config.
+
+## "Decorated" biome sources
+
+### `decorated`
+Works similarly to the `minecraft:decorated` feature.
+
+- `biome_source`: The biome source this decorator is decorating.
+- `decorator`: The decorator.
+- `seed`: Should be the same as the world seed.
+- `salt`: This is like a seed for this decorator (so that random values aren't the same for multiple ones).
+
+### `array_decorated`
+Similar to `decorated`, but can be given an array of decorators. This should be preferred.
 
 ## Vanilla example
 

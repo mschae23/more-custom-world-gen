@@ -5,12 +5,12 @@ import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class FromBiomeSourceBiomeDecorator extends BiomeDecorator {
+public class FromBiomeSourceBiomeDecorator extends CachingBiomeDecorator {
     public static final Codec<FromBiomeSourceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FromBiomeSourceBiomeDecorator::getBiomeSource),
@@ -40,7 +40,7 @@ public class FromBiomeSourceBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         return RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.biomeSource.getBiomeForNoiseGen(x, y, z)));
     }
 

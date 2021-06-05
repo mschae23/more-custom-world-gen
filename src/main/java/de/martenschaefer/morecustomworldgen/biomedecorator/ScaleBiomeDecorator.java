@@ -6,10 +6,11 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.layer.util.CoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 
-public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTransformer {
+public class ScaleBiomeDecorator extends CachingBiomeDecorator implements CoordinateTransformer {
     public static final Codec<ScaleBiomeDecorator> CODEC = ScaleType.CODEC.fieldOf("scale_type").xmap(ScaleBiomeDecorator::new, ScaleBiomeDecorator::getType).codec();
 
     private final ScaleType type;
@@ -42,7 +43,7 @@ public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTra
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         RegistryKey<Biome> i = parent.sample(this.transformX(x), this.transformY(y), this.transformZ(z));
 
         if (this.type == ScaleType.SIMPLE)

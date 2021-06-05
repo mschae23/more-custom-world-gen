@@ -21,6 +21,9 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, RegistryKey<Biome> sw, RegistryKey<Biome> se, RegistryKey<Biome> ne, RegistryKey<Biome> nw, RegistryKey<Biome> center) {
+        if (BiomeKeys.FOREST.getValue().equals(center.getValue()))
+            return BiomeKeys.FOREST;
+
         if (!(!isOcean(center) || isOcean(nw) && isOcean(ne) && isOcean(sw) && isOcean(se))) {
             int n = 1;
             RegistryKey<Biome> o = BiomeKeys.PLAINS;
@@ -45,13 +48,10 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
                 return o;
             }
 
-            return BiomeKeys.FOREST.getValue().equals(o.getValue()) ? BiomeKeys.FOREST : center;
+            return center;
         }
 
         if (!isOcean(center) && (isOcean(nw) || isOcean(sw) || isOcean(ne) || isOcean(se)) && random.nextInt(5) == 0) {
-            if (BiomeKeys.FOREST.getValue().equals(center.getValue()))
-                return center;
-
             if (isOcean(nw))
                 return nw;
             if (isOcean(sw))

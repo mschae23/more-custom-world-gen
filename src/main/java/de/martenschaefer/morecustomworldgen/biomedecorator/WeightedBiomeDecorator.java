@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeAccess;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.util.ChanceEntry;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class WeightedBiomeDecorator extends BiomeDecorator {
+public class WeightedBiomeDecorator extends CachingBiomeDecorator {
     public static final Codec<WeightedBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             ChanceEntry.createCodec(RegistryKeys.BIOME_CODEC, "biome").listOf().fieldOf("biomes").forGetter(WeightedBiomeDecorator::getBiomes),
@@ -43,7 +43,7 @@ public class WeightedBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         List<RegistryKey<Biome>> biomeList = this.biomes.stream().collect(ArrayList::new, (list, entry) -> {
             if (entry.getChance().get(random))
                 list.add(entry.getValue());

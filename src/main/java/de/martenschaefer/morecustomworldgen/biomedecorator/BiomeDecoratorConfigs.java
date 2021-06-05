@@ -6,6 +6,7 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.BuiltinBiomes;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.FixedBiomeSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
 import de.martenschaefer.morecustomworldgen.util.Chance;
 import de.martenschaefer.morecustomworldgen.util.ChanceEntry;
@@ -15,6 +16,7 @@ public final class BiomeDecoratorConfigs {
     private BiomeDecoratorConfigs() {
     }
 
+    @SuppressWarnings("unused")
     public static final BiomeSource FIXED_VOID_BIOME_SOURCE = new FixedBiomeSource(BuiltinBiomes.THE_VOID);
 
     public static final BiomeDecorator CONTINENT_INIT_DECORATOR = new WeightedBiomeDecorator(
@@ -30,24 +32,38 @@ public final class BiomeDecoratorConfigs {
     public static final BiomeDecorator INCREASE_EDGE_CURVATURE = new IncreaseEdgeCurvatureBiomeDecorator();
 
     public static BiomeSource getVanillaBiomeSource(long seed, Registry<Biome> biomeRegistry) {
-        return new DecoratedBiomeSource(seed, 70L,
-            new DecoratedBiomeSource(seed, 50L,
-                new DecoratedBiomeSource(seed, 2L,
-                    new DecoratedBiomeSource(seed, 2001L,
-                        new DecoratedBiomeSource(seed, 1L,
-                            new DecoratedBiomeSource(seed, 2000L,
-                                new DecoratedBiomeSource(seed, 1L, FIXED_VOID_BIOME_SOURCE, CONTINENT_INIT_DECORATOR, biomeRegistry),
-                                new ScaleBiomeDecorator(ScaleType.FUZZY), biomeRegistry
-                            ),
-                            INCREASE_EDGE_CURVATURE, biomeRegistry
-                        ),
-                        new ScaleBiomeDecorator(ScaleType.NORMAL), biomeRegistry
-                    ),
-                    INCREASE_EDGE_CURVATURE, biomeRegistry
+        return new ArrayDecoratedBiomeSource(seed,
+            ImmutableList.of(
+                new BiomeDecoratorEntry(
+                    1L,
+                    CONTINENT_INIT_DECORATOR
                 ),
-                INCREASE_EDGE_CURVATURE, biomeRegistry
+                new BiomeDecoratorEntry(
+                    2000L,
+                    new ScaleBiomeDecorator(ScaleType.FUZZY)
+                ),
+                new BiomeDecoratorEntry(
+                    1L,
+                    INCREASE_EDGE_CURVATURE
+                ),
+                new BiomeDecoratorEntry(
+                    2001L,
+                    new ScaleBiomeDecorator(ScaleType.NORMAL)
+                ),
+                new BiomeDecoratorEntry(
+                    2L,
+                    INCREASE_EDGE_CURVATURE
+                ),
+                new BiomeDecoratorEntry(
+                    50L,
+                    INCREASE_EDGE_CURVATURE
+                ),
+                new BiomeDecoratorEntry(
+                    70L,
+                    INCREASE_EDGE_CURVATURE
+                )
             ),
-            INCREASE_EDGE_CURVATURE, biomeRegistry
+            biomeRegistry
         );
     }
 }

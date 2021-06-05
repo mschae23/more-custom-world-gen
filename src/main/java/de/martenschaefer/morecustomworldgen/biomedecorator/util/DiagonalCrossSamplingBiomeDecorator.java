@@ -2,13 +2,12 @@ package de.martenschaefer.morecustomworldgen.biomedecorator.util;
 
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 
-public abstract class DiagonalCrossSamplingBiomeDecorator extends BiomeDecorator {
+public abstract class DiagonalCrossSamplingBiomeDecorator extends CachingBiomeDecorator {
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         return this.getBiome(random, parent.sample(x - 1, y, z + 1), parent.sample(x + 1, y, z + 1), parent.sample(x + 1, y, z - 1), parent.sample(x - 1, y, z - 1), parent.sample(x, y, z));
     }
 
