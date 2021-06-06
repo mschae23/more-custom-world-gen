@@ -9,6 +9,7 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class ScaleBiomeDecorator extends CachingBiomeDecorator implements CoordinateTransformer {
     public static final Codec<ScaleBiomeDecorator> CODEC = ScaleType.CODEC.fieldOf("scale_type").xmap(ScaleBiomeDecorator::new, ScaleBiomeDecorator::getType).codec();
@@ -72,30 +73,30 @@ public class ScaleBiomeDecorator extends CachingBiomeDecorator implements Coordi
         }
     }
 
-    protected <T> T sample(DecoratorRandomnessSource random, T i, T j, T k, T l) {
+    protected <T> RegistryKey<T> sample(DecoratorRandomnessSource random, RegistryKey<T> i, RegistryKey<T> j, RegistryKey<T> k, RegistryKey<T> l) {
         if (this.type == ScaleType.FUZZY)
             return random.choose(i, j, k, l);
 
-        if (j == k && k == l) {
+        if (RegistryKeys.equals(j, k) && RegistryKeys.equals(k, l)) {
             return j;
-        } else if (i == j && i == k) {
+        } else if (RegistryKeys.equals(i, j) && RegistryKeys.equals(i, k)) {
             return i;
-        } else if (i == j && i == l) {
+        } else if (RegistryKeys.equals(i, j) && RegistryKeys.equals(i, l)) {
             return i;
-        } else if (i == k && i == l) {
+        } else if (RegistryKeys.equals(i, k) && RegistryKeys.equals(i, l)) {
             return i;
-        } else if (i == j && k != l) {
+        } else if (RegistryKeys.equals(i, j) && !RegistryKeys.equals(k, l)) {
             return i;
-        } else if (i == k && j != l) {
+        } else if (RegistryKeys.equals(i, k) && !RegistryKeys.equals(j, l)) {
             return i;
-        } else if (i == l && j != k) {
+        } else if (RegistryKeys.equals(i, l) && !RegistryKeys.equals(j, k)) {
             return i;
-        } else if (j == k && i != l) {
+        } else if (RegistryKeys.equals(j, k) && !RegistryKeys.equals(i, l)) {
             return j;
-        } else if (j == l && i != k) {
+        } else if (RegistryKeys.equals(j, l) && !RegistryKeys.equals(i, k)) {
             return j;
         } else {
-            return k == l && i != j ? k : random.choose(i, j, k, l);
+            return RegistryKeys.equals(k, l) && !RegistryKeys.equals(i, j) ? k : random.choose(i, j, k, l);
         }
     }
 

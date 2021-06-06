@@ -24,7 +24,7 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
         if (BiomeKeys.FOREST.getValue().equals(center.getValue()))
             return BiomeKeys.FOREST;
 
-        if (!(!isOcean(center) || isOcean(nw) && isOcean(ne) && isOcean(sw) && isOcean(se))) {
+        if (isOcean(center) && (!isOcean(nw) || !isOcean(ne) || !isOcean(sw) || !isOcean(se))) {
             int n = 1;
             RegistryKey<Biome> o = BiomeKeys.PLAINS;
 

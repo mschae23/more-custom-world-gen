@@ -1,8 +1,8 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.config;
 
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 
 public class BiomeDecoratorEntry {
     // public static final Codec<BiomeDecoratorEntry> CODEC = Codec.LONG.dispatch("salt", BiomeDecoratorEntry::getSalt, BiomeDecoratorEntry::getCodec);

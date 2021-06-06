@@ -14,15 +14,15 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class CrossSamplingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator {
-    public static final Codec<CrossSamplingReplaceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
+public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator {
+    public static final Codec<BorderingReplaceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            Codec.BOOL.fieldOf("and").forGetter(CrossSamplingReplaceBiomeDecorator::isAnd),
-            Codec.BOOL.fieldOf("negative").forGetter(CrossSamplingReplaceBiomeDecorator::isNegative),
-            RegistryKeys.BIOME_CODEC.fieldOf("comparing_biome").forGetter(CrossSamplingReplaceBiomeDecorator::getComparingBiome),
-            Chance.CODEC.fieldOf("chance").forGetter(CrossSamplingReplaceBiomeDecorator::getChance),
-            RegistryKeys.BIOME_CODEC.fieldOf("biome").forGetter(CrossSamplingReplaceBiomeDecorator::getBiome)
-        ).apply(instance, instance.stable(CrossSamplingReplaceBiomeDecorator::new))
+            Codec.BOOL.fieldOf("and").forGetter(BorderingReplaceBiomeDecorator::isAnd),
+            Codec.BOOL.fieldOf("negative").forGetter(BorderingReplaceBiomeDecorator::isNegative),
+            RegistryKeys.BIOME_CODEC.fieldOf("comparing_biome").forGetter(BorderingReplaceBiomeDecorator::getComparingBiome),
+            Chance.CODEC.fieldOf("chance").forGetter(BorderingReplaceBiomeDecorator::getChance),
+            RegistryKeys.BIOME_CODEC.fieldOf("biome").forGetter(BorderingReplaceBiomeDecorator::getBiome)
+        ).apply(instance, instance.stable(BorderingReplaceBiomeDecorator::new))
     );
 
     private final boolean and;
@@ -31,7 +31,7 @@ public class CrossSamplingReplaceBiomeDecorator extends CrossSamplingBiomeDecora
     private final Chance chance;
     private final RegistryKey<Biome> biome;
 
-    public CrossSamplingReplaceBiomeDecorator(boolean and, boolean negative, RegistryKey<Biome> comparingBiome, Chance chance, RegistryKey<Biome> biome) {
+    public BorderingReplaceBiomeDecorator(boolean and, boolean negative, RegistryKey<Biome> comparingBiome, Chance chance, RegistryKey<Biome> biome) {
         this.and = and;
         this.negative = negative;
         this.comparingBiome = comparingBiome;

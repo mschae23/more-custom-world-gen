@@ -76,21 +76,17 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        BiomeSampler firstParent = this.biomeSource.map(source -> (BiomeSampler) (x, y, z) ->
+        BiomeSampler parent = this.biomeSource.map(source -> (BiomeSampler) (x, y, z) ->
             RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(source.getBiomeForNoiseGen(x, y, z)))
         ).orElseGet(() -> (x, y, z) -> BiomeKeys.THE_VOID);
 
-        List<BiomeSampler> samplers = new ArrayList<>(this.decorators.size());
-
-        for (int i = 0; i < this.decorators.size(); i++) {
-            BiomeDecoratorEntry entry = this.decorators.get(i);
-            BiomeSampler parent = i == 0 ? firstParent : samplers.get(i - 1);
+        for (BiomeDecoratorEntry entry : this.decorators) {
             DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.getSalt());
 
-            BiomeSampler sampler = (x, y, z) -> entry.getDecorator().getBiome(random, parent, x, y, z);
-            samplers.add(sampler);
+            BiomeSampler tempParent = parent;
+            parent = (x, y, z) -> entry.getDecorator().getBiome(random, tempParent, x, y, z);
         }
 
-        return this.biomeRegistry.get(samplers.get(samplers.size() - 1).sample(biomeX, biomeY, biomeZ));
+        return this.biomeRegistry.get(parent.sample(biomeX, biomeY, biomeZ));
     }
 }

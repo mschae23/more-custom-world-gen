@@ -24,4 +24,8 @@ public class RegistryKeys {
             RegistryKey::getValue
         ).listOf();
     }
+
+    public static boolean equals(RegistryKey<?> key1, RegistryKey<?> key2) {
+        return key1.getValue().equals(key2.getValue());
+    }
 }
