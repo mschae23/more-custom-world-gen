@@ -35,7 +35,7 @@ public class FromBiomeSourceBiomeDecorator extends CachingBiomeDecorator {
     }
 
     @Override
-    protected Codec<? extends BiomeDecorator> getCodec() {
+    protected Codec<FromBiomeSourceBiomeDecorator> getCodec() {
         return CODEC;
     }
 

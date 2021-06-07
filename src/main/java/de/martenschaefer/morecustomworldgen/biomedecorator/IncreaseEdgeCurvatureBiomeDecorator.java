@@ -15,7 +15,7 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
     // TODO make this a lot more configurable
 
     @Override
-    protected Codec<? extends BiomeDecorator> getCodec() {
+    protected Codec<IncreaseEdgeCurvatureBiomeDecorator> getCodec() {
         return CODEC;
     }
 

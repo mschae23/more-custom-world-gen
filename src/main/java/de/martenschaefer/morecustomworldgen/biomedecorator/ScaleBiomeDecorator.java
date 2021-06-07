@@ -25,7 +25,7 @@ public class ScaleBiomeDecorator extends CachingBiomeDecorator implements Coordi
     }
 
     @Override
-    protected Codec<? extends BiomeDecorator> getCodec() {
+    protected Codec<ScaleBiomeDecorator> getCodec() {
         return CODEC;
     }
 

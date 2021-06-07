@@ -31,7 +31,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
     private final Registry<Biome> biomeRegistry;
 
     public ArrayDecoratedBiomeSource(long seed, Optional<BiomeSource> biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
-        super(Stream.concat(decorators.stream().map(BiomeDecoratorEntry::getDecorator).flatMap(decorator -> decorator.getBiomes(biomeRegistry).stream()),
+        super(Stream.concat(decorators.stream().map(BiomeDecoratorEntry::decorator).flatMap(decorator -> decorator.getBiomes(biomeRegistry).stream()),
             biomeSource.map(BiomeSource::getBiomes).map(List::stream).orElseGet(Stream::empty))
             .collect(Collectors.toList()));
         this.seed = seed;
@@ -81,10 +81,10 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
         ).orElseGet(() -> (x, y, z) -> BiomeKeys.THE_VOID);
 
         for (BiomeDecoratorEntry entry : this.decorators) {
-            DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.getSalt());
+            DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.salt());
 
             BiomeSampler tempParent = parent;
-            parent = (x, y, z) -> entry.getDecorator().getBiome(random, tempParent, x, y, z);
+            parent = (x, y, z) -> entry.decorator().getBiome(random, tempParent, x, y, z);
         }
 
         return this.biomeRegistry.get(parent.sample(biomeX, biomeY, biomeZ));

@@ -53,4 +53,12 @@ public class Chance {
     public static Chance fraction(int numerator, int denominator) {
         return new Chance(numerator, denominator);
     }
+
+    public static Chance always() {
+        return simple(1);
+    }
+
+    public static Chance never() {
+        return fraction(0, 1);
+    }
 }
