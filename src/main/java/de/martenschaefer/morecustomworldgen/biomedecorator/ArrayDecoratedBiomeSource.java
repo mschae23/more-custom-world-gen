@@ -14,6 +14,9 @@ import net.minecraft.world.biome.source.BiomeSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.DecoratorBiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FixedBiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FromSourceBiomeSampler;
 
 public class ArrayDecoratedBiomeSource extends BiomeSource {
     public static final Codec<ArrayDecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->
@@ -29,6 +32,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
     private final Optional<BiomeSource> biomeSource;
     private final List<BiomeDecoratorEntry> decorators;
     private final Registry<Biome> biomeRegistry;
+    private final BiomeSampler sampler;
 
     public ArrayDecoratedBiomeSource(long seed, Optional<BiomeSource> biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
         super(Stream.concat(decorators.stream().map(BiomeDecoratorEntry::decorator).flatMap(decorator -> decorator.getBiomes(biomeRegistry).stream()),
@@ -38,6 +42,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
         this.biomeSource = biomeSource;
         this.decorators = decorators;
         this.biomeRegistry = biomeRegistry;
+        this.sampler = this.createSampler();
     }
 
     public ArrayDecoratedBiomeSource(long seed, BiomeSource biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
@@ -64,6 +69,18 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
         return this.biomeRegistry;
     }
 
+    private BiomeSampler createSampler() {
+        BiomeSampler parent = this.biomeSource.<BiomeSampler>map(source -> new FromSourceBiomeSampler(source, this.biomeRegistry))
+            .orElseGet(() -> new FixedBiomeSampler(BiomeKeys.THE_VOID));
+
+        for (BiomeDecoratorEntry entry : this.decorators) {
+            DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.salt());
+            parent = new DecoratorBiomeSampler(random, parent, entry.decorator());
+        }
+
+        return parent;
+    }
+
     @Override
     protected Codec<? extends BiomeSource> getCodec() {
         return CODEC;
@@ -76,17 +93,6 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        BiomeSampler parent = this.biomeSource.map(source -> (BiomeSampler) (x, y, z) ->
-            RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(source.getBiomeForNoiseGen(x, y, z)))
-        ).orElseGet(() -> (x, y, z) -> BiomeKeys.THE_VOID);
-
-        for (BiomeDecoratorEntry entry : this.decorators) {
-            DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.salt());
-
-            BiomeSampler tempParent = parent;
-            parent = (x, y, z) -> entry.decorator().getBiome(random, tempParent, x, y, z);
-        }
-
-        return this.biomeRegistry.get(parent.sample(biomeX, biomeY, biomeZ));
+        return this.biomeRegistry.get(this.sampler.sample(biomeX, biomeY, biomeZ));
     }
 }
