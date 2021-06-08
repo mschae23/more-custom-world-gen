@@ -3,6 +3,7 @@ package de.martenschaefer.morecustomworldgen.biomedecorator;
 import net.minecraft.util.registry.Registry;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenMod;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenRegistries;
+import de.martenschaefer.morecustomworldgen.biomedecorator.replace.ArrayWeightedReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.replace.BorderingReplaceBiomeDecorator;
 import com.mojang.serialization.Codec;
 import de.martenschaefer.morecustomworldgen.biomedecorator.replace.SimpleReplaceBiomeDecorator;
@@ -24,6 +25,7 @@ public final class BiomeDecorators {
         register("increase_edge_curvature", IncreaseEdgeCurvatureBiomeDecorator.CODEC);
         register("bordering_replace", BorderingReplaceBiomeDecorator.CODEC);
         register("weighted_replace", WeightedReplaceBiomeDecorator.CODEC);
+        register("array_weighted_replace", ArrayWeightedReplaceBiomeDecorator.CODEC);
         register("simple_replace", SimpleReplaceBiomeDecorator.CODEC);
     }
 }

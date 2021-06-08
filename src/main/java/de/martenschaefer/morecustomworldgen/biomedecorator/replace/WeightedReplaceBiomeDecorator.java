@@ -16,7 +16,7 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDeco
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import de.martenschaefer.morecustomworldgen.util.WeightEntry;
 
-public class WeightedReplaceBiomeDecorator extends CachingBiomeDecorator {
+public class WeightedReplaceBiomeDecorator extends BiomeDecorator {
     public static final Codec<WeightedReplaceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             RegistryKeys.BIOME_LIST_CODEC.fieldOf("ignored_biomes").forGetter(WeightedReplaceBiomeDecorator::getIgnoredBiomes),
@@ -57,7 +57,7 @@ public class WeightedReplaceBiomeDecorator extends CachingBiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         var biome = parent.sample(x, y, z);
 
         if (this.ignoredBiomes.contains(biome))

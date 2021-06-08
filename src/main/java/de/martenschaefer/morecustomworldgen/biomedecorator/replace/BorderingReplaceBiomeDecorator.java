@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeSetEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.CrossSamplingBiomeDecorator;
@@ -19,11 +18,11 @@ import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator {
     public static final Codec<BorderingReplaceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            Codec.BOOL.fieldOf("and").orElse(Boolean.TRUE).forGetter(BorderingReplaceBiomeDecorator::isAnd),
+            Codec.BOOL.fieldOf("and").orElse(Boolean.FALSE).forGetter(BorderingReplaceBiomeDecorator::isAnd),
             Codec.BOOL.fieldOf("center_and").orElse(Boolean.TRUE).forGetter(BorderingReplaceBiomeDecorator::isCenterAnd),
             Codec.BOOL.fieldOf("negative").orElse(Boolean.FALSE).forGetter(BorderingReplaceBiomeDecorator::isNegative),
             BiomeSetEntry.CODEC.fieldOf("center_biomes").forGetter(BorderingReplaceBiomeDecorator::getCenterBiomeSet),
-            BiomeSetEntry.CODEC.fieldOf("comparing_biomes").forGetter(BorderingReplaceBiomeDecorator::getComparingBiomeSet),
+            BiomeSetEntry.CODEC.fieldOf("bordering_biomes").forGetter(BorderingReplaceBiomeDecorator::getBorderingBiomeSet),
             Chance.CODEC.fieldOf("chance").forGetter(BorderingReplaceBiomeDecorator::getChance),
             RegistryKeys.BIOME_CODEC.fieldOf("biome").forGetter(BorderingReplaceBiomeDecorator::getBiome)
         ).apply(instance, instance.stable(BorderingReplaceBiomeDecorator::new))
@@ -33,34 +32,38 @@ public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator 
     private final boolean centerAnd;
     private final boolean negative;
     private final Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet;
-    private final Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> comparingBiomeSet;
+    private final Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet;
     private final Chance chance;
     private final RegistryKey<Biome> biome;
 
-    public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, boolean negative, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> comparingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+    public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, boolean negative, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
         this.and = and;
         this.centerAnd = centerAnd;
         this.negative = negative;
         this.centerBiomeSet = centerBiomeSet;
-        this.comparingBiomeSet = comparingBiomeSet;
+        this.borderingBiomeSet = borderingBiomeSet;
         this.chance = chance;
         this.biome = biome;
     }
 
-    public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> comparingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
-        this(and, centerAnd, false, centerBiomeSet, comparingBiomeSet, chance, biome);
+    public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(and, centerAnd, false, centerBiomeSet, borderingBiomeSet, chance, biome);
     }
 
-    public BorderingReplaceBiomeDecorator(boolean and, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> comparingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
-        this(and, true, centerBiomeSet, comparingBiomeSet, chance, biome);
+    public BorderingReplaceBiomeDecorator(boolean and, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(and, true, centerBiomeSet, borderingBiomeSet, chance, biome);
     }
 
-    public BorderingReplaceBiomeDecorator(Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> comparingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
-        this(true, centerBiomeSet, comparingBiomeSet, chance, biome);
+    public BorderingReplaceBiomeDecorator(boolean and, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(and, true, borderingBiomeSet, borderingBiomeSet, chance, biome);
     }
 
-    public BorderingReplaceBiomeDecorator(Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> comparingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
-        this(comparingBiomeSet, comparingBiomeSet, chance, biome);
+    public BorderingReplaceBiomeDecorator(Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(false, centerBiomeSet, borderingBiomeSet, chance, biome);
+    }
+
+    public BorderingReplaceBiomeDecorator(Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(borderingBiomeSet, borderingBiomeSet, chance, biome);
     }
 
     public boolean isAnd() {
@@ -79,8 +82,8 @@ public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator 
         return centerBiomeSet;
     }
 
-    public Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> getComparingBiomeSet() {
-        return this.comparingBiomeSet;
+    public Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> getBorderingBiomeSet() {
+        return this.borderingBiomeSet;
     }
 
     public Chance getChance() {
@@ -103,10 +106,10 @@ public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator 
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
-        boolean compareN = BiomeSetEntry.contains(this.comparingBiomeSet, n) && !this.negative;
-        boolean compareE = BiomeSetEntry.contains(this.comparingBiomeSet, e) && !this.negative;
-        boolean compareS = BiomeSetEntry.contains(this.comparingBiomeSet, s) && !this.negative;
-        boolean compareW = BiomeSetEntry.contains(this.comparingBiomeSet, w) && !this.negative;
+        boolean compareN = BiomeSetEntry.contains(this.borderingBiomeSet, n) && !this.negative;
+        boolean compareE = BiomeSetEntry.contains(this.borderingBiomeSet, e) && !this.negative;
+        boolean compareS = BiomeSetEntry.contains(this.borderingBiomeSet, s) && !this.negative;
+        boolean compareW = BiomeSetEntry.contains(this.borderingBiomeSet, w) && !this.negative;
         boolean compareCenter = BiomeSetEntry.contains(this.centerBiomeSet, center) && !this.negative;
         boolean compare = this.and ? compareN && compareE && compareS && compareW :
             compareN || compareE || compareS || compareW;

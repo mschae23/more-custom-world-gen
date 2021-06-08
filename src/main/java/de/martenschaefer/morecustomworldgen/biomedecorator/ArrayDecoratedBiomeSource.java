@@ -1,22 +1,25 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.minecraft.SharedConstants;
+import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
-import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.martenschaefer.morecustomworldgen.biomedecorator.impl.DecoratorBiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.CachingDecoratorBiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FixedBiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FromSourceBiomeSampler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ArrayDecoratedBiomeSource extends BiomeSource {
     public static final Codec<ArrayDecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->
@@ -27,6 +30,8 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(ArrayDecoratedBiomeSource::getBiomeRegistry)
         ).apply(instance, instance.stable(ArrayDecoratedBiomeSource::new))
     );
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private final long seed;
     private final Optional<BiomeSource> biomeSource;
@@ -75,14 +80,14 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
         for (BiomeDecoratorEntry entry : this.decorators) {
             DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.salt());
-            parent = new DecoratorBiomeSampler(random, parent, entry.decorator());
+            parent = new CachingDecoratorBiomeSampler(random, parent, entry.decorator());
         }
 
         return parent;
     }
 
     @Override
-    protected Codec<? extends BiomeSource> getCodec() {
+    protected Codec<ArrayDecoratedBiomeSource> getCodec() {
         return CODEC;
     }
 
@@ -93,6 +98,22 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        return this.biomeRegistry.get(this.sampler.sample(biomeX, biomeY, biomeZ));
+        RegistryKey<Biome> key = this.sampler.sample(biomeX, biomeY, biomeZ);
+
+        if (key == null) {
+            throw new IllegalStateException("No biome emitted by biome decorators");
+        } else {
+            Biome biome = this.biomeRegistry.get(key);
+            if (biome == null) {
+                if (SharedConstants.isDevelopment) {
+                    throw Util.throwOrPause(new IllegalStateException("Unknown biome id: " + key.getValue()));
+                } else {
+                    LOGGER.warn("Unknown biome id: " + key.getValue());
+                    return this.biomeRegistry.get(BiomeKeys.OCEAN);
+                }
+            } else {
+                return biome;
+            }
+        }
     }
 }

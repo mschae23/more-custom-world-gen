@@ -5,9 +5,9 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
-import de.martenschaefer.morecustomworldgen.biomedecorator.util.DiagonalCrossSamplingBiomeDecorator;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.DiagonalCrossSamplingBiomeDecorator;
 
 public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBiomeDecorator {
     public static final Codec<IncreaseEdgeCurvatureBiomeDecorator> CODEC = Codec.unit(IncreaseEdgeCurvatureBiomeDecorator::new);
@@ -24,23 +24,29 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
         if (BiomeKeys.FOREST.getValue().equals(center.getValue()))
             return BiomeKeys.FOREST;
 
-        if (isOcean(center) && (!isOcean(nw) || !isOcean(ne) || !isOcean(sw) || !isOcean(se))) {
+        boolean isCenterOcean = isOcean(center);
+        boolean isOceanNW = isOcean(nw);
+        boolean isOceanNE = isOcean(ne);
+        boolean isOceanSW = isOcean(sw);
+        boolean isOceanSE = isOcean(se);
+
+        if (isCenterOcean && (!isOceanNW || !isOceanNE || !isOceanSW || !isOceanSE)) {
             int n = 1;
             RegistryKey<Biome> o = BiomeKeys.PLAINS;
 
-            if (!isOcean(nw) && random.nextInt(n++) == 0) {
+            if (!isOceanNW && random.nextInt(n++) == 0) {
                 o = nw;
             }
 
-            if (!isOcean(ne) && random.nextInt(n++) == 0) {
+            if (!isOceanNE && random.nextInt(n++) == 0) {
                 o = ne;
             }
 
-            if (!isOcean(sw) && random.nextInt(n++) == 0) {
+            if (!isOceanSW && random.nextInt(n++) == 0) {
                 o = sw;
             }
 
-            if (!isOcean(se) && random.nextInt(n) == 0) {
+            if (!isOceanSE && random.nextInt(n) == 0) {
                 o = se;
             }
 
@@ -51,15 +57,15 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
             return center;
         }
 
-        if (!isOcean(center) && (isOcean(nw) || isOcean(sw) || isOcean(ne) || isOcean(se)) && random.nextInt(5) == 0) {
-            if (isOcean(nw))
+        if (!isCenterOcean && (isOceanNW || isOceanNE || isOceanSW || isOceanSE) && random.nextInt(5) == 0) {
+            if (isOceanNW)
                 return nw;
-            if (isOcean(sw))
-                return sw;
-            if (isOcean(ne))
+            if (isOceanNE)
                 return ne;
-            if (isOcean(se))
-                return se;
+            if (isOceanSW)
+                return sw;
+
+            return se;
         }
 
         return center;

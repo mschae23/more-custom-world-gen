@@ -6,13 +6,12 @@ import java.util.stream.Collectors;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
-import de.martenschaefer.morecustomworldgen.util.ChanceEntry;
-import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.martenschaefer.morecustomworldgen.util.ChanceEntry;
+import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
-public class WeightedInitBiomeDecorator extends CachingBiomeDecorator {
+public class WeightedInitBiomeDecorator extends BiomeDecorator {
     public static final Codec<WeightedInitBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             ChanceEntry.createCodec(RegistryKeys.BIOME_CODEC, "biome").listOf().fieldOf("biomes").forGetter(WeightedInitBiomeDecorator::getBiomes),
@@ -43,7 +42,7 @@ public class WeightedInitBiomeDecorator extends CachingBiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         List<RegistryKey<Biome>> biomeList = this.biomes.stream().collect(ArrayList::new, (list, entry) -> {
             if (entry.chance().get(random))
                 list.add(entry.value());

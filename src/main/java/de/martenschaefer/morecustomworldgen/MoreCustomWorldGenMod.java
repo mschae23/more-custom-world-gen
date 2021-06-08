@@ -7,6 +7,7 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.ArrayDecoratedBiomeSo
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorators;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratedBiomeSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.biome.MoreCustomWorldGenBiomes;
+import de.martenschaefer.morecustomworldgen.command.SaveBiomeMapCommand;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.CustomLayeredBiomeSource;
 
 public class MoreCustomWorldGenMod implements ModInitializer {
@@ -22,6 +23,8 @@ public class MoreCustomWorldGenMod implements ModInitializer {
         MoreCustomWorldGenFeatures.init();
         MoreCustomWorldGenBiomes.init();
         BiomeDecorators.register();
+
+        SaveBiomeMapCommand.init();
     }
 
     public static Identifier id(String path) {

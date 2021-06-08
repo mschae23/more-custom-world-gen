@@ -56,4 +56,12 @@ public final class WeightEntry<T> extends WeightedPicker.Entry {
     public static <T> Codec<WeightEntry<T>> createCodec(Codec<T> valueCodec) {
         return createCodec("value", valueCodec);
     }
+
+    public static <T> WeightEntry<T> of(int weight, T value) {
+        return new WeightEntry<>(weight, value);
+    }
+
+    public static <T> WeightEntry<T> one(T value) {
+        return of(1, value);
+    }
 }

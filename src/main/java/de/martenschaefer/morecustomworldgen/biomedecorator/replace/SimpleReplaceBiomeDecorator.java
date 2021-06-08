@@ -6,13 +6,14 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import com.mojang.serialization.Codec;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.SimpleReplaceBiomeEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
-public class SimpleReplaceBiomeDecorator extends CachingBiomeDecorator {
+public class SimpleReplaceBiomeDecorator extends BiomeDecorator {
     public static final Codec<SimpleReplaceBiomeDecorator> CODEC = SimpleReplaceBiomeEntry.CODEC.listOf().fieldOf("biomes")
         .xmap(SimpleReplaceBiomeDecorator::new, SimpleReplaceBiomeDecorator::getBiomes).codec();
 
@@ -40,7 +41,7 @@ public class SimpleReplaceBiomeDecorator extends CachingBiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         var biome = parent.sample(x, y, z);
 
         for (SimpleReplaceBiomeEntry entry : this.biomes) {

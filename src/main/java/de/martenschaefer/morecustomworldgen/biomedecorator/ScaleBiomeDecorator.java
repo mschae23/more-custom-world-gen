@@ -5,14 +5,14 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.layer.util.CoordinateTransformer;
-import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
-import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
-public class ScaleBiomeDecorator extends CachingBiomeDecorator implements CoordinateTransformer {
-    public static final Codec<ScaleBiomeDecorator> CODEC = ScaleType.CODEC.fieldOf("scale_type").xmap(ScaleBiomeDecorator::new, ScaleBiomeDecorator::getType).codec();
+public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTransformer {
+    public static final Codec<ScaleBiomeDecorator> CODEC = ScaleType.CODEC.fieldOf("scale_type")
+        .xmap(ScaleBiomeDecorator::new, ScaleBiomeDecorator::getType).codec();
 
     private final ScaleType type;
 
@@ -44,30 +44,30 @@ public class ScaleBiomeDecorator extends CachingBiomeDecorator implements Coordi
     }
 
     @Override
-    public RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        RegistryKey<Biome> i = parent.sample(this.transformX(x), this.transformY(y), this.transformZ(z));
+    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+        RegistryKey<Biome> biome = parent.sample(this.transformX(x), this.transformY(y), this.transformZ(z));
 
         if (this.type == ScaleType.SIMPLE)
-            return i;
+            return biome;
 
         random.initSeed(x >> 1 << 1, z >> 1 << 1);
         int j = x & 1;
         int k = z & 1;
         if (j == 0 && k == 0) {
-            return i;
+            return biome;
         } else {
             RegistryKey<Biome> l = parent.sample(this.transformX(x), this.transformY(y), this.transformZ(z + 1));
-            RegistryKey<Biome> m = random.choose(i, l);
+
             if (j == 0) { // k == 1
-                return m;
+                return random.choose(biome, l);
             } else {
                 RegistryKey<Biome> n = parent.sample(this.transformX(x + 1), this.transformY(y), this.transformZ(z));
-                RegistryKey<Biome> o = random.choose(i, n);
+
                 if (k == 0) { // j == 1
-                    return o;
+                    return random.choose(biome, n);
                 } else {
                     RegistryKey<Biome> p = parent.sample(this.transformX(x + 1), this.transformY(y), this.transformZ(z + 1));
-                    return this.sample(random, i, n, l, p);
+                    return this.sample(random, biome, n, l, p);
                 }
             }
         }
@@ -103,5 +103,17 @@ public class ScaleBiomeDecorator extends CachingBiomeDecorator implements Coordi
     @Override
     public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
         return ImmutableList.of();
+    }
+
+    public static ScaleBiomeDecorator normal() {
+        return new ScaleBiomeDecorator(ScaleType.NORMAL);
+    }
+
+    public static ScaleBiomeDecorator fuzzy() {
+        return new ScaleBiomeDecorator(ScaleType.FUZZY);
+    }
+
+    public static ScaleBiomeDecorator simple() {
+        return new ScaleBiomeDecorator(ScaleType.SIMPLE);
     }
 }

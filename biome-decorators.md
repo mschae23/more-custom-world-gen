@@ -46,7 +46,7 @@ Replaces the current biome with another one if it is bordering other specified b
 - `center_biomes`: Registry ID (or ID list) of the biome that the center biome is compared with.
 - `comparing_biomes`: Registry ID (or ID list) of the biome that the bordering biomes are compared with.
 - `and`: Boolean value. If all the bordering biomes have to match the comparing biome, or if it is enough if one of them
-  matches it. (Defaults to `true`)
+  matches it. (Defaults to `false`)
 - `center_and`: If the center *and* the bordering biomes have to match, or the center *or* the bordering biomes.
   (Defaults to `true`)
 - `negative`: Negates the `comparing_biome`, meaning the bordering biomes have to *not* match it. (Defaults to `false`)
@@ -63,6 +63,9 @@ Replaces specific biomes with other ones, determined by a weighted list.
 - `biomes`: Weighted list of biomes.
     - `weight`: Int.
     - `biome`: The biome to generate.
+  
+### `array_weighted_replace`
+Replaces specific biomes with other ones, determined by lists of weighted lists.
 
 ### `simple_replace`
 Replaces specific biomes with another one.
