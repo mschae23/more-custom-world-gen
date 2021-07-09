@@ -12,10 +12,14 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.biome.MoreCustomWorld
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.SimpleReplaceBiomeEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.WeightedReplaceBiomeEntry;
-import de.martenschaefer.morecustomworldgen.biomedecorator.replace.ArrayWeightedReplaceBiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.replace.BorderingReplaceBiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.replace.SimpleReplaceBiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.replace.WeightedReplaceBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.IncreaseEdgeCurvatureBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.ScaleBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.WeightedInitBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.ArrayBorderingReplaceBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.ArrayWeightedReplaceBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.BorderingReplaceBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.SimpleReplaceBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.WeightedReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.util.Chance;
 import de.martenschaefer.morecustomworldgen.util.ChanceEntry;
 import de.martenschaefer.morecustomworldgen.util.WeightEntry;
@@ -236,7 +240,7 @@ public final class BiomeDecoratorConfigs {
                 ),
                 new BiomeDecoratorEntry(
                     1001L,
-                    new SimpleReplaceBiomeDecorator( // TODO Replace with a south east sampling replace decorator
+                    new SimpleReplaceBiomeDecorator(
                         ImmutableList.of(
                             new SimpleReplaceBiomeEntry(
                                 BiomeKeys.JUNGLE,
@@ -253,6 +257,72 @@ public final class BiomeDecoratorConfigs {
                 new BiomeDecoratorEntry(
                     1001L,
                     ScaleBiomeDecorator.normal()
+                ),
+                new BiomeDecoratorEntry(
+                    1000L,
+                    new ArrayBorderingReplaceBiomeDecorator(
+                        ImmutableList.of(
+                            BiomeKeys.GRAVELLY_MOUNTAINS,
+                            BiomeKeys.MODIFIED_GRAVELLY_MOUNTAINS,
+                            BiomeKeys.MOUNTAIN_EDGE,
+                            BiomeKeys.MOUNTAINS,
+                            BiomeKeys.WOODED_MOUNTAINS
+                        ),
+                        ImmutableList.of(
+                            new BorderingReplaceBiomeDecorator(
+                                false, true, true,
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.BADLANDS_PLATEAU,
+                                    BiomeKeys.WOODED_BADLANDS_PLATEAU
+                                )),
+                                Chance.always(),
+                                BiomeKeys.BADLANDS
+                            ),
+                            new BorderingReplaceBiomeDecorator(
+                                false, true, true,
+                                Either.left(BiomeKeys.GIANT_TREE_TAIGA),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.GIANT_SPRUCE_TAIGA,
+                                    BiomeKeys.GIANT_SPRUCE_TAIGA_HILLS,
+                                    BiomeKeys.GIANT_TREE_TAIGA,
+                                    BiomeKeys.GIANT_TREE_TAIGA_HILLS,
+                                    BiomeKeys.SNOWY_TAIGA,
+                                    BiomeKeys.SNOWY_TAIGA_HILLS,
+                                    BiomeKeys.SNOWY_TAIGA_MOUNTAINS,
+                                    BiomeKeys.TAIGA,
+                                    BiomeKeys.TAIGA_HILLS,
+                                    BiomeKeys.TAIGA_MOUNTAINS
+                                )),
+                                Chance.always(),
+                                BiomeKeys.TAIGA
+                            ),
+                            new BorderingReplaceBiomeDecorator(
+                                Either.left(BiomeKeys.DESERT),
+                                Either.left(BiomeKeys.SNOWY_TUNDRA),
+                                Chance.always(),
+                                BiomeKeys.WOODED_MOUNTAINS
+                            ),
+                            new BorderingReplaceBiomeDecorator(
+                                Either.left(BiomeKeys.SWAMP),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.DESERT,
+                                    BiomeKeys.SNOWY_TAIGA,
+                                    BiomeKeys.SNOWY_TUNDRA
+                                )),
+                                Chance.always(),
+                                BiomeKeys.PLAINS
+                            ),
+                            new BorderingReplaceBiomeDecorator(
+                                Either.left(BiomeKeys.SWAMP),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.JUNGLE,
+                                    BiomeKeys.BAMBOO_JUNGLE
+                                )),
+                                Chance.always(),
+                                BiomeKeys.JUNGLE_EDGE
+                            )
+                        )
+                    )
                 )
             ),
             biomeRegistry

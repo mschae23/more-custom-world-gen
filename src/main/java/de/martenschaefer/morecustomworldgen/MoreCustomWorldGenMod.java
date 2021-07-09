@@ -2,6 +2,8 @@ package de.martenschaefer.morecustomworldgen;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 import net.fabricmc.api.ModInitializer;
 import de.martenschaefer.morecustomworldgen.biomedecorator.ArrayDecoratedBiomeSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorators;
@@ -29,5 +31,9 @@ public class MoreCustomWorldGenMod implements ModInitializer {
 
     public static Identifier id(String path) {
         return new Identifier(MODID, path);
+    }
+
+    public static boolean equals(RegistryKey<Biome> i, RegistryKey<Biome> j) {
+        return i.getValue().equals(j.getValue());
     }
 }

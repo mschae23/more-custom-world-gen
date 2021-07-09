@@ -1,4 +1,4 @@
-package de.martenschaefer.morecustomworldgen.biomedecorator.replace;
+package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +12,6 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeSetEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.WeightedReplaceBiomeEntry;
-import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 
 public class ArrayWeightedReplaceBiomeDecorator extends BiomeDecorator {
     public static final Codec<ArrayWeightedReplaceBiomeDecorator> CODEC = WeightedReplaceBiomeEntry.CODEC.listOf().fieldOf("biomes")
@@ -35,7 +34,7 @@ public class ArrayWeightedReplaceBiomeDecorator extends BiomeDecorator {
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        RegistryKey biome = parent.sample(x, y, z);
+        RegistryKey<Biome> biome = parent.sample(x, y, z);
 
         for (var entry : this.biomes) {
             if (BiomeSetEntry.contains(entry.comparingBiomes(), biome))

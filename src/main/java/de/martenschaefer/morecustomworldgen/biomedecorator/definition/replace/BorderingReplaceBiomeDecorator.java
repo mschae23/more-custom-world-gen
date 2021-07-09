@@ -1,7 +1,8 @@
-package de.martenschaefer.morecustomworldgen.biomedecorator.replace;
+package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
@@ -46,8 +47,16 @@ public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator 
         this.biome = biome;
     }
 
+    public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, boolean negative, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(and, centerAnd, negative, borderingBiomeSet, borderingBiomeSet, chance, biome);
+    }
+
     public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
         this(and, centerAnd, false, centerBiomeSet, borderingBiomeSet, chance, biome);
+    }
+
+    public BorderingReplaceBiomeDecorator(boolean and, boolean centerAnd, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
+        this(and, centerAnd, false, borderingBiomeSet, borderingBiomeSet, chance, biome);
     }
 
     public BorderingReplaceBiomeDecorator(boolean and, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> centerBiomeSet, Either<RegistryKey<Biome>, List<RegistryKey<Biome>>> borderingBiomeSet, Chance chance, RegistryKey<Biome> biome) {
@@ -106,17 +115,21 @@ public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator 
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
-        boolean compareN = BiomeSetEntry.contains(this.borderingBiomeSet, n) && !this.negative;
-        boolean compareE = BiomeSetEntry.contains(this.borderingBiomeSet, e) && !this.negative;
-        boolean compareS = BiomeSetEntry.contains(this.borderingBiomeSet, s) && !this.negative;
-        boolean compareW = BiomeSetEntry.contains(this.borderingBiomeSet, w) && !this.negative;
-        boolean compareCenter = BiomeSetEntry.contains(this.centerBiomeSet, center) && !this.negative;
+        return this.sample(random, n, e, s, w, center).orElse(center);
+    }
+
+    public Optional<RegistryKey<Biome>> sample(DecoratorRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
+        boolean compareN = BiomeSetEntry.contains(this.borderingBiomeSet, n) == !this.negative;
+        boolean compareE = BiomeSetEntry.contains(this.borderingBiomeSet, e) == !this.negative;
+        boolean compareS = BiomeSetEntry.contains(this.borderingBiomeSet, s) == !this.negative;
+        boolean compareW = BiomeSetEntry.contains(this.borderingBiomeSet, w) == !this.negative;
+        boolean compareCenter = BiomeSetEntry.contains(this.centerBiomeSet, center);
         boolean compare = this.and ? compareN && compareE && compareS && compareW :
             compareN || compareE || compareS || compareW;
 
         compare = this.centerAnd ? compare && compareCenter : compare || compareCenter;
         compare = compare && this.chance.get(random);
 
-        return compare ? this.biome : center;
+        return compare ? Optional.of(this.biome) : Optional.empty();
     }
 }

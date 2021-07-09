@@ -1,4 +1,4 @@
-package de.martenschaefer.morecustomworldgen.biomedecorator;
+package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
 import java.util.List;
 import net.minecraft.util.registry.Registry;
@@ -7,6 +7,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.layer.util.CoordinateTransformer;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 

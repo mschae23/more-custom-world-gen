@@ -53,6 +53,12 @@ Replaces the current biome with another one if it is bordering other specified b
 - `chance`: Int or chance object. The biome is only going to be replaced with a certain chance.
 - `biome`: The biome that is going to be used instead of the current biome.
 
+### `array_bordering_replace`
+Replaces the current biome with another one if it is bordering other specified biomes.
+
+- `ignored_biomes`: List of ignored biomes.
+- `replaces`: List of objects in the format of `bordering_replace`.
+
 ### `weighted_replace`
 Replaces specific biomes with other ones, determined by a weighted list.
 
@@ -63,7 +69,7 @@ Replaces specific biomes with other ones, determined by a weighted list.
 - `biomes`: Weighted list of biomes.
     - `weight`: Int.
     - `biome`: The biome to generate.
-  
+
 ### `array_weighted_replace`
 Replaces specific biomes with other ones, determined by lists of weighted lists.
 
@@ -161,7 +167,7 @@ Example dimension which should generate almost exactly like `vanilla_layered`
           "salt": 2,
           "decorator": {
             "center_biomes": "minecraft:ocean",
-            "comparing_biomes": "minecraft:ocean",
+            "bordering_biomes": "minecraft:ocean",
             "chance": 2,
             "biome": "minecraft:plains",
             "and": true,
@@ -204,7 +210,7 @@ Example dimension which should generate almost exactly like `vanilla_layered`
           "salt": 2,
           "decorator": {
             "center_biomes": "morecustomworldgen:dry",
-            "comparing_biomes": [
+            "bordering_biomes": [
               "morecustomworldgen:cool",
               "morecustomworldgen:snowy"
             ],
@@ -220,7 +226,7 @@ Example dimension which should generate almost exactly like `vanilla_layered`
           "salt": 2,
           "decorator": {
             "center_biomes": "morecustomworldgen:snowy",
-            "comparing_biomes": [
+            "bordering_biomes": [
               "morecustomworldgen:dry",
               "morecustomworldgen:temperate"
             ],
@@ -278,6 +284,265 @@ Example dimension which should generate almost exactly like `vanilla_layered`
           "salt": 4,
           "decorator": {
             "type": "morecustomworldgen:increase_edge_curvature"
+          }
+        },
+        {
+          "salt": 5,
+          "decorator": {
+            "center_biomes": "minecraft:ocean",
+            "bordering_biomes": "minecraft:ocean",
+            "chance": 100,
+            "biome": "minecraft:mushroom_fields",
+            "and": true,
+            "center_and": true,
+            "negative": false,
+            "type": "morecustomworldgen:bordering_replace"
+          }
+        },
+        {
+          "salt": 4,
+          "decorator": {
+            "center_biomes": "minecraft:ocean",
+            "bordering_biomes": "minecraft:ocean",
+            "chance": 1,
+            "biome": "minecraft:deep_ocean",
+            "and": true,
+            "center_and": true,
+            "negative": false,
+            "type": "morecustomworldgen:bordering_replace"
+          }
+        },
+        {
+          "salt": 200,
+          "decorator": {
+            "biomes": [
+              {
+                "comparing_biomes": "morecustomworldgen:dry",
+                "biomes": [
+                  {
+                    "weight": 3,
+                    "biome": "minecraft:desert"
+                  },
+                  {
+                    "weight": 2,
+                    "biome": "minecraft:savanna"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:plains"
+                  }
+                ]
+              },
+              {
+                "comparing_biomes": "morecustomworldgen:special_dry",
+                "biomes": [
+                  {
+                    "weight": 2,
+                    "biome": "minecraft:wooded_badlands_plateau"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:badlands_plateau"
+                  }
+                ]
+              },
+              {
+                "comparing_biomes": "morecustomworldgen:temperate",
+                "biomes": [
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:forest"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:dark_forest"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:mountains"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:plains"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:birch_forest"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:swamp"
+                  }
+                ]
+              },
+              {
+                "comparing_biomes": "morecustomworldgen:special_temperate",
+                "biomes": [
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:jungle"
+                  }
+                ]
+              },
+              {
+                "comparing_biomes": "morecustomworldgen:cool",
+                "biomes": [
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:forest"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:mountains"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:taiga"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:plains"
+                  }
+                ]
+              },
+              {
+                "comparing_biomes": "morecustomworldgen:special_cool",
+                "biomes": [
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:giant_tree_taiga"
+                  }
+                ]
+              },
+              {
+                "comparing_biomes": [
+                  "morecustomworldgen:snowy",
+                  "morecustomworldgen:special_snowy"
+                ],
+                "biomes": [
+                  {
+                    "weight": 3,
+                    "biome": "minecraft:snowy_tundra"
+                  },
+                  {
+                    "weight": 1,
+                    "biome": "minecraft:snowy_taiga"
+                  }
+                ]
+              }
+            ],
+            "type": "morecustomworldgen:array_weighted_replace"
+          }
+        },
+        {
+          "salt": 1001,
+          "decorator": {
+            "biomes": [
+              {
+                "comparing_biome": "minecraft:jungle",
+                "chance": 10,
+                "biome": "minecraft:bamboo_jungle"
+              }
+            ],
+            "type": "morecustomworldgen:simple_replace"
+          }
+        },
+        {
+          "salt": 1000,
+          "decorator": {
+            "scale_type": "normal",
+            "type": "morecustomworldgen:scale"
+          }
+        },
+        {
+          "salt": 1001,
+          "decorator": {
+            "scale_type": "normal",
+            "type": "morecustomworldgen:scale"
+          }
+        },
+        {
+          "salt": 1000,
+          "decorator": {
+            "ignored_biomes": [
+              "minecraft:gravelly_mountains",
+              "minecraft:modified_gravelly_mountains",
+              "minecraft:mountain_edge",
+              "minecraft:mountains",
+              "minecraft:wooded_mountains"
+            ],
+            "replaces": [
+              {
+                "center_biomes": [
+                  "minecraft:badlands_plateau",
+                  "minecraft:wooded_badlands_plateau"
+                ],
+                "bordering_biomes": [
+                  "minecraft:badlands_plateau",
+                  "minecraft:wooded_badlands_plateau"
+                ],
+                "chance": 1,
+                "biome": "minecraft:badlands",
+                "and": false,
+                "center_and": true,
+                "negative": true
+              },
+              {
+                "center_biomes": "minecraft:giant_tree_taiga",
+                "bordering_biomes": [
+                  "minecraft:giant_spruce_taiga",
+                  "minecraft:giant_spruce_taiga_hills",
+                  "minecraft:giant_tree_taiga",
+                  "minecraft:giant_tree_taiga_hills",
+                  "minecraft:snowy_taiga",
+                  "minecraft:snowy_taiga_hills",
+                  "minecraft:snowy_taiga_mountains",
+                  "minecraft:taiga",
+                  "minecraft:taiga_hills",
+                  "minecraft:taiga_mountains"
+                ],
+                "chance": 1,
+                "biome": "minecraft:taiga",
+                "and": false,
+                "center_and": true,
+                "negative": true
+              },
+              {
+                "center_biomes": "minecraft:desert",
+                "bordering_biomes": "minecraft:snowy_tundra",
+                "chance": 1,
+                "biome": "minecraft:wooded_mountains",
+                "and": false,
+                "center_and": true,
+                "negative": false
+              },
+              {
+                "center_biomes": "minecraft:swamp",
+                "bordering_biomes": [
+                  "minecraft:desert",
+                  "minecraft:snowy_taiga",
+                  "minecraft:snowy_tundra"
+                ],
+                "chance": 1,
+                "biome": "minecraft:plains",
+                "and": false,
+                "center_and": true,
+                "negative": false
+              },
+              {
+                "center_biomes": "minecraft:swamp",
+                "bordering_biomes": [
+                  "minecraft:jungle",
+                  "minecraft:bamboo_jungle"
+                ],
+                "chance": 1,
+                "biome": "minecraft:jungle_edge",
+                "and": false,
+                "center_and": true,
+                "negative": false
+              }
+            ],
+            "type": "morecustomworldgen:array_bordering_replace"
           }
         }
       ],

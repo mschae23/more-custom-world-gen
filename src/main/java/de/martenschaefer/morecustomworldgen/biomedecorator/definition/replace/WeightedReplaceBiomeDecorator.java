@@ -1,4 +1,4 @@
-package de.martenschaefer.morecustomworldgen.biomedecorator.replace;
+package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +12,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
-import de.martenschaefer.morecustomworldgen.biomedecorator.util.CachingBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import de.martenschaefer.morecustomworldgen.util.WeightEntry;
 
