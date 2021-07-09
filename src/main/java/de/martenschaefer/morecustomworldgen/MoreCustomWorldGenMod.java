@@ -14,7 +14,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource
 
 public class MoreCustomWorldGenMod implements ModInitializer {
     public static final String MODID = "morecustomworldgen";
-    
+
     @Override
     public void onInitialize() {
         Registry.register(Registry.BIOME_SOURCE, id("custom_layered"), CustomLayeredBiomeSource.CODEC);

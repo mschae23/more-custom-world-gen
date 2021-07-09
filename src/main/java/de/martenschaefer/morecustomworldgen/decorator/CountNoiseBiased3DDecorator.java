@@ -3,14 +3,14 @@ package de.martenschaefer.morecustomworldgen.decorator;
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.decorator.CountNoiseBiasedDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.decorator.DecoratorContext;
 import de.martenschaefer.morecustomworldgen.util.OctaveSimplexNoiseSampler3D;
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
 
 public class CountNoiseBiased3DDecorator extends Decorator<CountNoiseBiasedDecoratorConfig> {
     public static final OctaveSimplexNoiseSampler3D NOISE_SAMPLER = new OctaveSimplexNoiseSampler3D(new ChunkRandom(2345L), ImmutableList.of(0));

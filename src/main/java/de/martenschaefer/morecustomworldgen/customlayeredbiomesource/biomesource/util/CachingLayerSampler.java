@@ -1,7 +1,7 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util;
 
-import net.minecraft.util.math.ChunkPos;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
+import net.minecraft.util.math.ChunkPos;
 
 public class CachingLayerSampler<T> implements LayerSampler<T> {
     private final LayerOperator<T> operator;

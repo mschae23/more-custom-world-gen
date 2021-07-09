@@ -3,7 +3,7 @@ package de.martenschaefer.morecustomworldgen.biomedecorator;
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
 
 public interface DecoratorRandomnessSource {
-    void initSeed(long x, long y);
+    void initSeed(long x, long y, long z);
 
     int nextInt(int bound);
 

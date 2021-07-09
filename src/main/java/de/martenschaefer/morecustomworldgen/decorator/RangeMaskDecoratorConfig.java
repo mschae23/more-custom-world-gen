@@ -6,13 +6,13 @@ import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.decorator.DecoratorConfig;
 
 public class RangeMaskDecoratorConfig implements DecoratorConfig {
-    public static final Codec<RangeMaskDecoratorConfig> CODEC = RecordCodecBuilder.create(instance -> 
+    public static final Codec<RangeMaskDecoratorConfig> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             YOffset.OFFSET_CODEC.fieldOf("bottom_inclusive").forGetter(RangeMaskDecoratorConfig::getBottom),
             YOffset.OFFSET_CODEC.fieldOf("top_inclusive").forGetter(RangeMaskDecoratorConfig::getTop)
         ).apply(instance, instance.stable(RangeMaskDecoratorConfig::new))
     );
-    
+
     private final YOffset bottom;
     private final YOffset top;
 

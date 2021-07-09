@@ -2,10 +2,10 @@ package de.martenschaefer.morecustomworldgen.util;
 
 import java.util.Random;
 import java.util.function.Function;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 
 public class Chance {
     public static final Codec<Chance> INT_CODEC = Codec.INT.xmap(i -> new Chance(1, i), Chance::getDenominator);

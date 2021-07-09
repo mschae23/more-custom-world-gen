@@ -1,15 +1,13 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.config;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import de.martenschaefer.morecustomworldgen.util.WeightEntry;
 

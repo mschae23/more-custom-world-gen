@@ -65,13 +65,13 @@ public class IncreaseEdgeCurvatureBiomeLayer implements DiagonalCrossSamplingLay
             }
         }
     }
-    
+
     private boolean isShallowOcean(RegistryKey<Biome> biome) {
-        for(RegistryKey<Biome> shallowOceanBiome : this.shallowOceanBiomes) {
-            if(shallowOceanBiome.getValue().equals(biome.getValue()))
+        for (RegistryKey<Biome> shallowOceanBiome : this.shallowOceanBiomes) {
+            if (shallowOceanBiome.getValue().equals(biome.getValue()))
                 return true;
         }
-        
+
         return false;
     }
 }

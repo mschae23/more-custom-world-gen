@@ -26,12 +26,12 @@ public class AddHillsLayer implements MergingLayer<RegistryKey<Biome>, Integer>,
 
         int k = (noise - 2) % 29;
 
-        for(String ignoredCategory : config.getIgnoredCategories()) {
-            if(ignoredCategory.equals(BiomeCategory.getCategory(this.categories, i))) {
+        for (String ignoredCategory : config.getIgnoredCategories()) {
+            if (ignoredCategory.equals(BiomeCategory.getCategory(this.categories, i))) {
                 return i;
             }
         }
-        
+
         if (noise >= 2 && k == 1) {
             return this.config.getSpecialHillBiome(i);
         } else {

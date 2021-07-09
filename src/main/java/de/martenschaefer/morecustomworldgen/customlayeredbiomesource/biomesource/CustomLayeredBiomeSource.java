@@ -3,6 +3,16 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesourc
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import com.google.common.collect.Maps;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import net.minecraft.SharedConstants;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -19,16 +29,6 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.CustomLayeredBiomeSourceConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.BiomeLayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla.VanillaLayers;
-import com.google.common.collect.Maps;
-import com.mojang.datafixers.util.Either;
-import com.mojang.datafixers.util.Function3;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class CustomLayeredBiomeSource extends BiomeSource {
     public static final MapCodec<CustomLayeredBiomeSource> CUSTOM_CODEC = RecordCodecBuilder.mapCodec(instance ->

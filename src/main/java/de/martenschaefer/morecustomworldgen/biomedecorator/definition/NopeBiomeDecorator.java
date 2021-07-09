@@ -1,11 +1,11 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
 import java.util.List;
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;

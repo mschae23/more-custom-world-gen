@@ -2,13 +2,14 @@ package de.martenschaefer.morecustomworldgen.biomedecorator;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.VanillaDecoratorRandomnessSource;
 
 public class DecoratedBiomeSource extends BiomeSource {
     public static final Codec<DecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->

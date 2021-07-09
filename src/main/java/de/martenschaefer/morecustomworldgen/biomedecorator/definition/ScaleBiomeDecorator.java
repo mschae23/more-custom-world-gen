@@ -1,12 +1,12 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
 import java.util.List;
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.layer.util.CoordinateTransformer;
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
@@ -57,7 +57,7 @@ public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTra
         if (this.type == ScaleType.SIMPLE)
             return biome;
 
-        random.initSeed(x >> 1 << 1, z >> 1 << 1);
+        random.initSeed(x >> 1 << 1, y >> 1 << 1,  z >> 1 << 1);
         int j = x & 1;
         int k = z & 1;
         if (j == 0 && k == 0) {

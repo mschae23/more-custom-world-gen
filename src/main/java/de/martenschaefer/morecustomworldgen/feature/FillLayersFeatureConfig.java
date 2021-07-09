@@ -1,11 +1,11 @@
 package de.martenschaefer.morecustomworldgen.feature;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.FeatureConfig;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class FillLayersFeatureConfig implements FeatureConfig {
     public static final Codec<FillLayersFeatureConfig> CODEC = RecordCodecBuilder.create(instance ->

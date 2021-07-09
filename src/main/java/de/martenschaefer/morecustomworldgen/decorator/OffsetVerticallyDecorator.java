@@ -2,11 +2,10 @@ package de.martenschaefer.morecustomworldgen.decorator;
 
 import java.util.Random;
 import java.util.stream.Stream;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.decorator.DecoratorContext;
-
-import com.mojang.serialization.Codec;
 
 public class OffsetVerticallyDecorator extends Decorator<OffsetDecoratorConfig> {
     public OffsetVerticallyDecorator(Codec<OffsetDecoratorConfig> codec) {

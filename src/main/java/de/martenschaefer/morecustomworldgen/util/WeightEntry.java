@@ -1,9 +1,9 @@
 package de.martenschaefer.morecustomworldgen.util;
 
 import java.util.Objects;
-import net.minecraft.util.collection.WeightedPicker;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.collection.WeightedPicker;
 
 public final class WeightEntry<T> extends WeightedPicker.Entry {
     private final int weight;
@@ -27,7 +27,7 @@ public final class WeightEntry<T> extends WeightedPicker.Entry {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        WeightEntry that = (WeightEntry<?>) obj;
+        WeightEntry<?> that = (WeightEntry<?>) obj;
         return this.weight == that.weight &&
             Objects.equals(this.value, that.value);
     }

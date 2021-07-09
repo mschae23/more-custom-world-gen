@@ -1,13 +1,15 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
+import java.util.List;
+import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.BuiltinBiomes;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.FixedBiomeSource;
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Either;
 import de.martenschaefer.morecustomworldgen.biomedecorator.biome.MoreCustomWorldGenBiomes;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.SimpleReplaceBiomeEntry;
@@ -18,6 +20,7 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.definition.WeightedIn
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.ArrayBorderingReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.ArrayWeightedReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.BorderingReplaceBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.BorderingReplaceBiomeEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.SimpleReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.WeightedReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.util.Chance;
@@ -31,6 +34,14 @@ public final class BiomeDecoratorConfigs {
     @SuppressWarnings("unused")
     public static final BiomeSource FIXED_VOID_BIOME_SOURCE = new FixedBiomeSource(BuiltinBiomes.THE_VOID);
 
+    public static final List<RegistryKey<Biome>> OCEAN_BIOMES = ImmutableList.of(
+        BiomeKeys.OCEAN,
+        BiomeKeys.WARM_OCEAN,
+        BiomeKeys.LUKEWARM_OCEAN,
+        BiomeKeys.COLD_OCEAN,
+        BiomeKeys.FROZEN_OCEAN
+    );
+
     public static final BiomeDecorator CONTINENT_INIT_DECORATOR = new WeightedInitBiomeDecorator(
         ImmutableList.of(
             new ChanceEntry<>(
@@ -41,7 +52,7 @@ public final class BiomeDecoratorConfigs {
         BiomeKeys.OCEAN
     );
 
-    public static BiomeSource getVanillaBiomeSourceX(long seed, Registry<Biome> biomeRegistry) {
+    public static BiomeSource getVanillaBiomeSource(long seed, Registry<Biome> biomeRegistry) {
         return new ArrayDecoratedBiomeSource(seed,
             ImmutableList.of(
                 new BiomeDecoratorEntry(
@@ -54,7 +65,7 @@ public final class BiomeDecoratorConfigs {
                 ),
                 new BiomeDecoratorEntry(
                     1L,
-                    new IncreaseEdgeCurvatureBiomeDecorator()
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
                 ),
                 new BiomeDecoratorEntry(
                     2001L,
@@ -62,23 +73,25 @@ public final class BiomeDecoratorConfigs {
                 ),
                 new BiomeDecoratorEntry(
                     2L,
-                    new IncreaseEdgeCurvatureBiomeDecorator()
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
                 ),
                 new BiomeDecoratorEntry(
                     50L,
-                    new IncreaseEdgeCurvatureBiomeDecorator()
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
                 ),
                 new BiomeDecoratorEntry(
                     70L,
-                    new IncreaseEdgeCurvatureBiomeDecorator()
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
                 ),
                 new BiomeDecoratorEntry(
                     2L,
-                    new BorderingReplaceBiomeDecorator(true,
+                    new BorderingReplaceBiomeDecorator(new BorderingReplaceBiomeEntry(
                         Either.left(BiomeKeys.OCEAN),
+                        Either.left(BiomeKeys.OCEAN),
+                        Either.right(ImmutableList.of()),
                         Chance.simple(2),
                         BiomeKeys.PLAINS
-                    )
+                    ))
                 ),
                 new BiomeDecoratorEntry(
                     2L,
@@ -93,11 +106,11 @@ public final class BiomeDecoratorConfigs {
                 ),
                 new BiomeDecoratorEntry(
                     3L,
-                    new IncreaseEdgeCurvatureBiomeDecorator()
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
                 ),
                 new BiomeDecoratorEntry(
                     2L,
-                    new BorderingReplaceBiomeDecorator(
+                    new BorderingReplaceBiomeDecorator(new BorderingReplaceBiomeEntry(
                         Either.left(MoreCustomWorldGenBiomes.DRY),
                         Either.right(ImmutableList.of(
                             MoreCustomWorldGenBiomes.COOL,
@@ -105,11 +118,11 @@ public final class BiomeDecoratorConfigs {
                         )),
                         Chance.always(),
                         MoreCustomWorldGenBiomes.TEMPERATE
-                    )
+                    ))
                 ),
                 new BiomeDecoratorEntry(
                     2L,
-                    new BorderingReplaceBiomeDecorator(
+                    new BorderingReplaceBiomeDecorator(new BorderingReplaceBiomeEntry(
                         Either.left(MoreCustomWorldGenBiomes.SNOWY),
                         Either.right(ImmutableList.of(
                             MoreCustomWorldGenBiomes.DRY,
@@ -117,7 +130,7 @@ public final class BiomeDecoratorConfigs {
                         )),
                         Chance.always(),
                         MoreCustomWorldGenBiomes.COOL
-                    )
+                    ))
                 ),
                 new BiomeDecoratorEntry(
                     3L,
@@ -156,23 +169,27 @@ public final class BiomeDecoratorConfigs {
                 ),
                 new BiomeDecoratorEntry(
                     4L,
-                    new IncreaseEdgeCurvatureBiomeDecorator()
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
                 ),
                 new BiomeDecoratorEntry(
                     5L,
-                    new BorderingReplaceBiomeDecorator(true,
+                    new BorderingReplaceBiomeDecorator(new BorderingReplaceBiomeEntry(
                         Either.left(BiomeKeys.OCEAN),
+                        Either.left(BiomeKeys.OCEAN),
+                        Either.right(ImmutableList.of()),
                         Chance.simple(100),
                         BiomeKeys.MUSHROOM_FIELDS
-                    )
+                    ))
                 ),
                 new BiomeDecoratorEntry(
                     4L,
-                    new BorderingReplaceBiomeDecorator(true,
+                    new BorderingReplaceBiomeDecorator(new BorderingReplaceBiomeEntry(
                         Either.left(BiomeKeys.OCEAN),
+                        Either.left(BiomeKeys.OCEAN),
+                        Either.right(ImmutableList.of()),
                         Chance.always(),
                         BiomeKeys.DEEP_OCEAN
-                    )
+                    ))
                 ),
                 new BiomeDecoratorEntry(
                     200L,
@@ -269,8 +286,8 @@ public final class BiomeDecoratorConfigs {
                             BiomeKeys.WOODED_MOUNTAINS
                         ),
                         ImmutableList.of(
-                            new BorderingReplaceBiomeDecorator(
-                                false, true, true,
+                            new BorderingReplaceBiomeEntry(
+                                true, true,
                                 Either.right(ImmutableList.of(
                                     BiomeKeys.BADLANDS_PLATEAU,
                                     BiomeKeys.WOODED_BADLANDS_PLATEAU
@@ -278,8 +295,8 @@ public final class BiomeDecoratorConfigs {
                                 Chance.always(),
                                 BiomeKeys.BADLANDS
                             ),
-                            new BorderingReplaceBiomeDecorator(
-                                false, true, true,
+                            new BorderingReplaceBiomeEntry(
+                                true, true,
                                 Either.left(BiomeKeys.GIANT_TREE_TAIGA),
                                 Either.right(ImmutableList.of(
                                     BiomeKeys.GIANT_SPRUCE_TAIGA,
@@ -296,13 +313,13 @@ public final class BiomeDecoratorConfigs {
                                 Chance.always(),
                                 BiomeKeys.TAIGA
                             ),
-                            new BorderingReplaceBiomeDecorator(
+                            new BorderingReplaceBiomeEntry(
                                 Either.left(BiomeKeys.DESERT),
                                 Either.left(BiomeKeys.SNOWY_TUNDRA),
                                 Chance.always(),
                                 BiomeKeys.WOODED_MOUNTAINS
                             ),
-                            new BorderingReplaceBiomeDecorator(
+                            new BorderingReplaceBiomeEntry(
                                 Either.left(BiomeKeys.SWAMP),
                                 Either.right(ImmutableList.of(
                                     BiomeKeys.DESERT,
@@ -312,7 +329,7 @@ public final class BiomeDecoratorConfigs {
                                 Chance.always(),
                                 BiomeKeys.PLAINS
                             ),
-                            new BorderingReplaceBiomeDecorator(
+                            new BorderingReplaceBiomeEntry(
                                 Either.left(BiomeKeys.SWAMP),
                                 Either.right(ImmutableList.of(
                                     BiomeKeys.JUNGLE,
@@ -323,13 +340,165 @@ public final class BiomeDecoratorConfigs {
                             )
                         )
                     )
-                )
+                ), // Hills decorator here
+                new BiomeDecoratorEntry(
+                    1001L,
+                    new SimpleReplaceBiomeDecorator(
+                        ImmutableList.of(
+                            new SimpleReplaceBiomeEntry(
+                                BiomeKeys.PLAINS,
+                                Chance.simple(57),
+                                BiomeKeys.SUNFLOWER_PLAINS
+                            )
+                        )
+                    )
+                ),
+                new BiomeDecoratorEntry(
+                    1000L,
+                    ScaleBiomeDecorator.normal()
+                ),
+                new BiomeDecoratorEntry(
+                    3L,
+                    IncreaseEdgeCurvatureBiomeDecorator.INSTANCE
+                ),
+                new BiomeDecoratorEntry(
+                    1001L,
+                    ScaleBiomeDecorator.normal()
+                ),
+                new BiomeDecoratorEntry(
+                    1000L,
+                    new ArrayBorderingReplaceBiomeDecorator(
+                        ImmutableList.of(),
+                        ImmutableList.of(
+                            new BorderingReplaceBiomeEntry(
+                                Either.left(BiomeKeys.MUSHROOM_FIELDS),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.OCEAN,
+                                    BiomeKeys.WARM_OCEAN,
+                                    BiomeKeys.LUKEWARM_OCEAN,
+                                    BiomeKeys.COLD_OCEAN,
+                                    BiomeKeys.FROZEN_OCEAN
+                                )),
+                                Chance.always(),
+                                BiomeKeys.MUSHROOM_FIELD_SHORE
+                            ),
+                            new BorderingReplaceBiomeEntry(
+                                true, true,
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.BAMBOO_JUNGLE,
+                                    BiomeKeys.BAMBOO_JUNGLE_HILLS,
+                                    BiomeKeys.JUNGLE,
+                                    BiomeKeys.JUNGLE_HILLS,
+                                    BiomeKeys.JUNGLE_EDGE,
+                                    BiomeKeys.MODIFIED_JUNGLE,
+                                    BiomeKeys.MODIFIED_JUNGLE_EDGE
+                                )),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.BAMBOO_JUNGLE,
+                                    BiomeKeys.BAMBOO_JUNGLE_HILLS,
+                                    BiomeKeys.JUNGLE,
+                                    BiomeKeys.JUNGLE_HILLS,
+                                    BiomeKeys.JUNGLE_EDGE,
+                                    BiomeKeys.MODIFIED_JUNGLE,
+                                    BiomeKeys.MODIFIED_JUNGLE_EDGE,
+                                    BiomeKeys.FOREST,
+                                    BiomeKeys.TAIGA
+                                )),
+                                Chance.always(),
+                                BiomeKeys.JUNGLE_EDGE
+                            ),
+                            new BorderingReplaceBiomeEntry(
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.MOUNTAINS,
+                                    BiomeKeys.WOODED_MOUNTAINS,
+                                    BiomeKeys.MOUNTAIN_EDGE
+                                )),
+                                Either.right(OCEAN_BIOMES),
+                                Chance.always(),
+                                BiomeKeys.STONE_SHORE
+                            ),
+                            new BorderingReplaceBiomeEntry(
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.SNOWY_BEACH,
+                                    BiomeKeys.FROZEN_RIVER,
+                                    BiomeKeys.SNOWY_TUNDRA,
+                                    BiomeKeys.SNOWY_MOUNTAINS,
+                                    BiomeKeys.ICE_SPIKES,
+                                    BiomeKeys.SNOWY_TAIGA,
+                                    BiomeKeys.SNOWY_TAIGA_HILLS,
+                                    BiomeKeys.SNOWY_TAIGA_MOUNTAINS,
+                                    BiomeKeys.FROZEN_OCEAN
+                                )),
+                                Either.right(OCEAN_BIOMES),
+                                Chance.always(),
+                                BiomeKeys.SNOWY_BEACH
+                            ),
+                            new BorderingReplaceBiomeEntry(
+                                true, true,
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.BADLANDS,
+                                    BiomeKeys.WOODED_BADLANDS_PLATEAU
+                                )),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.OCEAN,
+                                    BiomeKeys.WARM_OCEAN,
+                                    BiomeKeys.LUKEWARM_OCEAN,
+                                    BiomeKeys.COLD_OCEAN,
+                                    BiomeKeys.FROZEN_OCEAN,
+                                    BiomeKeys.DEEP_OCEAN,
+                                    BiomeKeys.DEEP_WARM_OCEAN,
+                                    BiomeKeys.DEEP_LUKEWARM_OCEAN,
+                                    BiomeKeys.DEEP_COLD_OCEAN,
+                                    BiomeKeys.DEEP_FROZEN_OCEAN
+                                )),
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.BADLANDS,
+                                    BiomeKeys.WOODED_BADLANDS_PLATEAU,
+                                    BiomeKeys.BADLANDS_PLATEAU,
+                                    BiomeKeys.ERODED_BADLANDS,
+                                    BiomeKeys.MODIFIED_WOODED_BADLANDS_PLATEAU,
+                                    BiomeKeys.MODIFIED_BADLANDS_PLATEAU
+                                )),
+                                Chance.always(),
+                                BiomeKeys.DESERT
+                            ),
+                            new BorderingReplaceBiomeEntry(
+                                true, true, false,
+                                Either.right(ImmutableList.of(
+                                    BiomeKeys.OCEAN,
+                                    BiomeKeys.WARM_OCEAN,
+                                    BiomeKeys.LUKEWARM_OCEAN,
+                                    BiomeKeys.COLD_OCEAN,
+                                    BiomeKeys.FROZEN_OCEAN,
+                                    BiomeKeys.DEEP_OCEAN,
+                                    BiomeKeys.DEEP_WARM_OCEAN,
+                                    BiomeKeys.DEEP_LUKEWARM_OCEAN,
+                                    BiomeKeys.DEEP_COLD_OCEAN,
+                                    BiomeKeys.DEEP_FROZEN_OCEAN,
+                                    BiomeKeys.RIVER,
+                                    BiomeKeys.SWAMP
+                                )),
+                                Either.right(OCEAN_BIOMES),
+                                Chance.always(),
+                                BiomeKeys.BEACH
+                            )
+                        )
+                    )
+                ),
+                new BiomeDecoratorEntry(
+                    1002L,
+                    ScaleBiomeDecorator.normal()
+                ),
+                new BiomeDecoratorEntry(
+                    1003L,
+                    ScaleBiomeDecorator.normal()
+                ) // Smooth decorator here
             ),
             biomeRegistry
         );
     }
 
-    public static BiomeSource getVanillaBiomeSource(long seed, Registry<Biome> biomeRegistry) {
+    public static BiomeSource getVanillaBiomeSourceX(long seed, Registry<Biome> biomeRegistry) {
         return new ArrayDecoratedBiomeSource(seed,
             ImmutableList.of(
                 new BiomeDecoratorEntry(

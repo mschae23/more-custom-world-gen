@@ -2,12 +2,12 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesourc
 
 import java.util.Optional;
 import java.util.function.Function;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class BiomeEntry {

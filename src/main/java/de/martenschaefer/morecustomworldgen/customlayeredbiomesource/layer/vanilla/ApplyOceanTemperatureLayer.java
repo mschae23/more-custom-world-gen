@@ -72,7 +72,7 @@ public class ApplyOceanTemperatureLayer implements MergingLayer<RegistryKey<Biom
                     return config.getColdOcean();
                 case FROZEN:
                     return config.getFrozenOcean();
-                    
+
                 case NORMAL:
                 default:
                     return config.getOcean();

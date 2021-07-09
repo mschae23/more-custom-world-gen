@@ -11,17 +11,17 @@ public class ContinentConfig {
             Codec.INT.fieldOf("island_chance").forGetter(ContinentConfig::getIslandChance)
         ).apply(instance, instance.stable(ContinentConfig::new))
     );
-    
+
     private final int continentChance;
     private final boolean originContinent;
     private final int islandChance;
-    
+
     public ContinentConfig(int continentChance, boolean originContinent, int islandChance) {
         this.continentChance = continentChance;
         this.originContinent = originContinent;
         this.islandChance = islandChance;
     }
-    
+
     public int getContinentChance() {
         return this.continentChance;
     }

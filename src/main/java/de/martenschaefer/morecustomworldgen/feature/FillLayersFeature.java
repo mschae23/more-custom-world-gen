@@ -16,9 +16,9 @@ public class FillLayersFeature extends Feature<FillLayersFeatureConfig> {
         StructureWorldAccess world = context.getWorld();
         FillLayersFeatureConfig config = context.getConfig();
         BlockPos pos = context.getOrigin();
-        
+
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        
+
         HeightContext heightContext = new HeightContext(context.getGenerator(), context.getWorld());
         int minY = config.getMinY().getY(heightContext);
         int maxY = config.getMaxY().getY(heightContext);

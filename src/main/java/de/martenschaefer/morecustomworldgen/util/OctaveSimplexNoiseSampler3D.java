@@ -2,11 +2,11 @@ package de.martenschaefer.morecustomworldgen.util;
 
 import java.util.List;
 import java.util.stream.IntStream;
-import net.minecraft.util.math.noise.SimplexNoiseSampler;
-import net.minecraft.world.gen.ChunkRandom;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.IntRBTreeSet;
 import it.unimi.dsi.fastutil.ints.IntSortedSet;
+import net.minecraft.util.math.noise.SimplexNoiseSampler;
+import net.minecraft.world.gen.ChunkRandom;
 
 public class OctaveSimplexNoiseSampler3D {
     private final SimplexNoiseSampler[] octaveSamplers;

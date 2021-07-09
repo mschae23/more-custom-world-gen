@@ -2,10 +2,10 @@ package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import com.mojang.serialization.Codec;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;

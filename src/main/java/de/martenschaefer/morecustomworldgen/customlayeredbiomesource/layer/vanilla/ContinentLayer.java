@@ -7,7 +7,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.
 public class ContinentLayer implements InitLayer<ContinentCategory> {
     private final int continentChance;
     private final boolean originContinent;
-    
+
     public ContinentLayer(int continentChance, boolean originContinent) {
         this.continentChance = continentChance;
         this.originContinent = originContinent;

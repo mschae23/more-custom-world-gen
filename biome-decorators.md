@@ -43,13 +43,17 @@ No config.
 ### `bordering_replace`
 Replaces the current biome with another one if it is bordering other specified biomes.
 
-- `center_biomes`: Registry ID (or ID list) of the biome that the center biome is compared with.
-- `comparing_biomes`: Registry ID (or ID list) of the biome that the bordering biomes are compared with.
-- `and`: Boolean value. If all the bordering biomes have to match the comparing biome, or if it is enough if one of them
-  matches it. (Defaults to `false`)
 - `center_and`: If the center *and* the bordering biomes have to match, or the center *or* the bordering biomes.
   (Defaults to `true`)
-- `negative`: Negates the `comparing_biome`, meaning the bordering biomes have to *not* match it. (Defaults to `false`)
+- `negative_center`: The center biome will have to *not* match the specified center biomes when this is active. (
+  Defaults to `false`)
+- `negative`: The bordering biomes will have to *not* match the specified biomes when this is active. (Defaults
+  to `false`)
+- `center_biomes`: Registry ID (or ID list) of the biome that the center biome is compared with.
+- `bordering_biomes_and`: Registry ID (or ID list) of the biome that the bordering biomes are compared with. Using this,
+  all biomes around the center one have to be in this list for it to match. Can be empty.
+- `bordering_biomes_or`: Registry ID (or ID list) of the biome that the bordering biomes are compared with. Using this,
+  at least one biome around the center one has to be in this list for it to match. Can be empty.
 - `chance`: Int or chance object. The biome is only going to be replaced with a certain chance.
 - `biome`: The biome that is going to be used instead of the current biome.
 
@@ -57,7 +61,7 @@ Replaces the current biome with another one if it is bordering other specified b
 Replaces the current biome with another one if it is bordering other specified biomes.
 
 - `ignored_biomes`: List of ignored biomes.
-- `replaces`: List of objects in the format of `bordering_replace`.
+- `entries`: List of objects in the format of `bordering_replace`.
 
 ### `weighted_replace`
 Replaces specific biomes with other ones, determined by a weighted list.
@@ -166,14 +170,17 @@ Example dimension which should generate almost exactly like `vanilla_layered`
         {
           "salt": 2,
           "decorator": {
-            "center_biomes": "minecraft:ocean",
-            "bordering_biomes": "minecraft:ocean",
-            "chance": 2,
-            "biome": "minecraft:plains",
-            "and": true,
-            "center_and": true,
-            "negative": false,
-            "type": "morecustomworldgen:bordering_replace"
+            "type": "morecustomworldgen:bordering_replace",
+            "value": {
+              "bordering_biomes_and": "minecraft:ocean",
+              "bordering_biomes_or": [],
+              "chance": 2,
+              "biome": "minecraft:plains",
+              "center_and": true,
+              "negative_center": false,
+              "negative": false,
+              "center_biomes": "minecraft:ocean"
+            }
           }
         },
         {
@@ -209,33 +216,39 @@ Example dimension which should generate almost exactly like `vanilla_layered`
         {
           "salt": 2,
           "decorator": {
-            "center_biomes": "morecustomworldgen:dry",
-            "bordering_biomes": [
-              "morecustomworldgen:cool",
-              "morecustomworldgen:snowy"
-            ],
-            "chance": 1,
-            "biome": "morecustomworldgen:temperate",
-            "and": false,
-            "center_and": true,
-            "negative": false,
-            "type": "morecustomworldgen:bordering_replace"
+            "type": "morecustomworldgen:bordering_replace",
+            "value": {
+              "bordering_biomes_and": [],
+              "bordering_biomes_or": [
+                "morecustomworldgen:cool",
+                "morecustomworldgen:snowy"
+              ],
+              "chance": 1,
+              "biome": "morecustomworldgen:temperate",
+              "center_and": true,
+              "negative_center": false,
+              "negative": false,
+              "center_biomes": "morecustomworldgen:dry"
+            }
           }
         },
         {
           "salt": 2,
           "decorator": {
-            "center_biomes": "morecustomworldgen:snowy",
-            "bordering_biomes": [
-              "morecustomworldgen:dry",
-              "morecustomworldgen:temperate"
-            ],
-            "chance": 1,
-            "biome": "morecustomworldgen:cool",
-            "and": false,
-            "center_and": true,
-            "negative": false,
-            "type": "morecustomworldgen:bordering_replace"
+            "type": "morecustomworldgen:bordering_replace",
+            "value": {
+              "bordering_biomes_and": [],
+              "bordering_biomes_or": [
+                "morecustomworldgen:dry",
+                "morecustomworldgen:temperate"
+              ],
+              "chance": 1,
+              "biome": "morecustomworldgen:cool",
+              "center_and": true,
+              "negative_center": false,
+              "negative": false,
+              "center_biomes": "morecustomworldgen:snowy"
+            }
           }
         },
         {
@@ -289,27 +302,33 @@ Example dimension which should generate almost exactly like `vanilla_layered`
         {
           "salt": 5,
           "decorator": {
-            "center_biomes": "minecraft:ocean",
-            "bordering_biomes": "minecraft:ocean",
-            "chance": 100,
-            "biome": "minecraft:mushroom_fields",
-            "and": true,
-            "center_and": true,
-            "negative": false,
-            "type": "morecustomworldgen:bordering_replace"
+            "type": "morecustomworldgen:bordering_replace",
+            "value": {
+              "bordering_biomes_and": "minecraft:ocean",
+              "bordering_biomes_or": [],
+              "chance": 100,
+              "biome": "minecraft:mushroom_fields",
+              "center_and": true,
+              "negative_center": false,
+              "negative": false,
+              "center_biomes": "minecraft:ocean"
+            }
           }
         },
         {
           "salt": 4,
           "decorator": {
-            "center_biomes": "minecraft:ocean",
-            "bordering_biomes": "minecraft:ocean",
-            "chance": 1,
-            "biome": "minecraft:deep_ocean",
-            "and": true,
-            "center_and": true,
-            "negative": false,
-            "type": "morecustomworldgen:bordering_replace"
+            "type": "morecustomworldgen:bordering_replace",
+            "value": {
+              "bordering_biomes_and": "minecraft:ocean",
+              "bordering_biomes_or": [],
+              "chance": 1,
+              "biome": "minecraft:deep_ocean",
+              "center_and": true,
+              "negative_center": false,
+              "negative": false,
+              "center_biomes": "minecraft:ocean"
+            }
           }
         },
         {
@@ -471,25 +490,26 @@ Example dimension which should generate almost exactly like `vanilla_layered`
               "minecraft:mountains",
               "minecraft:wooded_mountains"
             ],
-            "replaces": [
+            "entries": [
               {
-                "center_biomes": [
-                  "minecraft:badlands_plateau",
-                  "minecraft:wooded_badlands_plateau"
-                ],
-                "bordering_biomes": [
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
                   "minecraft:badlands_plateau",
                   "minecraft:wooded_badlands_plateau"
                 ],
                 "chance": 1,
                 "biome": "minecraft:badlands",
-                "and": false,
                 "center_and": true,
-                "negative": true
+                "negative_center": false,
+                "negative": true,
+                "center_biomes": [
+                  "minecraft:badlands_plateau",
+                  "minecraft:wooded_badlands_plateau"
+                ]
               },
               {
-                "center_biomes": "minecraft:giant_tree_taiga",
-                "bordering_biomes": [
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
                   "minecraft:giant_spruce_taiga",
                   "minecraft:giant_spruce_taiga_hills",
                   "minecraft:giant_tree_taiga",
@@ -503,46 +523,256 @@ Example dimension which should generate almost exactly like `vanilla_layered`
                 ],
                 "chance": 1,
                 "biome": "minecraft:taiga",
-                "and": false,
                 "center_and": true,
-                "negative": true
+                "negative_center": false,
+                "negative": true,
+                "center_biomes": "minecraft:giant_tree_taiga"
               },
               {
-                "center_biomes": "minecraft:desert",
-                "bordering_biomes": "minecraft:snowy_tundra",
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": "minecraft:snowy_tundra",
                 "chance": 1,
                 "biome": "minecraft:wooded_mountains",
-                "and": false,
                 "center_and": true,
-                "negative": false
+                "negative_center": false,
+                "negative": false,
+                "center_biomes": "minecraft:desert"
               },
               {
-                "center_biomes": "minecraft:swamp",
-                "bordering_biomes": [
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
                   "minecraft:desert",
                   "minecraft:snowy_taiga",
                   "minecraft:snowy_tundra"
                 ],
                 "chance": 1,
                 "biome": "minecraft:plains",
-                "and": false,
                 "center_and": true,
-                "negative": false
+                "negative_center": false,
+                "negative": false,
+                "center_biomes": "minecraft:swamp"
               },
               {
-                "center_biomes": "minecraft:swamp",
-                "bordering_biomes": [
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
                   "minecraft:jungle",
                   "minecraft:bamboo_jungle"
                 ],
                 "chance": 1,
                 "biome": "minecraft:jungle_edge",
-                "and": false,
                 "center_and": true,
-                "negative": false
+                "negative_center": false,
+                "negative": false,
+                "center_biomes": "minecraft:swamp"
               }
             ],
             "type": "morecustomworldgen:array_bordering_replace"
+          }
+        },
+        {
+          "salt": 1001,
+          "decorator": {
+            "biomes": [
+              {
+                "comparing_biome": "minecraft:plains",
+                "chance": 57,
+                "biome": "minecraft:sunflower_plains"
+              }
+            ],
+            "type": "morecustomworldgen:simple_replace"
+          }
+        },
+        {
+          "salt": 1000,
+          "decorator": {
+            "scale_type": "normal",
+            "type": "morecustomworldgen:scale"
+          }
+        },
+        {
+          "salt": 3,
+          "decorator": {
+            "type": "morecustomworldgen:increase_edge_curvature"
+          }
+        },
+        {
+          "salt": 1001,
+          "decorator": {
+            "scale_type": "normal",
+            "type": "morecustomworldgen:scale"
+          }
+        },
+        {
+          "salt": 1000,
+          "decorator": {
+            "ignored_biomes": [],
+            "entries": [
+              {
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
+                  "minecraft:ocean",
+                  "minecraft:warm_ocean",
+                  "minecraft:lukewarm_ocean",
+                  "minecraft:cold_ocean",
+                  "minecraft:frozen_ocean"
+                ],
+                "chance": 1,
+                "biome": "minecraft:mushroom_field_shore",
+                "center_and": true,
+                "negative_center": false,
+                "negative": false,
+                "center_biomes": "minecraft:mushroom_fields"
+              },
+              {
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
+                  "minecraft:bamboo_jungle",
+                  "minecraft:bamboo_jungle_hills",
+                  "minecraft:jungle",
+                  "minecraft:jungle_hills",
+                  "minecraft:jungle_edge",
+                  "minecraft:modified_jungle",
+                  "minecraft:modified_jungle_edge",
+                  "minecraft:forest",
+                  "minecraft:taiga"
+                ],
+                "chance": 1,
+                "biome": "minecraft:jungle_edge",
+                "center_and": true,
+                "negative_center": false,
+                "negative": true,
+                "center_biomes": [
+                  "minecraft:bamboo_jungle",
+                  "minecraft:bamboo_jungle_hills",
+                  "minecraft:jungle",
+                  "minecraft:jungle_hills",
+                  "minecraft:jungle_edge",
+                  "minecraft:modified_jungle",
+                  "minecraft:modified_jungle_edge"
+                ]
+              },
+              {
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
+                  "minecraft:ocean",
+                  "minecraft:warm_ocean",
+                  "minecraft:lukewarm_ocean",
+                  "minecraft:cold_ocean",
+                  "minecraft:frozen_ocean"
+                ],
+                "chance": 1,
+                "biome": "minecraft:stone_shore",
+                "center_and": true,
+                "negative_center": false,
+                "negative": false,
+                "center_biomes": [
+                  "minecraft:mountains",
+                  "minecraft:wooded_mountains",
+                  "minecraft:mountain_edge"
+                ]
+              },
+              {
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
+                  "minecraft:ocean",
+                  "minecraft:warm_ocean",
+                  "minecraft:lukewarm_ocean",
+                  "minecraft:cold_ocean",
+                  "minecraft:frozen_ocean"
+                ],
+                "chance": 1,
+                "biome": "minecraft:snowy_beach",
+                "center_and": true,
+                "negative_center": false,
+                "negative": false,
+                "center_biomes": [
+                  "minecraft:snowy_beach",
+                  "minecraft:frozen_river",
+                  "minecraft:snowy_tundra",
+                  "minecraft:snowy_mountains",
+                  "minecraft:ice_spikes",
+                  "minecraft:snowy_taiga",
+                  "minecraft:snowy_taiga_hills",
+                  "minecraft:snowy_taiga_mountains",
+                  "minecraft:frozen_ocean"
+                ]
+              },
+              {
+                "bordering_biomes_and": [
+                  "minecraft:ocean",
+                  "minecraft:warm_ocean",
+                  "minecraft:lukewarm_ocean",
+                  "minecraft:cold_ocean",
+                  "minecraft:frozen_ocean",
+                  "minecraft:deep_ocean",
+                  "minecraft:deep_warm_ocean",
+                  "minecraft:deep_lukewarm_ocean",
+                  "minecraft:deep_cold_ocean",
+                  "minecraft:deep_frozen_ocean"
+                ],
+                "bordering_biomes_or": [
+                  "minecraft:badlands",
+                  "minecraft:wooded_badlands_plateau",
+                  "minecraft:badlands_plateau",
+                  "minecraft:eroded_badlands",
+                  "minecraft:modified_wooded_badlands_plateau",
+                  "minecraft:modified_badlands_plateau"
+                ],
+                "chance": 1,
+                "biome": "minecraft:desert",
+                "center_and": true,
+                "negative_center": false,
+                "negative": true,
+                "center_biomes": [
+                  "minecraft:badlands",
+                  "minecraft:wooded_badlands_plateau"
+                ]
+              },
+              {
+                "bordering_biomes_and": [],
+                "bordering_biomes_or": [
+                  "minecraft:ocean",
+                  "minecraft:warm_ocean",
+                  "minecraft:lukewarm_ocean",
+                  "minecraft:cold_ocean",
+                  "minecraft:frozen_ocean"
+                ],
+                "chance": 1,
+                "biome": "minecraft:beach",
+                "center_and": true,
+                "negative_center": true,
+                "negative": false,
+                "center_biomes": [
+                  "minecraft:ocean",
+                  "minecraft:warm_ocean",
+                  "minecraft:lukewarm_ocean",
+                  "minecraft:cold_ocean",
+                  "minecraft:frozen_ocean",
+                  "minecraft:deep_ocean",
+                  "minecraft:deep_warm_ocean",
+                  "minecraft:deep_lukewarm_ocean",
+                  "minecraft:deep_cold_ocean",
+                  "minecraft:deep_frozen_ocean",
+                  "minecraft:river",
+                  "minecraft:swamp"
+                ]
+              }
+            ],
+            "type": "morecustomworldgen:array_bordering_replace"
+          }
+        },
+        {
+          "salt": 1002,
+          "decorator": {
+            "scale_type": "normal",
+            "type": "morecustomworldgen:scale"
+          }
+        },
+        {
+          "salt": 1003,
+          "decorator": {
+            "scale_type": "normal",
+            "type": "morecustomworldgen:scale"
           }
         }
       ],

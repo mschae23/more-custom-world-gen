@@ -3,8 +3,8 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesourc
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
-import net.minecraft.util.StringIdentifiable;
 import com.mojang.serialization.Codec;
+import net.minecraft.util.StringIdentifiable;
 
 public enum OceanCategory implements StringIdentifiable {
     NORMAL("normal"),

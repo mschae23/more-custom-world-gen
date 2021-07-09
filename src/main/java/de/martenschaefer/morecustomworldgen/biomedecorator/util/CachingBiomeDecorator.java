@@ -1,12 +1,12 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.util;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
-import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 
 public abstract class CachingBiomeDecorator extends BiomeDecorator {
     private final Long2ObjectLinkedOpenHashMap<RegistryKey<Biome>> cache;

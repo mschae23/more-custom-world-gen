@@ -1,9 +1,9 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
 import net.minecraft.world.biome.source.SeedMixer;
 import net.minecraft.world.gen.SimpleRandom;
-import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 
 public class CachingLayerContext<T, T2, T3> implements LayerSampleContext<T, T2, T3, CachingLayerSampler<T>, CachingLayerSampler<T2>, CachingLayerSampler<T3>> {
     private final Long2ObjectLinkedOpenHashMap<T> cache;
@@ -45,7 +45,7 @@ public class CachingLayerContext<T, T2, T3> implements LayerSampleContext<T, T2,
     }
 
     public int nextInt(int bound) {
-        int i = (int) Math.floorMod(this.localSeed >> 24, bound);
+        int i = Math.floorMod(this.localSeed >> 24, bound);
         this.localSeed = SeedMixer.mixSeed(this.localSeed, this.worldSeed);
         return i;
     }

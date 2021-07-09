@@ -3,10 +3,10 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesourc
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
 
 public class CustomLayeredBiomeSourceConfig {
     public static final Codec<CustomLayeredBiomeSourceConfig> CODEC = RecordCodecBuilder.create(instance ->
@@ -60,7 +60,7 @@ public class CustomLayeredBiomeSourceConfig {
     public BiomeSizeConfig getBiomeSizeConfig() {
         return this.biomeSize;
     }
-    
+
     public String getOceanCategory() {
         return this.oceanCategory;
     }
@@ -77,7 +77,7 @@ public class CustomLayeredBiomeSourceConfig {
         List<Supplier<Biome>> biomes = this.getBiomeLayout().getBiomes(biomeRegistry);
         biomes.addAll(this.rivers.getBiomes(biomeRegistry));
         biomes.addAll(this.oceanBiomes.getBiomes(biomeRegistry));
-        
+
         return biomes.stream();
     }
 }

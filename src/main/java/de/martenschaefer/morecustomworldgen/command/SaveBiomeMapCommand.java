@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
@@ -12,7 +13,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecoratorConfigs;
 
 public class SaveBiomeMapCommand {
@@ -24,14 +24,13 @@ public class SaveBiomeMapCommand {
             builder.executes(context -> execute(context.getSource()));
 
             dispatcher.register(builder);
-
         });
     }
 
     private static int execute(ServerCommandSource source) {
         BufferedImage img = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
 
-        BiomeSource biomeSource = BiomeDecoratorConfigs.getVanillaBiomeSourceX(source.getWorld().getSeed(), source.getRegistryManager().get(Registry.BIOME_KEY));
+        BiomeSource biomeSource = BiomeDecoratorConfigs.getVanillaBiomeSource(source.getWorld().getSeed(), source.getRegistryManager().get(Registry.BIOME_KEY));
 
         for (int x = -1024; x < 1024; x++) {
             if (x % 256 == 0) {
@@ -41,7 +40,7 @@ public class SaveBiomeMapCommand {
             for (int z = -1024; z < 1024; z++) {
                 Biome biome = biomeSource.getBiomeForNoiseGen(x, 63, z);
 
-                img.setRGB(x + 1024, z + 1024, switch(biome.getCategory()) {
+                img.setRGB(x + 1024, z + 1024, switch (biome.getCategory()) {
                     case TAIGA -> 0x00dd88;
                     case EXTREME_HILLS -> 0xcccccc;
                     case JUNGLE -> 0x00ff00;

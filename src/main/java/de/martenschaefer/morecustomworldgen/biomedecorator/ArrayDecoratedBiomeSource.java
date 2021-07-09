@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import net.minecraft.SharedConstants;
 import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
@@ -13,14 +17,9 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
-import de.martenschaefer.morecustomworldgen.biomedecorator.impl.CachingDecoratorBiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FixedBiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FromSourceBiomeSampler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ArrayDecoratedBiomeSource extends BiomeSource {
     public static final Codec<ArrayDecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->
@@ -82,8 +81,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
             .orElseGet(() -> new FixedBiomeSampler(BiomeKeys.THE_VOID));
 
         for (BiomeDecoratorEntry entry : this.decorators) {
-            DecoratorRandomnessSource random = new VanillaDecoratorRandomnessSource(this.seed, entry.salt());
-            parent = new CachingDecoratorBiomeSampler(random, parent, entry.decorator());
+            parent = entry.decorator().createSampler(this.seed, entry.salt(), parent, this.biomeRegistry);
         }
 
         return parent;

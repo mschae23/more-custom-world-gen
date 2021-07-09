@@ -5,16 +5,16 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class HillBiomesConfig {
     public static final Codec<HillBiomesConfig> CODEC = RecordCodecBuilder.create(instance ->

@@ -1,8 +1,8 @@
 package de.martenschaefer.morecustomworldgen.decorator;
 
-import net.minecraft.world.gen.decorator.DecoratorConfig;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.world.gen.decorator.DecoratorConfig;
 
 public class OffsetDecoratorConfig implements DecoratorConfig {
     public static final Codec<OffsetDecoratorConfig> CODEC = RecordCodecBuilder.create(instance ->

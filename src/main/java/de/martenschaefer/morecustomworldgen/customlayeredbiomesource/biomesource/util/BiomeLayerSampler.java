@@ -10,7 +10,7 @@ public class BiomeLayerSampler<T> {
     public T sample(int x, int z) {
         return this.sampler.sample(x, z);
     }
-    
+
     public CachingLayerSampler<T> getSampler() {
         return this.sampler;
     }

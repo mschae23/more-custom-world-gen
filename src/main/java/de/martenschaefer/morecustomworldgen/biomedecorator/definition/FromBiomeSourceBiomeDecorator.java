@@ -1,16 +1,17 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
 import java.util.List;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FromSourceBiomeSampler;
 
 public class FromBiomeSourceBiomeDecorator extends BiomeDecorator {
     public static final Codec<FromBiomeSourceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
@@ -49,5 +50,10 @@ public class FromBiomeSourceBiomeDecorator extends BiomeDecorator {
     @Override
     public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
         return this.biomeSource.getBiomes();
+    }
+
+    @Override
+    public BiomeSampler createSampler(long seed, long salt, BiomeSampler parent, Registry<Biome> biomeRegistry) {
+        return new FromSourceBiomeSampler(this.biomeSource, biomeRegistry);
     }
 }

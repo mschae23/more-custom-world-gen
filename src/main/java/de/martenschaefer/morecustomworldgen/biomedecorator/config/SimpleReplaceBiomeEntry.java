@@ -1,9 +1,9 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.config;
 
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.util.Chance;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 

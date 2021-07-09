@@ -6,7 +6,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.
 
 public class AddIslandLayer implements CrossSamplingLayer<ContinentCategory> {
     private final int islandChance;
-    
+
     public AddIslandLayer(int islandChance) {
         this.islandChance = islandChance;
     }

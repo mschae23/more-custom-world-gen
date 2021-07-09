@@ -1,12 +1,12 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config;
 
 import java.util.List;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
+import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class BiomeCategory {
     public static final Codec<BiomeCategory> CODEC = RecordCodecBuilder.create(instance ->

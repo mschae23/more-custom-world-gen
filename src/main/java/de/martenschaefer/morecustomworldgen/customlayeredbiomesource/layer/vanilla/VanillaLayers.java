@@ -126,13 +126,15 @@ public final class VanillaLayers {
     // Biome layer
     public static <T extends LayerSampler<RegistryKey<Biome>>, T2 extends LayerSampler<Integer>, T3 extends LayerSampler<OceanCategory>, C extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, RegistryKey<Biome>, T, T, T>, C2 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, Integer, T, T, T2>, C3 extends LayerSampleContext<RegistryKey<Biome>, RegistryKey<Biome>, OceanCategory, T, T, T3>> LayerFactory<RegistryKey<Biome>, T> buildBiomeLayerFactory(LayerFactory<RegistryKey<Biome>, T> biomeLayoutLayer, LayerFactory<Integer, T2> riverLayer, LayerFactory<OceanCategory, T3> oceanLayer, List<BiomeCategory> categories, RiverConfig riverConfig, int biomeAndRiverScale, String oceanCategory, OceanBiomesConfig oceanBiomes, LongFunction<C2> riverMergingContextProvider, LongFunction<C3> oceanMergingContextProvider, LongFunction<C> contextProvider) {
         ScaleLayer<RegistryKey<Biome>> normalScaleLayer = ScaleLayer.normal();
-        
+
         LayerFactory<RegistryKey<Biome>, T> biomes = biomeLayoutLayer;
 
-        if(riverConfig.shouldGenerateRivers()) biomes = new AddRiversLayer(categories, oceanCategory, riverConfig).create(riverMergingContextProvider.apply(100L), biomes, riverLayer);
+        if (riverConfig.shouldGenerateRivers())
+            biomes = new AddRiversLayer(categories, oceanCategory, riverConfig).create(riverMergingContextProvider.apply(100L), biomes, riverLayer);
         biomes = stack(1000L, normalScaleLayer, biomes, biomeAndRiverScale, contextProvider);
-        
-        if(oceanBiomes.shouldApplyOceanTemperatures()) biomes = new ApplyOceanTemperatureLayer(categories, oceanCategory, oceanBiomes).create(oceanMergingContextProvider.apply(100L), biomes, oceanLayer);
+
+        if (oceanBiomes.shouldApplyOceanTemperatures())
+            biomes = new ApplyOceanTemperatureLayer(categories, oceanCategory, oceanBiomes).create(oceanMergingContextProvider.apply(100L), biomes, oceanLayer);
 
         return biomes;
     }
@@ -150,7 +152,7 @@ public final class VanillaLayers {
         rivers = stack(1000L, normalScaleLayer, rivers, riverSize, contextProvider);
         rivers = NoiseToRiverLayer.INSTANCE.create(contextProvider.apply(1L), rivers);
         rivers = new SmoothLayer<Integer>().create(contextProvider.apply(1000L), rivers);
-        
+
         return rivers;
     }
 

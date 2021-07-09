@@ -3,11 +3,11 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesourc
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class EdgeBiomesConfig {

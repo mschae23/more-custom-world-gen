@@ -1,5 +1,6 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenMod;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenRegistries;
@@ -11,7 +12,6 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.definition.WeightedIn
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.ArrayBorderingReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.ArrayWeightedReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.BorderingReplaceBiomeDecorator;
-import com.mojang.serialization.Codec;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.SimpleReplaceBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace.WeightedReplaceBiomeDecorator;
 
@@ -23,7 +23,16 @@ public final class BiomeDecorators {
         Registry.register(MoreCustomWorldGenRegistries.BIOME_DECORATOR, MoreCustomWorldGenMod.id(name), codec);
     }
 
+    private static void registerMerging(String name, Codec<? extends MergingBiomeDecorator> codec) {
+        Registry.register(MoreCustomWorldGenRegistries.MERGING_BIOME_DECORATOR, MoreCustomWorldGenMod.id(name), codec);
+    }
+
     public static void register() {
+        registerNormal();
+        registerMerging();
+    }
+
+    private static void registerNormal() {
         register("nope", NopeBiomeDecorator.CODEC);
         register("from_biome_source_init", FromBiomeSourceBiomeDecorator.CODEC);
         register("weighted_init", WeightedInitBiomeDecorator.CODEC);
@@ -34,5 +43,9 @@ public final class BiomeDecorators {
         register("weighted_replace", WeightedReplaceBiomeDecorator.CODEC);
         register("array_weighted_replace", ArrayWeightedReplaceBiomeDecorator.CODEC);
         register("simple_replace", SimpleReplaceBiomeDecorator.CODEC);
+    }
+
+    private static void registerMerging() {
+        // TODO
     }
 }

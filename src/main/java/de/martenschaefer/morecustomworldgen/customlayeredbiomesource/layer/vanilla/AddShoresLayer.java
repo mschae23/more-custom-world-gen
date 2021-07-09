@@ -40,7 +40,7 @@ public class AddShoresLayer implements CrossSamplingLayer<RegistryKey<Biome>> {
 
             // And bordering biomes
 
-            if(!override.getAndBorderingBiomes().isEmpty()) {
+            if (!override.getAndBorderingBiomes().isEmpty()) {
                 if (override.isNegative() == contains(override.getAndBorderingBiomes(), n)) {
                     b = false;
                 } else if (override.isNegative() == contains(override.getAndBorderingBiomes(), e)) {
@@ -62,7 +62,7 @@ public class AddShoresLayer implements CrossSamplingLayer<RegistryKey<Biome>> {
             b = override.getOrBorderingBiomes().isEmpty() && !override.isCheckIfBorderingOcean();
 
             if (override.isNegative() != contains(override.getOrBorderingBiomes(), n)
-            || (override.isCheckIfBorderingOcean() && this.oceanCategory.equals(BiomeCategory.getCategory(this.categories, n)))) {
+                || (override.isCheckIfBorderingOcean() && this.oceanCategory.equals(BiomeCategory.getCategory(this.categories, n)))) {
                 b = true;
             } else if (override.isNegative() != contains(override.getOrBorderingBiomes(), e)
                 || (override.isCheckIfBorderingOcean() && this.oceanCategory.equals(BiomeCategory.getCategory(this.categories, e)))) {

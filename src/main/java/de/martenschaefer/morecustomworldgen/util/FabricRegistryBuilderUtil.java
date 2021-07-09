@@ -1,11 +1,11 @@
-package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource;
+package de.martenschaefer.morecustomworldgen.util;
 
+import com.mojang.serialization.Lifecycle;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import com.mojang.serialization.Lifecycle;
 
 public final class FabricRegistryBuilderUtil {
     private FabricRegistryBuilderUtil() {

@@ -1,8 +1,9 @@
-package de.martenschaefer.morecustomworldgen.biomedecorator;
+package de.martenschaefer.morecustomworldgen.biomedecorator.impl;
 
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
 import net.minecraft.world.biome.source.SeedMixer;
 import net.minecraft.world.gen.SimpleRandom;
+import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 
 public class VanillaDecoratorRandomnessSource implements DecoratorRandomnessSource {
     private final long worldSeed;
@@ -15,12 +16,15 @@ public class VanillaDecoratorRandomnessSource implements DecoratorRandomnessSour
     }
 
     @Override
-    public void initSeed(long x, long y) {
+    public void initSeed(long x, long y, long z) {
         long l = this.worldSeed;
         l = SeedMixer.mixSeed(l, x);
         l = SeedMixer.mixSeed(l, y);
+        if (z != 0L) l = SeedMixer.mixSeed(l, z);
         l = SeedMixer.mixSeed(l, x);
         l = SeedMixer.mixSeed(l, y);
+        if (z != 0L) l = SeedMixer.mixSeed(l, z);
+
         this.localSeed = l;
     }
 

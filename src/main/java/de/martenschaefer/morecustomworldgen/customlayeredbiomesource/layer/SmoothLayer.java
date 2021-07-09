@@ -6,7 +6,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.
 public class SmoothLayer<T> implements CrossSamplingLayer<T> {
     public SmoothLayer() {
     }
-    
+
     @Override
     public T sample(LayerRandomnessSource context, T n, T e, T s, T w, T center) {
         boolean bl = e == w;

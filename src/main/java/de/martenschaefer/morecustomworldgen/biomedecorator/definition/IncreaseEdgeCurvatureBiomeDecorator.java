@@ -1,19 +1,24 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
 import java.util.List;
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
 import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.DiagonalCrossSamplingBiomeDecorator;
 
 public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBiomeDecorator {
-    public static final Codec<IncreaseEdgeCurvatureBiomeDecorator> CODEC = Codec.unit(IncreaseEdgeCurvatureBiomeDecorator::new);
+    public static final IncreaseEdgeCurvatureBiomeDecorator INSTANCE = new IncreaseEdgeCurvatureBiomeDecorator();
+
+    public static final Codec<IncreaseEdgeCurvatureBiomeDecorator> CODEC = Codec.unit(() -> INSTANCE);
 
     // TODO make this a lot more configurable
+
+    private IncreaseEdgeCurvatureBiomeDecorator() {
+    }
 
     @Override
     protected Codec<IncreaseEdgeCurvatureBiomeDecorator> getCodec() {

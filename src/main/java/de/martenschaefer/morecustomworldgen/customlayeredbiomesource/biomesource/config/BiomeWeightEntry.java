@@ -1,13 +1,13 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config;
 
 import java.util.Objects;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.util.collection.WeightedPicker;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
-import org.jetbrains.annotations.NotNull;
 
 public class BiomeWeightEntry extends WeightedPicker.Entry {
     public static final Codec<BiomeWeightEntry> CODEC = RecordCodecBuilder.create(instance ->
