@@ -27,7 +27,7 @@ public final class WeightEntry<T> extends WeightedPicker.Entry {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (WeightEntry<?>) obj;
+        WeightEntry that = (WeightEntry<?>) obj;
         return this.weight == that.weight &&
             Objects.equals(this.value, that.value);
     }

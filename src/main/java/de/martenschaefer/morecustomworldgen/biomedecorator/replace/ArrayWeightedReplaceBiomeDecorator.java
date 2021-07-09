@@ -35,7 +35,7 @@ public class ArrayWeightedReplaceBiomeDecorator extends BiomeDecorator {
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        var biome = parent.sample(x, y, z);
+        RegistryKey biome = parent.sample(x, y, z);
 
         for (var entry : this.biomes) {
             if (BiomeSetEntry.contains(entry.comparingBiomes(), biome))

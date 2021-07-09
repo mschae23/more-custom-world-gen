@@ -1,5 +1,6 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,14 +35,16 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final long seed;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private final Optional<BiomeSource> biomeSource;
     private final List<BiomeDecoratorEntry> decorators;
     private final Registry<Biome> biomeRegistry;
     private final BiomeSampler sampler;
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public ArrayDecoratedBiomeSource(long seed, Optional<BiomeSource> biomeSource, List<BiomeDecoratorEntry> decorators, Registry<Biome> biomeRegistry) {
         super(Stream.concat(decorators.stream().map(BiomeDecoratorEntry::decorator).flatMap(decorator -> decorator.getBiomes(biomeRegistry).stream()),
-            biomeSource.map(BiomeSource::getBiomes).map(List::stream).orElseGet(Stream::empty))
+            biomeSource.map(BiomeSource::getBiomes).stream().flatMap(Collection::stream))
             .collect(Collectors.toList()));
         this.seed = seed;
         this.biomeSource = biomeSource;
@@ -98,7 +101,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        RegistryKey<Biome> key = this.sampler.sample(biomeX, biomeY, biomeZ);
+        RegistryKey<Biome> key = this.sampler.sample(biomeX, 0, biomeZ);
 
         if (key == null) {
             throw new IllegalStateException("No biome emitted by biome decorators");

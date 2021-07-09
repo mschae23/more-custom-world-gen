@@ -48,7 +48,7 @@ public class WeightedInitBiomeDecorator extends BiomeDecorator {
                 list.add(entry.value());
         }, ArrayList::addAll);
 
-        if (biomeList.size() < 1)
+        if (biomeList.isEmpty())
             return this.defaultBiome;
         else
             return biomeList.get(0);

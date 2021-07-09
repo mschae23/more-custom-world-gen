@@ -11,6 +11,10 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTransformer {
+    public static final ScaleBiomeDecorator SIMPLE = new ScaleBiomeDecorator(ScaleType.SIMPLE);
+    public static final ScaleBiomeDecorator NORMAL = new ScaleBiomeDecorator(ScaleType.NORMAL);
+    public static final ScaleBiomeDecorator FUZZY = new ScaleBiomeDecorator(ScaleType.FUZZY);
+
     public static final Codec<ScaleBiomeDecorator> CODEC = ScaleType.CODEC.fieldOf("scale_type")
         .xmap(ScaleBiomeDecorator::new, ScaleBiomeDecorator::getType).codec();
 
@@ -106,14 +110,14 @@ public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTra
     }
 
     public static ScaleBiomeDecorator normal() {
-        return new ScaleBiomeDecorator(ScaleType.NORMAL);
+        return NORMAL;
     }
 
     public static ScaleBiomeDecorator fuzzy() {
-        return new ScaleBiomeDecorator(ScaleType.FUZZY);
+        return FUZZY;
     }
 
     public static ScaleBiomeDecorator simple() {
-        return new ScaleBiomeDecorator(ScaleType.SIMPLE);
+        return SIMPLE;
     }
 }

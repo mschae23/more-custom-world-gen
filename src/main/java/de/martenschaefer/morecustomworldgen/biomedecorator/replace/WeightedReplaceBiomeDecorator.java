@@ -58,7 +58,7 @@ public class WeightedReplaceBiomeDecorator extends BiomeDecorator {
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        var biome = parent.sample(x, y, z);
+        RegistryKey biome = parent.sample(x, y, z);
 
         if (this.ignoredBiomes.contains(biome))
             return biome;

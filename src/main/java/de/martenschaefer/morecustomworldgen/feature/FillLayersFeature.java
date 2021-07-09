@@ -19,17 +19,7 @@ public class FillLayersFeature extends Feature<FillLayersFeatureConfig> {
         
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         
-        HeightContext heightContext = new HeightContext() {
-            @Override
-            public int getMinY() {
-                return world.getBottomY();
-            }
-
-            @Override
-            public int getMaxY() {
-                return world.getTopY();
-            }
-        };
+        HeightContext heightContext = new HeightContext(context.getGenerator(), context.getWorld());
         int minY = config.getMinY().getY(heightContext);
         int maxY = config.getMaxY().getY(heightContext);
 

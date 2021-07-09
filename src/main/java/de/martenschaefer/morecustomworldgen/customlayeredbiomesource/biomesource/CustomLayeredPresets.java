@@ -513,4 +513,21 @@ public final class CustomLayeredPresets {
         ),
         VANILLA_OCEAN_BIOMES
     );
+
+    public static final ContinentConfig CONTINENTS_CONTINENTS = new ContinentConfig(10, true, 200);
+
+    public static final CustomLayeredBiomeSourceConfig CONTINENTS_OVERWORLD = new CustomLayeredBiomeSourceConfig(
+        VANILLA_CATEGORIES,
+        CONTINENTS_CONTINENTS,
+        VANILLA_CLIMATES,
+        VANILLA_BIOME_LAYOUT,
+        VANILLA_BIOME_SIZE,
+        "ocean",
+        new RiverConfig(
+            true,
+            VANILLA_RIVER_OVERRIDES,
+            BiomeKeys.RIVER
+        ),
+        VANILLA_OCEAN_BIOMES
+    );
 }

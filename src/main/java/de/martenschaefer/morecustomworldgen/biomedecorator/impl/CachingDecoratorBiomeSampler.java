@@ -15,6 +15,7 @@ public class CachingDecoratorBiomeSampler extends DecoratorBiomeSampler {
     public CachingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator, Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache, int cacheCapacity) {
         super(random, parent, decorator);
         this.cache = cache;
+        this.cache.defaultReturnValue(null);
         this.cacheCapacity = cacheCapacity;
     }
 
@@ -23,11 +24,12 @@ public class CachingDecoratorBiomeSampler extends DecoratorBiomeSampler {
     }
 
     public CachingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator) {
-        this(random, parent, decorator, 25);
+        this(random, parent, decorator, parent instanceof CachingDecoratorBiomeSampler ?
+            Math.min(1024, ((CachingDecoratorBiomeSampler) parent).getCacheCapacity()) * 4 : 25);
     }
 
     public Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> getCache() {
-        return cache;
+        return this.cache;
     }
 
     public int getCacheCapacity() {
@@ -36,7 +38,7 @@ public class CachingDecoratorBiomeSampler extends DecoratorBiomeSampler {
 
     @Override
     public RegistryKey<Biome> sample(int x, int y, int z) {
-        var pos = new BlockPos(x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
 
         synchronized (this.cache) {
             RegistryKey<Biome> cachedBiome = this.cache.getAndMoveToLast(pos);
@@ -52,6 +54,7 @@ public class CachingDecoratorBiomeSampler extends DecoratorBiomeSampler {
                         this.cache.removeFirst();
                     }
                 }
+
 
                 return biome;
             }

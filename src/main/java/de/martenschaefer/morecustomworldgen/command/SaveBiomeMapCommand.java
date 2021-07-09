@@ -31,7 +31,7 @@ public class SaveBiomeMapCommand {
     private static int execute(ServerCommandSource source) {
         BufferedImage img = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
 
-        BiomeSource biomeSource = BiomeDecoratorConfigs.getVanillaBiomeSource(source.getWorld().getSeed(), source.getRegistryManager().get(Registry.BIOME_KEY));
+        BiomeSource biomeSource = BiomeDecoratorConfigs.getVanillaBiomeSourceX(source.getWorld().getSeed(), source.getRegistryManager().get(Registry.BIOME_KEY));
 
         for (int x = -1024; x < 1024; x++) {
             if (x % 256 == 0) {
@@ -42,11 +42,21 @@ public class SaveBiomeMapCommand {
                 Biome biome = biomeSource.getBiomeForNoiseGen(x, 63, z);
 
                 img.setRGB(x + 1024, z + 1024, switch(biome.getCategory()) {
-                    case OCEAN -> 0x00ccff;
-                    case PLAINS -> 0x00ff00;
                     case TAIGA -> 0x00dd88;
-                    case DESERT -> 0xaa66;
+                    case EXTREME_HILLS -> 0xcccccc;
+                    case JUNGLE -> 0x00ff00;
+                    case MESA -> 0xffa500;
+                    case PLAINS -> 0x33dd33;
+                    case SAVANNA -> 0x55cc33;
                     case ICY -> 0xffffff;
+                    case BEACH -> 0xffffc0;
+                    case FOREST -> 0x004d0d;
+                    case OCEAN -> 0x00a0ff;
+                    case DESERT -> 0xaa66;
+                    case RIVER -> 0x0055ff;
+                    case SWAMP -> 0x334d00;
+                    case MUSHROOM -> 0x6c6378;
+                    case UNDERGROUND -> 0xaaaaaa;
                     default -> 0x000000;
                 });
             }

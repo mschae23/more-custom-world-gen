@@ -141,6 +141,11 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                 CustomLayeredPresets.VANILLA_OVERWORLD,
                 registry, Pair.of(registry, preset)));
 
+        public static final Preset CONTINENTS = new Preset(new Identifier(MoreCustomWorldGenMod.MODID, "continents"), (preset, registry, seed) ->
+            new CustomLayeredBiomeSource(seed,
+                CustomLayeredPresets.CONTINENTS_OVERWORLD,
+                registry, Pair.of(registry, preset)));
+
         public static final Preset LARGE_RIVERS = new Preset(new Identifier(MoreCustomWorldGenMod.MODID, "large_rivers"), (preset, registry, seed) ->
             new CustomLayeredBiomeSource(seed,
                 CustomLayeredPresets.LARGE_RIVERS_WORLD_TYPE,

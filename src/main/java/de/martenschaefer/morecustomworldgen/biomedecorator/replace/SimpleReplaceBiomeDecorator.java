@@ -42,7 +42,7 @@ public class SimpleReplaceBiomeDecorator extends BiomeDecorator {
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        var biome = parent.sample(x, y, z);
+        RegistryKey biome = parent.sample(x, y, z);
 
         for (SimpleReplaceBiomeEntry entry : this.biomes) {
             if (RegistryKeys.equals(biome, entry.comparingBiome()) && entry.chance().get(random))
