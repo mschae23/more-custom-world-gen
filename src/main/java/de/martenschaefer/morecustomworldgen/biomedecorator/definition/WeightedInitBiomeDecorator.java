@@ -2,6 +2,7 @@ package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -18,17 +19,19 @@ public class WeightedInitBiomeDecorator extends BiomeDecorator {
     public static final Codec<WeightedInitBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             ChanceEntry.createCodec(RegistryKeys.BIOME_CODEC, "biome").listOf().fieldOf("biomes").forGetter(WeightedInitBiomeDecorator::getBiomes),
-            RegistryKeys.BIOME_CODEC.fieldOf("default_biome").forGetter(WeightedInitBiomeDecorator::getDefaultBiome)
+            RegistryKeys.BIOME_CODEC.fieldOf("default_biome").forGetter(WeightedInitBiomeDecorator::getDefaultBiome),
+            PositionBiomeOverride.CODEC.listOf().fieldOf("position_overrides").forGetter(WeightedInitBiomeDecorator::getPositionOverrides)
         ).apply(instance, instance.stable(WeightedInitBiomeDecorator::new))
     );
 
     private final List<ChanceEntry<RegistryKey<Biome>>> biomes;
     private final RegistryKey<Biome> defaultBiome;
-    // private final List<PositionBiomeOverride> positionOverrides;
+    private final List<PositionBiomeOverride> positionOverrides;
 
-    public WeightedInitBiomeDecorator(List<ChanceEntry<RegistryKey<Biome>>> biomes, RegistryKey<Biome> defaultBiome) {
+    public WeightedInitBiomeDecorator(List<ChanceEntry<RegistryKey<Biome>>> biomes, RegistryKey<Biome> defaultBiome, List<PositionBiomeOverride> positionOverrides) {
         this.biomes = biomes;
         this.defaultBiome = defaultBiome;
+        this.positionOverrides = positionOverrides;
     }
 
     public List<ChanceEntry<RegistryKey<Biome>>> getBiomes() {
@@ -39,6 +42,10 @@ public class WeightedInitBiomeDecorator extends BiomeDecorator {
         return this.defaultBiome;
     }
 
+    public List<PositionBiomeOverride> getPositionOverrides() {
+        return this.positionOverrides;
+    }
+
     @Override
     protected Codec<WeightedInitBiomeDecorator> getCodec() {
         return CODEC;
@@ -46,6 +53,16 @@ public class WeightedInitBiomeDecorator extends BiomeDecorator {
 
     @Override
     public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+        for (var override : this.positionOverrides) {
+            if (override.x().isEmpty() && override.y().isEmpty() && override.z().isEmpty())
+                continue;
+
+            if ((override.x.isEmpty() || override.x().stream().anyMatch(overrideX -> x == overrideX))
+                && (override.y.isEmpty() || override.y().stream().anyMatch(overrideY -> y == overrideY))
+                && (override.z.isEmpty() || override.z().stream().anyMatch(overrideZ -> z == overrideZ)))
+                return override.biome();
+        }
+
         List<RegistryKey<Biome>> biomeList = this.biomes.stream().collect(ArrayList::new, (list, entry) -> {
             if (entry.chance().get(random))
                 list.add(entry.value());
@@ -68,5 +85,15 @@ public class WeightedInitBiomeDecorator extends BiomeDecorator {
         );
 
         return biomes;
+    }
+
+    public static record PositionBiomeOverride(Optional<Integer> x, Optional<Integer> y, Optional<Integer> z,
+                                               RegistryKey<Biome> biome) {
+        public static final Codec<PositionBiomeOverride> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.optionalFieldOf("x").forGetter(PositionBiomeOverride::x),
+            Codec.INT.optionalFieldOf("y").forGetter(PositionBiomeOverride::y),
+            Codec.INT.optionalFieldOf("z").forGetter(PositionBiomeOverride::z),
+            RegistryKeys.BIOME_CODEC.fieldOf("biome").forGetter(PositionBiomeOverride::biome)
+        ).apply(instance, instance.stable(PositionBiomeOverride::new)));
     }
 }

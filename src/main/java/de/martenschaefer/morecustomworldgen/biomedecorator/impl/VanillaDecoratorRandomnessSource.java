@@ -19,18 +19,18 @@ public class VanillaDecoratorRandomnessSource implements DecoratorRandomnessSour
     public void initSeed(long x, long y, long z) {
         long l = this.worldSeed;
         l = SeedMixer.mixSeed(l, x);
-        l = SeedMixer.mixSeed(l, y);
-        if (z != 0L) l = SeedMixer.mixSeed(l, z);
+        if (y != 0L) l = SeedMixer.mixSeed(l, y);
+        l = SeedMixer.mixSeed(l, z);
         l = SeedMixer.mixSeed(l, x);
-        l = SeedMixer.mixSeed(l, y);
-        if (z != 0L) l = SeedMixer.mixSeed(l, z);
+        if (y != 0L) l = SeedMixer.mixSeed(l, y);
+        l = SeedMixer.mixSeed(l, z);
 
         this.localSeed = l;
     }
 
     @Override
     public int nextInt(int bound) {
-        int i = (int) Math.floorMod(this.localSeed >> 24, bound);
+        int i = Math.floorMod(this.localSeed >> 24, bound);
         this.localSeed = SeedMixer.mixSeed(this.localSeed, this.worldSeed);
         return i;
     }

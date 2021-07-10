@@ -1,15 +1,14 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
 import java.util.List;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
-import net.minecraft.world.biome.BuiltinBiomes;
 import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.biome.source.FixedBiomeSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.biome.MoreCustomWorldGenBiomes;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeDecoratorEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.SimpleReplaceBiomeEntry;
@@ -31,9 +30,6 @@ public final class BiomeDecoratorConfigs {
     private BiomeDecoratorConfigs() {
     }
 
-    @SuppressWarnings("unused")
-    public static final BiomeSource FIXED_VOID_BIOME_SOURCE = new FixedBiomeSource(BuiltinBiomes.THE_VOID);
-
     public static final List<RegistryKey<Biome>> OCEAN_BIOMES = ImmutableList.of(
         BiomeKeys.OCEAN,
         BiomeKeys.WARM_OCEAN,
@@ -49,7 +45,15 @@ public final class BiomeDecoratorConfigs {
                 BiomeKeys.PLAINS
             )
         ),
-        BiomeKeys.OCEAN
+        BiomeKeys.OCEAN,
+        ImmutableList.of(
+            new WeightedInitBiomeDecorator.PositionBiomeOverride(
+                Optional.of(0),
+                Optional.empty(),
+                Optional.of(0),
+                BiomeKeys.PLAINS
+            )
+        )
     );
 
     public static BiomeSource getVanillaBiomeSource(long seed, Registry<Biome> biomeRegistry) {
