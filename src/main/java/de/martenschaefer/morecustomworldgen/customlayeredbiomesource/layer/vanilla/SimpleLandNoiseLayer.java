@@ -1,10 +1,10 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla;
 
-import net.minecraft.world.biome.layer.util.IdentityCoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampleContext;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.ConvertingLayer;
+import de.martenschaefer.morecustomworldgen.util.IdentityCoordinateTransformer;
 
 public enum SimpleLandNoiseLayer implements ConvertingLayer<Integer, ClimateCategory>, IdentityCoordinateTransformer {
     INSTANCE;

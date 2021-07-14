@@ -4,7 +4,6 @@ import java.util.List;
 import net.minecraft.util.collection.WeightedPicker;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.IdentityCoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BaseBiomesConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeWeightEntry;
@@ -12,6 +11,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampleContext;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.ConvertingLayer;
+import de.martenschaefer.morecustomworldgen.util.IdentityCoordinateTransformer;
 
 public class SetBaseBiomesLayer implements ConvertingLayer<RegistryKey<Biome>, ClimateCategory>, IdentityCoordinateTransformer {
     private final BaseBiomesConfig config;

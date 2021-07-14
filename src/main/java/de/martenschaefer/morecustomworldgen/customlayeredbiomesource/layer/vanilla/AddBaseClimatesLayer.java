@@ -1,13 +1,13 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla;
 
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
-import net.minecraft.world.biome.layer.util.NorthWestCoordinateTransformer;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.ContinentCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.vanilla.ClimateCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.ClimateConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampleContext;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.ConvertingLayer;
+import de.martenschaefer.morecustomworldgen.util.NorthWestCoordinateTransformer;
 
 public class AddBaseClimatesLayer implements ConvertingLayer<ClimateCategory, ContinentCategory>, NorthWestCoordinateTransformer {
     private final ClimateConfig config;

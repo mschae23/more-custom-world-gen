@@ -3,14 +3,14 @@ package de.martenschaefer.morecustomworldgen.biomedecorator.impl;
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
 import net.minecraft.world.biome.source.SeedMixer;
 import net.minecraft.world.gen.SimpleRandom;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
-public class VanillaDecoratorRandomnessSource implements DecoratorRandomnessSource {
+public class VanillaLayerRandomnessSource implements LayerRandomnessSource {
     private final long worldSeed;
     private long localSeed;
     private final PerlinNoiseSampler noiseSampler;
 
-    public VanillaDecoratorRandomnessSource(long seed, long salt) {
+    public VanillaLayerRandomnessSource(long seed, long salt) {
         this.worldSeed = addSalt(seed, salt);
         this.noiseSampler = new PerlinNoiseSampler(new SimpleRandom(seed));
     }
@@ -33,6 +33,11 @@ public class VanillaDecoratorRandomnessSource implements DecoratorRandomnessSour
         int i = Math.floorMod(this.localSeed >> 24, bound);
         this.localSeed = SeedMixer.mixSeed(this.localSeed, this.worldSeed);
         return i;
+    }
+
+    @Override
+    public long getSeed() {
+        return this.worldSeed;
     }
 
     @Override

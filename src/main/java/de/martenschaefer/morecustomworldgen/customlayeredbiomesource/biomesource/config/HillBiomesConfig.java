@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class HillBiomesConfig {

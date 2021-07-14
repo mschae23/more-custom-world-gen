@@ -1,7 +1,7 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla;
 
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.OceanCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.InitLayer;
 

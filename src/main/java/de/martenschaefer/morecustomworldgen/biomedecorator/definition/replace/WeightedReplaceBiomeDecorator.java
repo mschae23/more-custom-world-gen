@@ -11,7 +11,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import de.martenschaefer.morecustomworldgen.util.WeightEntry;
 
@@ -56,7 +56,7 @@ public class WeightedReplaceBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         RegistryKey biome = parent.sample(x, y, z);
 
         if (this.ignoredBiomes.contains(biome))

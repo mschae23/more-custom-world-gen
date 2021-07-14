@@ -8,7 +8,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
 public class NopeBiomeDecorator extends BiomeDecorator {
     public static final Codec<NopeBiomeDecorator> CODEC = Codec.unit(NopeBiomeDecorator::new);
@@ -24,7 +24,7 @@ public class NopeBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         return parent.sample(x, y, z);
     }
 }

@@ -4,20 +4,20 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
 public class DecoratorBiomeSampler implements BiomeSampler {
-    private final DecoratorRandomnessSource random;
+    private final LayerRandomnessSource random;
     private final BiomeSampler parent;
     private final BiomeDecorator decorator;
 
-    public DecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator) {
+    public DecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator) {
         this.random = random;
         this.parent = parent;
         this.decorator = decorator;
     }
 
-    public DecoratorRandomnessSource getRandom() {
+    public LayerRandomnessSource getRandom() {
         return this.random;
     }
 

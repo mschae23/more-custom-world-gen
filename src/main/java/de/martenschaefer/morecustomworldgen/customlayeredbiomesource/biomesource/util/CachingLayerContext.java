@@ -35,7 +35,8 @@ public class CachingLayerContext<T, T2, T3> implements LayerSampleContext<T, T2,
         return new CachingLayerSampler<>(this.cache, Math.min(1024, Math.max(parent.getCapacity(), sampler2.getCapacity()) * 4), operator);
     }
 
-    public void initSeed(long x, long y) {
+    @Override
+    public void initSeed(long x, long y, long z) {
         long l = this.worldSeed;
         l = SeedMixer.mixSeed(l, x);
         l = SeedMixer.mixSeed(l, y);
@@ -44,12 +45,24 @@ public class CachingLayerContext<T, T2, T3> implements LayerSampleContext<T, T2,
         this.localSeed = l;
     }
 
+    @Override
+    public void initSeed(long x, long z) {
+        this.initSeed(x, 0, z);
+    }
+
+    @Override
     public int nextInt(int bound) {
         int i = Math.floorMod(this.localSeed >> 24, bound);
         this.localSeed = SeedMixer.mixSeed(this.localSeed, this.worldSeed);
         return i;
     }
 
+    @Override
+    public long getSeed() {
+        return this.worldSeed;
+    }
+
+    @Override
     public PerlinNoiseSampler getNoiseSampler() {
         return this.noiseSampler;
     }

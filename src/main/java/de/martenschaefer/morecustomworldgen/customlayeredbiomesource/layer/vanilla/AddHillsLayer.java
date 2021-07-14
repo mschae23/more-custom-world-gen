@@ -3,12 +3,12 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vani
 import java.util.List;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
-import net.minecraft.world.biome.layer.util.NorthWestCoordinateTransformer;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.HillBiomesConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.MergingLayer;
+import de.martenschaefer.morecustomworldgen.util.NorthWestCoordinateTransformer;
 
 public class AddHillsLayer implements MergingLayer<RegistryKey<Biome>, Integer>, NorthWestCoordinateTransformer {
     private final List<BiomeCategory> categories;

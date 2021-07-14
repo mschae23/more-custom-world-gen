@@ -5,25 +5,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.MergingBiomeDecorator;
 
 public class CachingMergingDecoratorBiomeSampler extends MergingDecoratorBiomeSampler {
     private final Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache;
     private final int cacheCapacity;
 
-    public CachingMergingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, MergingBiomeDecorator decorator, Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache, int cacheCapacity) {
+    public CachingMergingDecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, MergingBiomeDecorator decorator, Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache, int cacheCapacity) {
         super(random, parent, parent2, decorator);
         this.cache = cache;
         this.cache.defaultReturnValue(null);
         this.cacheCapacity = cacheCapacity;
     }
 
-    public CachingMergingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, MergingBiomeDecorator decorator, int cacheCapacity) {
+    public CachingMergingDecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, MergingBiomeDecorator decorator, int cacheCapacity) {
         this(random, parent, parent2, decorator, new Object2ObjectLinkedOpenHashMap<>(16, 0.25F), cacheCapacity);
     }
 
-    public CachingMergingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, MergingBiomeDecorator decorator) {
+    public CachingMergingDecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, MergingBiomeDecorator decorator) {
         this(random, parent, parent2, decorator, parent instanceof CachingMergingDecoratorBiomeSampler && parent2 instanceof CachingMergingDecoratorBiomeSampler ?
             Math.min(1024, Math.max(
                 ((CachingMergingDecoratorBiomeSampler) parent).getCacheCapacity(),

@@ -6,7 +6,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
 public abstract class CachingBiomeDecorator extends BiomeDecorator {
     private final Long2ObjectLinkedOpenHashMap<RegistryKey<Biome>> cache;
@@ -26,7 +26,7 @@ public abstract class CachingBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         long pos = BlockPos.asLong(x, y, z);
 
         synchronized (this.cache) {
@@ -46,5 +46,5 @@ public abstract class CachingBiomeDecorator extends BiomeDecorator {
         }
     }
 
-    public abstract RegistryKey<Biome> getBiomeCached(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z);
+    public abstract RegistryKey<Biome> getBiomeCached(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z);
 }

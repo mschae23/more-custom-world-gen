@@ -1,6 +1,6 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanilla;
 
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.CrossSamplingLayer;
 
 public enum NoiseToRiverLayer implements CrossSamplingLayer<Integer> {

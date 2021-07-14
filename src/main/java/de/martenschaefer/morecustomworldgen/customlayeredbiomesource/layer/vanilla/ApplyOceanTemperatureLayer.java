@@ -3,13 +3,13 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vani
 import java.util.List;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.IdentityCoordinateTransformer;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.category.OceanCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.BiomeCategory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.config.OceanBiomesConfig;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.MergingLayer;
+import de.martenschaefer.morecustomworldgen.util.IdentityCoordinateTransformer;
 
 public class ApplyOceanTemperatureLayer implements MergingLayer<RegistryKey<Biome>, OceanCategory>, IdentityCoordinateTransformer {
     private final List<BiomeCategory> categories;

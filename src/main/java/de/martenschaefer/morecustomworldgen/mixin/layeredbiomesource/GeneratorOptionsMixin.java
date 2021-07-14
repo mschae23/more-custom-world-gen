@@ -28,7 +28,7 @@ public class GeneratorOptionsMixin {
         }
 
         if (properties.get("level-type").toString().trim().equalsIgnoreCase("layered")) {
-            String seed = (String) MoreObjects.firstNonNull(properties.get("level-seed"), "");
+            String seed = (String) MoreObjects.firstNonNull(properties.get("level-salt"), "");
             long l = new Random().nextLong();
             if (!seed.isEmpty()) {
                 try {
@@ -51,7 +51,7 @@ public class GeneratorOptionsMixin {
                 CustomLayeredBiomeSource.Preset.VANILLA_OVERWORLD.getBiomeSource(biomes, l), l,
                 () -> chunkGeneratorSettings.getOrThrow(ChunkGeneratorSettings.OVERWORLD)))));
         } else if (properties.get("level-type").toString().trim().equalsIgnoreCase("decorated")) {
-            String seed = (String) MoreObjects.firstNonNull(properties.get("level-seed"), "");
+            String seed = (String) MoreObjects.firstNonNull(properties.get("level-salt"), "");
             long l = new Random().nextLong();
             if (!seed.isEmpty()) {
                 try {

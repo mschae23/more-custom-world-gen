@@ -10,7 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeSetEntry;
 import de.martenschaefer.morecustomworldgen.util.Chance;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
@@ -96,7 +96,7 @@ public record BorderingReplaceBiomeEntry(boolean centerAnd, boolean negativeCent
         this(true, centerBiomeSet, borderingBiomeSetOr, chance, biome);
     }
 
-    public Optional<RegistryKey<Biome>> sample(DecoratorRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
+    public Optional<RegistryKey<Biome>> sample(LayerRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
         boolean compareAnd = true;
         boolean compareOr = true;
 

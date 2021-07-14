@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
-	id 'maven-publish'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
+    id 'maven-publish'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -11,70 +11,75 @@ version = "$project.mod_version+$project.minecraft_version"
 group = project.maven_group
 
 minecraft {
-	accessWidener = file("src/main/resources/morecustomworldgen.accesswidener")
+    accessWidener = file("src/main/resources/morecustomworldgen.accesswidener")
+}
+
+loom {
+    customManifest = "https://gist.githubusercontent.com/modmuss50/6e00baf80dcbaa42f3a2fc846b290128/raw/f035ef8f75164f56ec6352809a34841d326bae1c/1_18_experimental-snapshot-1.json"
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // To change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings fileTree(dir: "mappings", include: "**.jar")
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-registry-sync-v0:${project.fabric_registry_sync_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-command-api-v1:${project.fabric_command_api_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-command-api-v1:${project.fabric_command_api_version}"
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
+    it.options.encoding = "UTF-8"
 
     // Minecraft 1.17 (21w19a) upwards uses Java 16.
     it.options.release = 16
 }
 
 java {
-	withSourcesJar()
+    withSourcesJar()
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
 }
 
 // Configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// Add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-
-	// Select the repositories you want to publish to
-	// To publish to maven local, no extra repositories are necessary. Just use the task `publishToMavenLocal`.
-	repositories {
-		repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/mschae23/more-custom-world-gen")
-            credentials {
-                username = project.findProperty("gpr.user") ?: "mschae23"
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+    publications {
+        mavenJava(MavenPublication) {
+            // Add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
             }
         }
     }
-	}
+
+    // Select the repositories you want to publish to
+    // To publish to maven local, no extra repositories are necessary. Just use the task `publishToMavenLocal`.
+    repositories {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/mschae23/more-custom-world-gen")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: "mschae23"
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
 }

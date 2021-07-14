@@ -1,11 +1,13 @@
-package de.martenschaefer.morecustomworldgen.biomedecorator;
+package de.martenschaefer.morecustomworldgen;
 
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
 
-public interface DecoratorRandomnessSource {
+public interface LayerRandomnessSource {
     void initSeed(long x, long y, long z);
 
     int nextInt(int bound);
+
+    long getSeed();
 
     PerlinNoiseSampler getNoiseSampler();
 

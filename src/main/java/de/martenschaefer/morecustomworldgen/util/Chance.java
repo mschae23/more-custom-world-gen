@@ -5,7 +5,7 @@ import java.util.function.Function;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
 public class Chance {
     public static final Codec<Chance> INT_CODEC = Codec.INT.xmap(i -> new Chance(1, i), Chance::getDenominator);
@@ -42,7 +42,7 @@ public class Chance {
         return random.nextInt(this.denominator) < this.numerator;
     }
 
-    public boolean get(DecoratorRandomnessSource random) {
+    public boolean get(LayerRandomnessSource random) {
         return random.nextInt(this.denominator) < this.numerator;
     }
 

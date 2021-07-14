@@ -33,7 +33,7 @@ import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vanil
 public class CustomLayeredBiomeSource extends BiomeSource {
     public static final MapCodec<CustomLayeredBiomeSource> CUSTOM_CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-            Codec.LONG.fieldOf("seed").stable().forGetter(biomeSource -> biomeSource.seed),
+            Codec.LONG.fieldOf("salt").stable().forGetter(biomeSource -> biomeSource.seed),
             CustomLayeredBiomeSourceConfig.CODEC.fieldOf("config").forGetter(biomeSource -> biomeSource.config),
             RegistryLookupCodec.of(Registry.BIOME_KEY).stable().forGetter(biomeSource -> biomeSource.biomeRegistry)
         ).apply(instance, CustomLayeredBiomeSource::new));
@@ -173,7 +173,7 @@ public class CustomLayeredBiomeSource extends BiomeSource {
                         () -> DataResult.error("Unknown preset: " + identifier)), preset ->
                     DataResult.success(preset.id)).fieldOf("preset").stable().forGetter(Instance::getPreset),
                 RegistryLookupCodec.of(Registry.BIOME_KEY).stable().forGetter(Instance::getBiomeRegistry),
-                Codec.LONG.fieldOf("seed").stable().forGetter(Instance::getSeed)
+                Codec.LONG.fieldOf("salt").stable().forGetter(Instance::getSeed)
             ).apply(instance, instance.stable(Instance::new)));
         private final Preset preset;
         private final Registry<Biome> biomeRegistry;

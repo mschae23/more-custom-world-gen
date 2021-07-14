@@ -6,11 +6,11 @@ import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.CoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.ScaleType;
+import de.martenschaefer.morecustomworldgen.util.CoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTransformer {
@@ -51,7 +51,7 @@ public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTra
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         RegistryKey<Biome> biome = parent.sample(this.transformX(x), this.transformY(y), this.transformZ(z));
 
         if (this.type == ScaleType.SIMPLE)
@@ -80,7 +80,7 @@ public class ScaleBiomeDecorator extends BiomeDecorator implements CoordinateTra
         }
     }
 
-    protected <T> RegistryKey<T> sample(DecoratorRandomnessSource random, RegistryKey<T> i, RegistryKey<T> j, RegistryKey<T> k, RegistryKey<T> l) {
+    protected <T> RegistryKey<T> sample(LayerRandomnessSource random, RegistryKey<T> i, RegistryKey<T> j, RegistryKey<T> k, RegistryKey<T> l) {
         if (this.type == ScaleType.FUZZY)
             return random.choose(i, j, k, l);
 

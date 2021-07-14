@@ -11,6 +11,8 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratedBiomeSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.biome.MoreCustomWorldGenBiomes;
 import de.martenschaefer.morecustomworldgen.command.SaveBiomeMapCommand;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.CustomLayeredBiomeSource;
+import de.martenschaefer.morecustomworldgen.terrainlayered.TerrainLayeredBiomeSource;
+import de.martenschaefer.morecustomworldgen.terrainlayered.TerrainLayers;
 
 public class MoreCustomWorldGenMod implements ModInitializer {
     public static final String MODID = "morecustomworldgen";
@@ -20,11 +22,14 @@ public class MoreCustomWorldGenMod implements ModInitializer {
         Registry.register(Registry.BIOME_SOURCE, id("custom_layered"), CustomLayeredBiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, id("decorated"), DecoratedBiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, id("array_decorated"), ArrayDecoratedBiomeSource.CODEC);
+        Registry.register(Registry.BIOME_SOURCE, id("terrain_layered"), TerrainLayeredBiomeSource.CODEC);
 
         MoreCustomWorldGenDecorators.init();
         MoreCustomWorldGenFeatures.init();
         MoreCustomWorldGenBiomes.init();
+
         BiomeDecorators.register();
+        TerrainLayers.register();
 
         SaveBiomeMapCommand.init();
     }

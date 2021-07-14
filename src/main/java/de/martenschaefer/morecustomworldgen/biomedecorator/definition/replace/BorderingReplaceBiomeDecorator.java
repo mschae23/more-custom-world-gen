@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.CrossSamplingBiomeDecorator;
 
 public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator {
@@ -33,7 +33,7 @@ public class BorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator 
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
+    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
         return this.entry.sample(random, n, e, s, w, center).orElse(center);
     }
 }

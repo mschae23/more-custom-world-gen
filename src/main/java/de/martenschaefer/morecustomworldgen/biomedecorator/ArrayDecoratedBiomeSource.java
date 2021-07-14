@@ -24,7 +24,7 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FromSourceBiomeS
 public class ArrayDecoratedBiomeSource extends BiomeSource {
     public static final Codec<ArrayDecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            Codec.LONG.fieldOf("seed").forGetter(ArrayDecoratedBiomeSource::getSeed),
+            Codec.LONG.fieldOf("salt").forGetter(ArrayDecoratedBiomeSource::getSeed),
             BiomeSource.CODEC.optionalFieldOf("biome_source").forGetter(ArrayDecoratedBiomeSource::getBiomeSource),
             BiomeDecoratorEntry.CODEC.listOf().fieldOf("decorators").forGetter(ArrayDecoratedBiomeSource::getDecorators),
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(ArrayDecoratedBiomeSource::getBiomeRegistry)
@@ -117,4 +117,12 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
             }
         }
     }
+
+    @Override
+    public double[] method_37612(int x, int z) {
+        double d = 0.03D;
+        double e = 342.8571468713332D;
+        return new double[]{0.03D, 342.8571468713332D};
+    }
+
 }

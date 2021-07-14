@@ -6,24 +6,24 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
 public class CachingDecoratorBiomeSampler extends DecoratorBiomeSampler {
     private final Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache;
     private final int cacheCapacity;
 
-    public CachingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator, Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache, int cacheCapacity) {
+    public CachingDecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator, Object2ObjectLinkedOpenHashMap<BlockPos, RegistryKey<Biome>> cache, int cacheCapacity) {
         super(random, parent, decorator);
         this.cache = cache;
         this.cache.defaultReturnValue(null);
         this.cacheCapacity = cacheCapacity;
     }
 
-    public CachingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator, int cacheCapacity) {
+    public CachingDecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator, int cacheCapacity) {
         this(random, parent, decorator, new Object2ObjectLinkedOpenHashMap<>(16, 0.25F), cacheCapacity);
     }
 
-    public CachingDecoratorBiomeSampler(DecoratorRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator) {
+    public CachingDecoratorBiomeSampler(LayerRandomnessSource random, BiomeSampler parent, BiomeDecorator decorator) {
         this(random, parent, decorator, parent instanceof CachingDecoratorBiomeSampler ?
             Math.min(1024, ((CachingDecoratorBiomeSampler) parent).getCacheCapacity() * 4) : 25);
     }

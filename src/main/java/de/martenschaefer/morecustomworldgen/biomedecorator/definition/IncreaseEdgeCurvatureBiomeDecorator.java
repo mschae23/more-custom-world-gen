@@ -7,7 +7,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
-import de.martenschaefer.morecustomworldgen.biomedecorator.DecoratorRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.DiagonalCrossSamplingBiomeDecorator;
 
 public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBiomeDecorator {
@@ -26,7 +26,7 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(DecoratorRandomnessSource random, RegistryKey<Biome> sw, RegistryKey<Biome> se, RegistryKey<Biome> ne, RegistryKey<Biome> nw, RegistryKey<Biome> center) {
+    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, RegistryKey<Biome> sw, RegistryKey<Biome> se, RegistryKey<Biome> ne, RegistryKey<Biome> nw, RegistryKey<Biome> center) {
         if (BiomeKeys.FOREST.getValue().equals(center.getValue()))
             return BiomeKeys.FOREST;
 

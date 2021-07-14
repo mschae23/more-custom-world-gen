@@ -1,9 +1,9 @@
 package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type;
 
-import net.minecraft.world.biome.layer.util.CoordinateTransformer;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerFactory;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampleContext;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.biomesource.util.LayerSampler;
+import de.martenschaefer.morecustomworldgen.util.CoordinateTransformer;
 
 public interface ParentedLayer<T> extends CoordinateTransformer {
     default <R extends LayerSampler<T>> LayerFactory<T, R> create(LayerSampleContext<T, T, T, R, R, R> context, LayerFactory<T, R> parent) {

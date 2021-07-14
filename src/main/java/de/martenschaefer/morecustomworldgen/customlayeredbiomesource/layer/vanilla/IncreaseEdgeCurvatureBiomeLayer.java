@@ -3,7 +3,7 @@ package de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.vani
 import java.util.List;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.customlayeredbiomesource.layer.type.DiagonalCrossSamplingLayer;
 
 public class IncreaseEdgeCurvatureBiomeLayer implements DiagonalCrossSamplingLayer<RegistryKey<Biome>> {
