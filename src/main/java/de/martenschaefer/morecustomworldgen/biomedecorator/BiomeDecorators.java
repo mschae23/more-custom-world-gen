@@ -19,8 +19,8 @@ public final class BiomeDecorators {
     private BiomeDecorators() {
     }
 
-    private static void register(String name, Codec<? extends BiomeDecorator> codec) {
-        Registry.register(MoreCustomWorldGenRegistries.BIOME_DECORATOR, MoreCustomWorldGenMod.id(name), codec);
+    private static void register(String name, Codec<? extends ParentedBiomeDecorator> codec) {
+        Registry.register(MoreCustomWorldGenRegistries.PARENTED_BIOME_DECORATOR, MoreCustomWorldGenMod.id(name), codec);
     }
 
     private static void registerMerging(String name, Codec<? extends MergingBiomeDecorator> codec) {

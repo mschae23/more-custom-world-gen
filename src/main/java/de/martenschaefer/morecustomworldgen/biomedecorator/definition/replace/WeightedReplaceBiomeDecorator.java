@@ -1,7 +1,8 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,60 +10,41 @@ import net.minecraft.util.collection.WeightedPicker;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 import de.martenschaefer.morecustomworldgen.util.WeightEntry;
 
-public class WeightedReplaceBiomeDecorator extends BiomeDecorator {
+public record WeightedReplaceBiomeDecorator(List<RegistryKey<Biome>> ignoredBiomes,
+                                            List<RegistryKey<Biome>> whitelistedBiomes,
+                                            List<WeightEntry<BiomeContext>> biomes) implements ParentedBiomeDecorator {
     public static final Codec<WeightedReplaceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            RegistryKeys.BIOME_LIST_CODEC.fieldOf("ignored_biomes").forGetter(WeightedReplaceBiomeDecorator::getIgnoredBiomes),
-            RegistryKeys.BIOME_LIST_CODEC.fieldOf("whitelisted_biomes").orElseGet(ImmutableList::of).forGetter(WeightedReplaceBiomeDecorator::getWhitelistedBiomes),
-            WeightEntry.createCodec("biome", RegistryKeys.BIOME_CODEC).listOf().fieldOf("biomes").forGetter(WeightedReplaceBiomeDecorator::getBiomes)
+            RegistryKeys.BIOME_LIST_CODEC.fieldOf("ignored_biomes").forGetter(WeightedReplaceBiomeDecorator::ignoredBiomes),
+            RegistryKeys.BIOME_LIST_CODEC.fieldOf("whitelisted_biomes").orElseGet(ImmutableList::of).forGetter(WeightedReplaceBiomeDecorator::whitelistedBiomes),
+            WeightEntry.createCodec("biome", BiomeContext.CODEC).listOf().fieldOf("biomes").forGetter(WeightedReplaceBiomeDecorator::biomes)
         ).apply(instance, instance.stable(WeightedReplaceBiomeDecorator::new))
     );
 
-    private final List<RegistryKey<Biome>> ignoredBiomes;
-    private final List<RegistryKey<Biome>> whitelistedBiomes;
-    private final List<WeightEntry<RegistryKey<Biome>>> biomes;
-
-    public WeightedReplaceBiomeDecorator(List<RegistryKey<Biome>> ignoredBiomes, List<RegistryKey<Biome>> whitelistedBiomes, List<WeightEntry<RegistryKey<Biome>>> biomes) {
-        this.ignoredBiomes = ignoredBiomes;
-        this.whitelistedBiomes = whitelistedBiomes;
-        this.biomes = biomes;
-    }
-
-    public WeightedReplaceBiomeDecorator(List<RegistryKey<Biome>> ignoredBiomes, List<WeightEntry<RegistryKey<Biome>>> biomes) {
+    public WeightedReplaceBiomeDecorator(List<RegistryKey<Biome>> ignoredBiomes, List<WeightEntry<BiomeContext>> biomes) {
         this(ignoredBiomes, ImmutableList.of(), biomes);
     }
 
-    public List<RegistryKey<Biome>> getIgnoredBiomes() {
-        return ignoredBiomes;
-    }
-
-    public List<RegistryKey<Biome>> getWhitelistedBiomes() {
-        return whitelistedBiomes;
-    }
-
-    public List<WeightEntry<RegistryKey<Biome>>> getBiomes() {
-        return biomes;
-    }
-
     @Override
-    protected Codec<WeightedReplaceBiomeDecorator> getCodec() {
+    public Codec<WeightedReplaceBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        RegistryKey biome = parent.sample(x, y, z);
+    public BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+        BiomeContext biome = parent.sample(x, y, z);
 
-        if (this.ignoredBiomes.contains(biome))
+        if (this.ignoredBiomes.contains(biome.biome()))
             return biome;
 
-        if (!this.whitelistedBiomes.isEmpty() && !this.whitelistedBiomes.contains(biome))
+        if (!this.whitelistedBiomes.isEmpty() && !this.whitelistedBiomes.contains(biome.biome()))
             return biome;
 
         return WeightedPicker.getAt(this.biomes, random.nextInt(WeightedPicker.getWeightSum(this.biomes)))
@@ -70,7 +52,7 @@ public class WeightedReplaceBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
-        return this.biomes.stream().map(WeightEntry::value).map(biomeRegistry::get).collect(Collectors.toList());
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
+        return this.biomes.stream().map(WeightEntry::value).map(biome -> () -> biomeRegistry.get(biome.biome()));
     }
 }

@@ -1,16 +1,16 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
-import java.util.List;
-import com.google.common.collect.ImmutableList;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.DiagonalCrossSamplingBiomeDecorator;
 
-public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBiomeDecorator {
+public class IncreaseEdgeCurvatureBiomeDecorator implements DiagonalCrossSamplingBiomeDecorator {
     public static final IncreaseEdgeCurvatureBiomeDecorator INSTANCE = new IncreaseEdgeCurvatureBiomeDecorator();
 
     public static final Codec<IncreaseEdgeCurvatureBiomeDecorator> CODEC = Codec.unit(() -> INSTANCE);
@@ -21,14 +21,14 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
     }
 
     @Override
-    protected Codec<IncreaseEdgeCurvatureBiomeDecorator> getCodec() {
+    public Codec<IncreaseEdgeCurvatureBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, RegistryKey<Biome> sw, RegistryKey<Biome> se, RegistryKey<Biome> ne, RegistryKey<Biome> nw, RegistryKey<Biome> center) {
-        if (BiomeKeys.FOREST.getValue().equals(center.getValue()))
-            return BiomeKeys.FOREST;
+    public BiomeContext sample(LayerRandomnessSource random, BiomeContext sw, BiomeContext se, BiomeContext ne, BiomeContext nw, BiomeContext center) {
+        if (BiomeKeys.FOREST.getValue().equals(center.biome().getValue()))
+            return center;
 
         boolean isCenterOcean = isOcean(center);
         boolean isOceanNW = isOcean(nw);
@@ -38,26 +38,26 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
 
         if (isCenterOcean && (!isOceanNW || !isOceanNE || !isOceanSW || !isOceanSE)) {
             int n = 1;
-            RegistryKey<Biome> o = BiomeKeys.PLAINS;
+            BiomeContext context = center.withBiome(BiomeKeys.PLAINS);
 
             if (!isOceanNW && random.nextInt(n++) == 0) {
-                o = nw;
+                context = center.withBiome(nw.biome());
             }
 
             if (!isOceanNE && random.nextInt(n++) == 0) {
-                o = ne;
+                context = center.withBiome(ne.biome());
             }
 
             if (!isOceanSW && random.nextInt(n++) == 0) {
-                o = sw;
+                context = center.withBiome(sw.biome());
             }
 
             if (!isOceanSE && random.nextInt(n) == 0) {
-                o = se;
+                context = center.withBiome(se.biome());
             }
 
             if (random.nextInt(3) == 0) {
-                return o;
+                return context;
             }
 
             return center;
@@ -78,15 +78,15 @@ public class IncreaseEdgeCurvatureBiomeDecorator extends DiagonalCrossSamplingBi
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
-        return ImmutableList.of();
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
+        return Stream.empty();
     }
 
-    private static boolean isOcean(RegistryKey<Biome> id) { // TODO config for this
-        return BiomeKeys.OCEAN.getValue().equals(id.getValue())
-            || BiomeKeys.WARM_OCEAN.getValue().equals(id.getValue())
-            || BiomeKeys.LUKEWARM_OCEAN.getValue().equals(id.getValue())
-            || BiomeKeys.COLD_OCEAN.getValue().equals(id.getValue())
-            || BiomeKeys.FROZEN_OCEAN.getValue().equals(id.getValue());
+    private static boolean isOcean(BiomeContext context) { // TODO config for this
+        return BiomeKeys.OCEAN.getValue().equals(context.biome().getValue())
+            || BiomeKeys.WARM_OCEAN.getValue().equals(context.biome().getValue())
+            || BiomeKeys.LUKEWARM_OCEAN.getValue().equals(context.biome().getValue())
+            || BiomeKeys.COLD_OCEAN.getValue().equals(context.biome().getValue())
+            || BiomeKeys.FROZEN_OCEAN.getValue().equals(context.biome().getValue());
     }
 }

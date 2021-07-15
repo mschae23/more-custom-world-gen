@@ -15,7 +15,7 @@ public class VanillaBiomeDecoratorsWorldType extends GeneratorType {
 
     @Override
     protected ChunkGenerator getChunkGenerator(Registry<Biome> biomeRegistry, Registry<ChunkGeneratorSettings> chunkGeneratorSettingsRegistry, long seed) {
-        return new NoiseChunkGenerator(BiomeDecoratorConfigs.getVanillaBiomeSource(seed, biomeRegistry),
+        return new NoiseChunkGenerator(BiomeDecoratorConfigs.getCustomBiomeSource(seed, biomeRegistry),
             seed, () -> chunkGeneratorSettingsRegistry.getOrThrow(ChunkGeneratorSettings.OVERWORLD));
     }
 }

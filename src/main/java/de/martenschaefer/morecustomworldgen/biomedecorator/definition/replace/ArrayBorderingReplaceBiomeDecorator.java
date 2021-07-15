@@ -2,19 +2,21 @@ package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.CrossSamplingBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
-public class ArrayBorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecorator {
+public class ArrayBorderingReplaceBiomeDecorator implements CrossSamplingBiomeDecorator {
     public static final Codec<ArrayBorderingReplaceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             RegistryKeys.BIOME_LIST_CODEC.fieldOf("ignored_biomes").forGetter(ArrayBorderingReplaceBiomeDecorator::getIgnoredBiomes),
@@ -40,17 +42,17 @@ public class ArrayBorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecor
     }
 
     @Override
-    protected Codec<? extends BiomeDecorator> getCodec() {
+    public Codec<ArrayBorderingReplaceBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, RegistryKey<Biome> n, RegistryKey<Biome> e, RegistryKey<Biome> s, RegistryKey<Biome> w, RegistryKey<Biome> center) {
-        if (this.ignoredBiomes.contains(center.getValue()))
+    public BiomeContext sample(LayerRandomnessSource random, BiomeContext n, BiomeContext e, BiomeContext s, BiomeContext w, BiomeContext center) {
+        if (this.ignoredBiomes.contains(center.biome().getValue()))
             return center;
 
         for (var entry : this.entries) {
-            Optional<RegistryKey<Biome>> result = entry.sample(random, n, e, s, w, center);
+            Optional<BiomeContext> result = entry.sample(random, n, e, s, w, center);
 
             if (result.isPresent()) {
                 return result.get();
@@ -61,9 +63,7 @@ public class ArrayBorderingReplaceBiomeDecorator extends CrossSamplingBiomeDecor
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
-        return this.entries.stream()
-            .flatMap(entry -> entry.getBiomes(biomeRegistry).stream())
-            .collect(Collectors.toList());
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
+        return this.entries.stream().flatMap(entry -> entry.getBiomes(biomeRegistry));
     }
 }

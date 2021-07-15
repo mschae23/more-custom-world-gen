@@ -1,43 +1,35 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.collection.WeightedPicker;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.BiomeSetEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.WeightedReplaceBiomeEntry;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 
-public class ArrayWeightedReplaceBiomeDecorator extends BiomeDecorator {
+public record ArrayWeightedReplaceBiomeDecorator(
+    List<WeightedReplaceBiomeEntry> biomes) implements ParentedBiomeDecorator {
     public static final Codec<ArrayWeightedReplaceBiomeDecorator> CODEC = WeightedReplaceBiomeEntry.CODEC.listOf().fieldOf("biomes")
-        .xmap(ArrayWeightedReplaceBiomeDecorator::new, ArrayWeightedReplaceBiomeDecorator::getBiomes).codec();
-
-    private final List<WeightedReplaceBiomeEntry> biomes;
-
-    public ArrayWeightedReplaceBiomeDecorator(List<WeightedReplaceBiomeEntry> biomes) {
-        this.biomes = biomes;
-    }
-
-    public List<WeightedReplaceBiomeEntry> getBiomes() {
-        return biomes;
-    }
+        .xmap(ArrayWeightedReplaceBiomeDecorator::new, ArrayWeightedReplaceBiomeDecorator::biomes).codec();
 
     @Override
-    protected Codec<ArrayWeightedReplaceBiomeDecorator> getCodec() {
+    public Codec<ArrayWeightedReplaceBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        RegistryKey<Biome> biome = parent.sample(x, y, z);
+    public BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+        BiomeContext biome = parent.sample(x, y, z);
 
         for (var entry : this.biomes) {
-            if (BiomeSetEntry.contains(entry.comparingBiomes(), biome))
+            if (BiomeSetEntry.contains(entry.comparingBiomes(), biome.biome()))
                 return WeightedPicker.getAt(entry.biomes(), random.nextInt(WeightedPicker.getWeightSum(entry.biomes())))
                     .orElseThrow().value();
         }
@@ -46,7 +38,7 @@ public class ArrayWeightedReplaceBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
-        return this.biomes.stream().flatMap(entry -> entry.getBiomes(biomeRegistry)).collect(Collectors.toList());
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
+        return this.biomes.stream().flatMap(entry -> entry.getBiomes(biomeRegistry));
     }
 }

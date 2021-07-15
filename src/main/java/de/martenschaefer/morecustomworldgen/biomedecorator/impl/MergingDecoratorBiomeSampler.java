@@ -1,10 +1,9 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.impl;
 
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.MergingBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 
 public class MergingDecoratorBiomeSampler implements BiomeSampler {
     private final LayerRandomnessSource random;
@@ -36,7 +35,7 @@ public class MergingDecoratorBiomeSampler implements BiomeSampler {
     }
 
     @Override
-    public RegistryKey<Biome> sample(int x, int y, int z) {
-        return this.decorator.getBiome(this.random, this.parent, this.parent2, x, y, z);
+    public BiomeContext sample(int x, int y, int z) {
+        return this.decorator.sample(this.random, this.parent, this.parent2, x, y, z);
     }
 }

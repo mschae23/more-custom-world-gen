@@ -19,7 +19,7 @@ public class MoreCustomWorldGenModClient implements ClientModInitializer {
         // CUSTOM_LAYERED_WORLD_TYPE = new CustomLayeredWorldType();
         // LARGE_RIVERS_WORLD_TYPE = new LargeRiversWorldType();
         // CONTINENTS_WORLD_TYPE = new ContinentsWorldType();
-        // VANILLA_BIOME_DECORATORS_WORLD_TYPE = new VanillaBiomeDecoratorsWorldType();
+        VANILLA_BIOME_DECORATORS_WORLD_TYPE = new VanillaBiomeDecoratorsWorldType();
         TERRAIN_LAYERED_WORLD_TYPE = new TerrainLayeredWorldType();
     }
 }

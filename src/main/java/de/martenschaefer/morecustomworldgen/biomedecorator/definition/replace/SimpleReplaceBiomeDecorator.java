@@ -1,50 +1,41 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition.replace;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.SimpleReplaceBiomeEntry;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
-public class SimpleReplaceBiomeDecorator extends BiomeDecorator {
+public record SimpleReplaceBiomeDecorator(
+    List<SimpleReplaceBiomeEntry> biomes) implements ParentedBiomeDecorator {
     public static final Codec<SimpleReplaceBiomeDecorator> CODEC = SimpleReplaceBiomeEntry.CODEC.listOf().fieldOf("biomes")
-        .xmap(SimpleReplaceBiomeDecorator::new, SimpleReplaceBiomeDecorator::getBiomes).codec();
-
-    private final List<SimpleReplaceBiomeEntry> biomes;
-
-    public SimpleReplaceBiomeDecorator(List<SimpleReplaceBiomeEntry> biomes) {
-        this.biomes = biomes;
-    }
-
-    public List<SimpleReplaceBiomeEntry> getBiomes() {
-        return biomes;
-    }
+        .xmap(SimpleReplaceBiomeDecorator::new, SimpleReplaceBiomeDecorator::biomes).codec();
 
     @Override
-    protected Codec<SimpleReplaceBiomeDecorator> getCodec() {
+    public Codec<SimpleReplaceBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
         return this.biomes.stream()
             .map(SimpleReplaceBiomeEntry::biome)
-            .map(biomeRegistry::get)
-            .collect(Collectors.toList());
+            .map(biome -> () -> biomeRegistry.get(biome.biome()));
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        RegistryKey<Biome> biome = parent.sample(x, y, z);
+    public BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+        BiomeContext biome = parent.sample(x, y, z);
 
         for (SimpleReplaceBiomeEntry entry : this.biomes) {
-            if (RegistryKeys.equals(biome, entry.comparingBiome()) && entry.chance().get(random))
+            if (RegistryKeys.equals(biome.biome(), entry.comparingBiome()) && entry.chance().get(random))
                 return entry.biome();
         }
 

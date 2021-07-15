@@ -28,7 +28,7 @@ public final class TerrainLayeredPresets {
             3001L,
             new NoiseBasedBiomeTerrainLayer(
                 NoiseType.EROSION,
-                0.05f, 0.7f,
+                0.05f, 1f,
                 BiomeKeys.PLAINS
             )
         ),
@@ -36,7 +36,7 @@ public final class TerrainLayeredPresets {
             3002L,
             new NoiseBasedBiomeTerrainLayer(
                 NoiseType.EROSION,
-                -0.225f, 0.1f,
+                -0.225f, 1f,
                 BiomeKeys.GROVE
             )
         ),
@@ -44,7 +44,7 @@ public final class TerrainLayeredPresets {
             3003L,
             new NoiseBasedBiomeTerrainLayer(
                 NoiseType.EROSION,
-                -0.375f, -0.1f,
+                -0.375f, 1f,
                 BiomeKeys.SNOWY_SLOPES
             )
         ),
@@ -52,7 +52,7 @@ public final class TerrainLayeredPresets {
             3004L,
             new NoiseBasedBiomeTerrainLayer(
                 NoiseType.EROSION,
-                -1f, -0.2f,
+                -1f, 1f,
                 BiomeKeys.LOFTY_PEAKS
             )
         )
@@ -71,7 +71,7 @@ public final class TerrainLayeredPresets {
             1001L,
             new NoiseBasedBiomeTerrainLayer(
                 NoiseType.CONTINENTALNESS,
-                -0.4f, -0.17f,
+                -1f, -0.17f,
                 BiomeKeys.OCEAN
             )
         ),
@@ -79,7 +79,7 @@ public final class TerrainLayeredPresets {
             1002L,
             new NoiseBasedBiomeNestedTerrainLayer(
                 NoiseType.CONTINENTALNESS,
-                0f, 1f,
+                -1f, 1f,
                 ImmutableList.of(
                     new TerrainLayerEntry(
                         2000L,
@@ -93,7 +93,7 @@ public final class TerrainLayeredPresets {
                         2001L,
                         new NoiseBasedBiomeTerrainLayer(
                             NoiseType.WEIRDNESS,
-                            -0.05f, 0.1f,
+                            -0.05f, 1f,
                             BiomeKeys.RIVER
                         )
                     ),
@@ -101,7 +101,7 @@ public final class TerrainLayeredPresets {
                         2002L,
                         new NoiseBasedBiomeNestedTerrainLayer(
                             NoiseType.WEIRDNESS,
-                            -1f, -0.1f,
+                            -1f, 1f,
                             DEFAULT_LAND_LAYERS
                         )
                     )

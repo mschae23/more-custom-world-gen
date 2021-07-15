@@ -6,12 +6,13 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.MergingBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.terrainlayered.TerrainLayer;
 import de.martenschaefer.morecustomworldgen.util.FabricRegistryBuilderUtil;
 
 public final class MoreCustomWorldGenRegistries {
-    public static final RegistryKey<Registry<Codec<BiomeDecorator>>> BIOME_DECORATOR_KEY = RegistryKey.ofRegistry(new Identifier(MoreCustomWorldGenMod.MODID, "worldgen/biome_decorator"));
-    public static final Registry<Codec<? extends BiomeDecorator>> BIOME_DECORATOR = FabricRegistryBuilderUtil.<Codec<? extends BiomeDecorator>>createSimple(BIOME_DECORATOR_KEY.getValue())
+    public static final RegistryKey<Registry<Codec<ParentedBiomeDecorator>>> PARENTED_BIOME_DECORATOR_KEY = RegistryKey.ofRegistry(new Identifier(MoreCustomWorldGenMod.MODID, "worldgen/parented_biome_decorator"));
+    public static final Registry<Codec<? extends ParentedBiomeDecorator>> PARENTED_BIOME_DECORATOR = FabricRegistryBuilderUtil.<Codec<? extends ParentedBiomeDecorator>>createSimple(PARENTED_BIOME_DECORATOR_KEY.getValue())
         .buildAndRegister();
 
     public static final RegistryKey<Registry<Codec<BiomeDecorator>>> MERGING_BIOME_DECORATOR_KEY = RegistryKey.ofRegistry(

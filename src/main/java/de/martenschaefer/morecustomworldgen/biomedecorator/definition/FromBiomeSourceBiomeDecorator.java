@@ -1,33 +1,30 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
-import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.impl.FromSourceBiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 
-public class FromBiomeSourceBiomeDecorator extends BiomeDecorator {
+@Deprecated
+public record FromBiomeSourceBiomeDecorator(BiomeSource biomeSource,
+                                            Registry<Biome> biomeRegistry) implements ParentedBiomeDecorator {
     public static final Codec<FromBiomeSourceBiomeDecorator> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FromBiomeSourceBiomeDecorator::getBiomeSource),
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(FromBiomeSourceBiomeDecorator::getBiomeRegistry)
         ).apply(instance, instance.stable(FromBiomeSourceBiomeDecorator::new))
     );
-
-    private final BiomeSource biomeSource;
-    private final Registry<Biome> biomeRegistry;
-
-    public FromBiomeSourceBiomeDecorator(BiomeSource biomeSource, Registry<Biome> biomeRegistry) {
-        this.biomeSource = biomeSource;
-        this.biomeRegistry = biomeRegistry;
-    }
 
     public BiomeSource getBiomeSource() {
         return this.biomeSource;
@@ -38,18 +35,22 @@ public class FromBiomeSourceBiomeDecorator extends BiomeDecorator {
     }
 
     @Override
-    protected Codec<FromBiomeSourceBiomeDecorator> getCodec() {
+    public Codec<FromBiomeSourceBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
-        return RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.biomeSource.getBiomeForNoiseGen(x, y, z)));
+    public BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+        Biome biome = this.biomeSource.getBiomeForNoiseGen(x, y, z);
+        Identifier id = this.biomeRegistry.getId(biome);
+        RegistryKey<Biome> key = RegistryKey.of(Registry.BIOME_KEY, id);
+
+        return new BiomeContext(key, 0, 0, 0, 0, 0);
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
-        return this.biomeSource.getBiomes();
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
+        return this.biomeSource.getBiomes().stream().map(b -> () -> b);
     }
 
     @Override

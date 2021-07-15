@@ -1,21 +1,25 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
-import java.util.List;
 import java.util.function.Function;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.MoreCustomWorldGenRegistries;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.CachingMergingDecoratorBiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.impl.VanillaLayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 
-public abstract class MergingBiomeDecorator {
-    public static final Codec<MergingBiomeDecorator> CODEC = MoreCustomWorldGenRegistries.MERGING_BIOME_DECORATOR
+public interface MergingBiomeDecorator {
+    Codec<MergingBiomeDecorator> CODEC = MoreCustomWorldGenRegistries.MERGING_BIOME_DECORATOR
         .dispatchStable(MergingBiomeDecorator::getCodec, Function.identity());
 
-    protected abstract Codec<? extends MergingBiomeDecorator> getCodec();
+    Codec<? extends MergingBiomeDecorator> getCodec();
 
-    public abstract RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, int x, int y, int z);
+    BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, BiomeSampler parent2, int x, int y, int z);
 
-    public abstract List<Biome> getBiomes(Registry<Biome> biomeRegistry);
+    default BiomeSampler createSampler(long seed, long salt, BiomeSampler parent, BiomeSampler parent2, Registry<Biome> biomeRegistry) {
+        LayerRandomnessSource random = new VanillaLayerRandomnessSource(seed, salt);
+        return new CachingMergingDecoratorBiomeSampler(random, parent, parent2, this);
+    }
 }

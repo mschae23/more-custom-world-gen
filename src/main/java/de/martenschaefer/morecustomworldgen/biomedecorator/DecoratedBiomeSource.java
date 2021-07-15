@@ -11,14 +11,16 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 import de.martenschaefer.morecustomworldgen.biomedecorator.impl.VanillaLayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 
+@Deprecated
 public class DecoratedBiomeSource extends BiomeSource {
     public static final Codec<DecoratedBiomeSource> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.LONG.fieldOf("salt").forGetter(DecoratedBiomeSource::getSeed),
             Codec.LONG.fieldOf("salt").forGetter(DecoratedBiomeSource::getSalt),
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(DecoratedBiomeSource::getBiomeSource),
-            BiomeDecorator.CODEC.fieldOf("decorator").forGetter(DecoratedBiomeSource::getDecorator),
+            ParentedBiomeDecorator.CODEC.fieldOf("decorator").forGetter(DecoratedBiomeSource::getDecorator),
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(DecoratedBiomeSource::getBiomeRegistry)
         ).apply(instance, instance.stable(DecoratedBiomeSource::new))
     );
@@ -27,12 +29,11 @@ public class DecoratedBiomeSource extends BiomeSource {
     private final long salt;
     private final LayerRandomnessSource random;
     private final BiomeSource biomeSource;
-    private final BiomeDecorator decorator;
+    private final ParentedBiomeDecorator decorator;
     private final Registry<Biome> biomeRegistry;
 
-    public DecoratedBiomeSource(long seed, long salt, BiomeSource biomeSource, BiomeDecorator decorator, Registry<Biome> biomeRegistry) {
-        super(Stream.concat(biomeSource.getBiomes().stream(), decorator.getBiomes(biomeRegistry).stream())
-            .collect(Collectors.toList()));
+    public DecoratedBiomeSource(long seed, long salt, BiomeSource biomeSource, ParentedBiomeDecorator decorator, Registry<Biome> biomeRegistry) {
+        super(Stream.concat(biomeSource.getBiomes().stream().map(b -> () -> b), decorator.getBiomes(biomeRegistry)));
         this.seed = seed;
         this.salt = salt;
         this.random = new VanillaLayerRandomnessSource(seed, salt);
@@ -53,7 +54,7 @@ public class DecoratedBiomeSource extends BiomeSource {
         return this.biomeSource;
     }
 
-    public BiomeDecorator getDecorator() {
+    public ParentedBiomeDecorator getDecorator() {
         return this.decorator;
     }
 
@@ -73,8 +74,11 @@ public class DecoratedBiomeSource extends BiomeSource {
 
     @Override
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-        return this.biomeRegistry.get(this.decorator.getBiome(this.random,
-            (x, y, z) -> RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.biomeSource.getBiomeForNoiseGen(x, y, z))),
-            biomeX, biomeY, biomeZ));
+        BiomeContext context = this.decorator.sample(this.random,
+            (x, y, z) -> new BiomeContext(RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.biomeSource.getBiomeForNoiseGen(x, y, z))),
+                0, 0, 0, 0, 0),
+            biomeX, biomeY, biomeZ);
+
+        return this.biomeRegistry.getOrThrow(context.biome());
     }
 }

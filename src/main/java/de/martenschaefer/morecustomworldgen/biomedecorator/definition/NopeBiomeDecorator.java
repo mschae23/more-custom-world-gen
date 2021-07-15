@@ -1,30 +1,35 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator.definition;
 
-import java.util.List;
-import com.google.common.collect.ImmutableList;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeDecorator;
-import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
+import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
+import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
+import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
 
-public class NopeBiomeDecorator extends BiomeDecorator {
-    public static final Codec<NopeBiomeDecorator> CODEC = Codec.unit(NopeBiomeDecorator::new);
+public class NopeBiomeDecorator implements ParentedBiomeDecorator {
+    public static final NopeBiomeDecorator INSTANCE = new NopeBiomeDecorator();
+
+    public static final Codec<NopeBiomeDecorator> CODEC = Codec.unit(() -> INSTANCE);
+
+    private NopeBiomeDecorator() {
+    }
 
     @Override
-    protected Codec<? extends BiomeDecorator> getCodec() {
+    public Codec<NopeBiomeDecorator> getCodec() {
         return CODEC;
     }
 
     @Override
-    public List<Biome> getBiomes(Registry<Biome> biomeRegistry) {
-        return ImmutableList.of();
+    public Stream<Supplier<Biome>> getBiomes(Registry<Biome> biomeRegistry) {
+        return Stream.empty();
     }
 
     @Override
-    public RegistryKey<Biome> getBiome(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
+    public BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         return parent.sample(x, y, z);
     }
 }
