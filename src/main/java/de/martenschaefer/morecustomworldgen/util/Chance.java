@@ -7,36 +7,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.martenschaefer.morecustomworldgen.LayerRandomnessSource;
 
-public class Chance {
-    public static final Codec<Chance> INT_CODEC = Codec.INT.xmap(i -> new Chance(1, i), Chance::getDenominator);
+public record Chance(int numerator, int denominator) {
+    public static final Chance ALWAYS = simple(1);
+    public static final Chance NEVER = fraction(0, 1);
+
+    public static final Codec<Chance> INT_CODEC = Codec.INT.xmap(i -> new Chance(1, i), Chance::denominator);
 
     public static final Codec<Chance> FRACTION_CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            Codec.INT.fieldOf("numerator").forGetter(Chance::getNumerator),
-            Codec.INT.fieldOf("denominator").forGetter(Chance::getDenominator)
+            Codec.INT.fieldOf("numerator").forGetter(Chance::numerator),
+            Codec.INT.fieldOf("denominator").forGetter(Chance::denominator)
         ).apply(instance, instance.stable(Chance::new))
     );
 
     public static final Codec<Chance> CODEC = Codec.either(INT_CODEC, FRACTION_CODEC).xmap(
         either -> either.map(Function.identity(), Function.identity()),
-        chance -> chance.getNumerator() == 1 ? Either.left(chance) : Either.right(chance)
+        chance -> chance.numerator() == 1 ? Either.left(chance) : Either.right(chance)
     );
-
-    private final int numerator;
-    private final int denominator;
-
-    public Chance(int numerator, int denominator) {
-        this.numerator = numerator;
-        this.denominator = denominator;
-    }
-
-    public int getNumerator() {
-        return this.numerator;
-    }
-
-    public int getDenominator() {
-        return this.denominator;
-    }
 
     public boolean get(Random random) {
         return random.nextInt(this.denominator) < this.numerator;
@@ -55,10 +42,10 @@ public class Chance {
     }
 
     public static Chance always() {
-        return simple(1);
+        return ALWAYS;
     }
 
     public static Chance never() {
-        return fraction(0, 1);
+        return NEVER;
     }
 }

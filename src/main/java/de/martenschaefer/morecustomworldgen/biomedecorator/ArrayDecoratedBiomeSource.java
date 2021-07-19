@@ -9,9 +9,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraft.SharedConstants;
-import net.minecraft.class_6466;
 import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
@@ -31,7 +31,6 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(ArrayDecoratedBiomeSource::getBiomeRegistry)
         ).apply(instance, instance.stable(ArrayDecoratedBiomeSource::new))
     );
-    private static final class_6466 TERRAIN_SHAPER = new class_6466();
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final long seed;
@@ -78,7 +77,7 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
 
     private BiomeSampler createSampler() {
         BiomeSampler parent = this.biomeSource.<BiomeSampler>map(source -> new FromSourceBiomeSampler(source, this.biomeRegistry))
-            .orElseGet(() -> new FixedBiomeSampler(new BiomeContext(BiomeKeys.THE_VOID, 0, 0, 0, 0, 0)));
+            .orElseGet(() -> new FixedBiomeSampler(new BiomeContext(BiomeKeys.THE_VOID, 0, 0, 0, 0, 0, 0, 0)));
 
         for (BiomeDecoratorEntry entry : this.decorators) {
             parent = entry.decorator().createSampler(this.seed, entry.salt(), parent, this.biomeRegistry);
@@ -122,12 +121,17 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
     @Override
     public double[] method_37612(int x, int z) {
         BiomeContext context = this.sampler.sample(x, 0, z);
+        return new double[] { context.offset(), context.factor() };
+    }
 
-        float continentalness = (float) context.continentalness();
-        float erosion = (float) context.erosion();
-        float weirdness = (float) context.weirdness();
-        class_6466.class_6467 lv = TERRAIN_SHAPER.method_37732(continentalness, erosion, weirdness);
+    @Override
+    public void addDebugInfo(List<String> info, BlockPos pos) {
+        BiomeContext context = this.sampler.sample(pos.getX(), 0, pos.getZ());
+        // BiomeContext context3D = this.sampler.sample(pos.getX(), pos.getY(), pos.getZ());
 
-        return new double[] { TERRAIN_SHAPER.method_37734(lv), TERRAIN_SHAPER.method_37742(lv) };
+        info.add("Parameters T: " + context.temperature() + " H: " + context.humidity() + " C: " + context.continentalness()
+            + " E: " + context.erosion() + " W: " + context.weirdness() + " O: " + context.offset() + " F: " + context.factor());
+        // info.add("Parameters (3D) T: " + context3D.temperature() + " H: " + context3D.humidity() + " C: " + context3D.continentalness()
+        //     + " E: " + context3D.erosion() + " W: " + context3D.weirdness() + " O: " + context3D.offset() + " F: " + context3D.factor());
     }
 }

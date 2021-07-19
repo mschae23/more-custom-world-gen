@@ -71,7 +71,7 @@ public class GeneratorOptionsMixin {
             Registry<ChunkGeneratorSettings> chunkGeneratorSettings = dynamicRegistryManager.get(Registry.CHUNK_GENERATOR_SETTINGS_KEY);
             SimpleRegistry<DimensionOptions> dimensionOptions = DimensionType.createDefaultDimensionOptions(dimensionTypes, biomes, chunkGeneratorSettings, l);
             cir.setReturnValue(new GeneratorOptions(l, generateStructures, false, GeneratorOptions.getRegistryWithReplacedOverworldGenerator(dimensionTypes, dimensionOptions, new NoiseChunkGenerator(
-                BiomeDecoratorConfigs.getVanillaBiomeSource(l, biomes), l,
+                BiomeDecoratorConfigs.getCustomBiomeSource(l, biomes), l,
                 () -> chunkGeneratorSettings.getOrThrow(ChunkGeneratorSettings.OVERWORLD)))));
         }
     }

@@ -42,10 +42,14 @@ public record FromBiomeSourceBiomeDecorator(BiomeSource biomeSource,
     @Override
     public BiomeContext sample(LayerRandomnessSource random, BiomeSampler parent, int x, int y, int z) {
         Biome biome = this.biomeSource.getBiomeForNoiseGen(x, y, z);
+        double[] offsetAndFactor = this.biomeSource.method_37612(x, z);
         Identifier id = this.biomeRegistry.getId(biome);
         RegistryKey<Biome> key = RegistryKey.of(Registry.BIOME_KEY, id);
 
-        return new BiomeContext(key, 0, 0, 0, 0, 0);
+        double offset = offsetAndFactor[0];
+        double factor = offsetAndFactor[1];
+
+        return new BiomeContext(key, 0, 0, 0, 0, 0, offset, factor);
     }
 
     @Override

@@ -11,7 +11,6 @@ import de.martenschaefer.morecustomworldgen.biomedecorator.BiomeSampler;
 import de.martenschaefer.morecustomworldgen.biomedecorator.ParentedBiomeDecorator;
 import de.martenschaefer.morecustomworldgen.biomedecorator.config.SimpleReplaceBiomeEntry;
 import de.martenschaefer.morecustomworldgen.biomedecorator.util.BiomeContext;
-import de.martenschaefer.morecustomworldgen.util.RegistryKeys;
 
 public record SimpleReplaceBiomeDecorator(
     List<SimpleReplaceBiomeEntry> biomes) implements ParentedBiomeDecorator {
@@ -35,7 +34,7 @@ public record SimpleReplaceBiomeDecorator(
         BiomeContext biome = parent.sample(x, y, z);
 
         for (SimpleReplaceBiomeEntry entry : this.biomes) {
-            if (RegistryKeys.equals(biome.biome(), entry.comparingBiome()) && entry.chance().get(random))
+            if (entry.test(biome, random))
                 return entry.biome();
         }
 

@@ -1,6 +1,5 @@
 package de.martenschaefer.morecustomworldgen.biomedecorator;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -76,7 +75,7 @@ public class DecoratedBiomeSource extends BiomeSource {
     public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
         BiomeContext context = this.decorator.sample(this.random,
             (x, y, z) -> new BiomeContext(RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.biomeSource.getBiomeForNoiseGen(x, y, z))),
-                0, 0, 0, 0, 0),
+                0, 0, 0, 0, 0, 1, 100),
             biomeX, biomeY, biomeZ);
 
         return this.biomeRegistry.getOrThrow(context.biome());

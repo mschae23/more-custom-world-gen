@@ -30,7 +30,7 @@ public class SaveBiomeMapCommand {
     private static int execute(ServerCommandSource source) {
         BufferedImage img = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
 
-        BiomeSource biomeSource = BiomeDecoratorConfigs.getVanillaBiomeSource(source.getWorld().getSeed(), source.getRegistryManager().get(Registry.BIOME_KEY));
+        BiomeSource biomeSource = BiomeDecoratorConfigs.getCustomBiomeSource(source.getWorld().getSeed(), source.getRegistryManager().get(Registry.BIOME_KEY));
 
         for (int x = -1024; x < 1024; x++) {
             if (x % 256 == 0) {
