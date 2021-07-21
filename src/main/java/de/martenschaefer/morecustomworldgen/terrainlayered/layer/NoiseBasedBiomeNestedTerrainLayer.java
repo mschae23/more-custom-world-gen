@@ -89,7 +89,7 @@ public final class NoiseBasedBiomeNestedTerrainLayer implements TerrainLayer {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (NoiseBasedBiomeNestedTerrainLayer) obj;
+        NoiseBasedBiomeNestedTerrainLayer that = (NoiseBasedBiomeNestedTerrainLayer) obj;
         return Objects.equals(this.noiseType, that.noiseType) &&
             Float.floatToIntBits(this.min) == Float.floatToIntBits(that.min) &&
             Float.floatToIntBits(this.max) == Float.floatToIntBits(that.max) &&

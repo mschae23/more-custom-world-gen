@@ -140,9 +140,9 @@ public class TerrainLayeredBiomeSource extends BiomeSource {
         float continentalness = (float) this.sampleContinentalnessNoise(x, 0, z);
         float erosion = (float) this.sampleWeirdnessNoise(x, 0, z);
         float weirdness = (float) this.sampleErosionNoise(x, 0, z);
-        class_6466.class_6467 lv = TERRAIN_SHAPER.method_37732(continentalness, erosion, weirdness);
+        class_6466.TerrainNoisePoint lv = TERRAIN_SHAPER.createTerrainNoisePoint(continentalness, erosion, weirdness);
 
-        return new double[] { TERRAIN_SHAPER.method_37734(lv), TERRAIN_SHAPER.method_37742(lv) };
+        return new double[] { TERRAIN_SHAPER.getOffset(lv), TERRAIN_SHAPER.getFactor(lv) };
     }
 
     public double sampleContinentalnessNoise(double x, double y, double z) {

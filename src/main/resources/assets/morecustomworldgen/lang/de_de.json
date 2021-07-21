@@ -3,5 +3,6 @@
   "generator.morecustomworldgen.large_rivers": "Große Flüsse",
   "generator.morecustomworldgen.continents": "Kontinente",
   "generator.morecustomworldgen.decorated": "Vanilla Biome Decorators",
-  "generator.morecustomworldgen.terrain_layered": "Terrain Layered"
+  "generator.morecustomworldgen.terrain_layered": "Terrain Layered",
+  "generator.morecustomworldgen.test": "Test"
 }
