@@ -11,15 +11,15 @@ public final class TestSplines {
 
     public static Spline<NoisePoint> createRiverOffsetSpline(Spline<NoisePoint> landSpline) {
         return Spline.builder(NoisePoint::river).setName("offset_river")
-            .add(-1f, landSpline, 0f).addFixedValue(-0.2f, point -> landSpline.apply(point) * 0.5f, 0f)
+            .add(-1f, landSpline, 0f).add(-0.2f, point -> landSpline.apply(point) * 0.5f, 0f)
             .add(0f, -0.3f, 0f)
-            .addFixedValue(0.2f, point -> landSpline.apply(point) * 0.5f, 0f).add(1f, landSpline, 0f)
+            .add(0.2f, point -> landSpline.apply(point) * 0.5f, 0f).add(1f, landSpline, 0f)
             .build().getThis();
     }
 
     public static Spline<NoisePoint> createContinentalOffsetSpline(Spline<NoisePoint> landSpline) {
         return Spline.builder(NoisePoint::continents).setName("offset_continents").add(-1f, 0f, 0f).add(0f, 0f, 0f)
-            .addFixedValue(0.3f, point -> landSpline.apply(point) * 0.6f, 0f).add(1f, landSpline, 0f)
+            .add(0.3f, point -> landSpline.apply(point) * 0.6f, 0f).add(1f, landSpline, 0f)
             .build().getThis();
     }
 

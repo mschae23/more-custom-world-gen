@@ -31,10 +31,10 @@ public final class CustomLayeredPresets {
         new BiomeCategory(BiomeKeys.DESERT, "desert"),
         new BiomeCategory(BiomeKeys.DESERT_HILLS, "desert"),
         new BiomeCategory(BiomeKeys.DESERT_LAKES, "desert"),
-        new BiomeCategory(BiomeKeys.GRAVELLY_MOUNTAINS, "mountains"),
+        new BiomeCategory(BiomeKeys.GRAVELLY_HILLS, "mountains"),
         new BiomeCategory(BiomeKeys.MODIFIED_GRAVELLY_MOUNTAINS, "mountains"),
         new BiomeCategory(BiomeKeys.MOUNTAIN_EDGE, "mountains"),
-        new BiomeCategory(BiomeKeys.MOUNTAINS, "mountains"),
+        new BiomeCategory(BiomeKeys.EXTREME_HILLS, "mountains"),
         new BiomeCategory(BiomeKeys.WOODED_MOUNTAINS, "mountains"),
         new BiomeCategory(BiomeKeys.BIRCH_FOREST, "forest"),
         new BiomeCategory(BiomeKeys.BIRCH_FOREST_HILLS, "forest"),
@@ -112,14 +112,14 @@ public final class CustomLayeredPresets {
         ImmutableList.of( // Temperate biomes
             new BiomeWeightEntry(BiomeKeys.FOREST, 1),
             new BiomeWeightEntry(BiomeKeys.DARK_FOREST, 1),
-            new BiomeWeightEntry(BiomeKeys.MOUNTAINS, 1),
+            new BiomeWeightEntry(BiomeKeys.EXTREME_HILLS, 1),
             new BiomeWeightEntry(BiomeKeys.PLAINS, 1),
             new BiomeWeightEntry(BiomeKeys.BIRCH_FOREST, 1),
             new BiomeWeightEntry(BiomeKeys.SWAMP, 1)
         ),
         ImmutableList.of( // Cool biomes
             new BiomeWeightEntry(BiomeKeys.FOREST, 1),
-            new BiomeWeightEntry(BiomeKeys.MOUNTAINS, 1),
+            new BiomeWeightEntry(BiomeKeys.EXTREME_HILLS, 1),
             new BiomeWeightEntry(BiomeKeys.TAIGA, 1),
             new BiomeWeightEntry(BiomeKeys.PLAINS, 1)
         ),
@@ -194,7 +194,7 @@ public final class CustomLayeredPresets {
     public static final List<SpecialHillBiomeEntry> VANILLA_SPECIAL_HILL_BIOMES = ImmutableList.of(
         new SpecialHillBiomeEntry(BiomeKeys.PLAINS, BiomeKeys.SUNFLOWER_PLAINS),
         new SpecialHillBiomeEntry(BiomeKeys.DESERT, BiomeKeys.DESERT_LAKES),
-        new SpecialHillBiomeEntry(BiomeKeys.MOUNTAINS, BiomeKeys.GRAVELLY_MOUNTAINS),
+        new SpecialHillBiomeEntry(BiomeKeys.EXTREME_HILLS, BiomeKeys.GRAVELLY_HILLS),
         new SpecialHillBiomeEntry(BiomeKeys.FOREST, BiomeKeys.FLOWER_FOREST),
         new SpecialHillBiomeEntry(BiomeKeys.TAIGA, BiomeKeys.TAIGA_MOUNTAINS),
         new SpecialHillBiomeEntry(BiomeKeys.SWAMP, BiomeKeys.SWAMP_HILLS),
@@ -230,7 +230,7 @@ public final class CustomLayeredPresets {
         new HillBiomeEntry(BiomeKeys.LUKEWARM_OCEAN, BiomeKeys.DEEP_LUKEWARM_OCEAN),
         new HillBiomeEntry(BiomeKeys.COLD_OCEAN, BiomeKeys.DEEP_COLD_OCEAN),
         new HillBiomeEntry(BiomeKeys.FROZEN_RIVER, BiomeKeys.DEEP_FROZEN_OCEAN),
-        new HillBiomeEntry(BiomeKeys.MOUNTAINS, BiomeKeys.WOODED_MOUNTAINS),
+        new HillBiomeEntry(BiomeKeys.EXTREME_HILLS, BiomeKeys.WOODED_MOUNTAINS),
         new HillBiomeEntry(BiomeKeys.SAVANNA, BiomeKeys.SAVANNA_PLATEAU),
         new HillBiomeEntry("badlands_plateau", BiomeKeys.BADLANDS)
     );
@@ -319,7 +319,7 @@ public final class CustomLayeredPresets {
         ),
         new ShoreBiomesConfig.Override(
             ImmutableList.of(
-                BiomeKeys.MOUNTAINS,
+                BiomeKeys.EXTREME_HILLS,
                 BiomeKeys.WOODED_MOUNTAINS,
                 BiomeKeys.MOUNTAIN_EDGE
             ),

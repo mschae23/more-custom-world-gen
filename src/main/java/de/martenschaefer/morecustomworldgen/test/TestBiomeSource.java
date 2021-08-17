@@ -82,17 +82,17 @@ public class TestBiomeSource extends BiomeSource {
         if (hillinessNoise < 0.8f)
             return this.biomeRegistry.getOrThrow(BiomeKeys.MEADOW);
 
-        return this.biomeRegistry.getOrThrow(BiomeKeys.MOUNTAINS);
+        return this.biomeRegistry.getOrThrow(BiomeKeys.EXTREME_HILLS);
     }
 
     @Override
-    public double[] method_37612(int x, int z) {
+    public BiomeSource.TerrainParameters getTerrainParameters(int x, int z) {
         double continentsNoise = this.continentsNoiseSampler.sample(x, 0, z);
         double hillinessNoise = this.hillinessNoiseSampler.sample(x / 8.0, 0, z / 8.0);
         double riverNoise = this.riverNoiseSampler.sample(x / 8.0, 0, z / 8.0);
         TestSplines.NoisePoint point = TestSplines.createNoisePoint((float) continentsNoise, (float) hillinessNoise, (float) riverNoise);
 
-        return new double[] { TestSplines.getOffset(point), TestSplines.getFactor(point) };
+        return new BiomeSource.TerrainParameters(TestSplines.getOffset(point), TestSplines.getFactor(point), false);
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraft.SharedConstants;
-import net.minecraft.class_6466;
 import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.RegistryLookupCodec;
 import net.minecraft.util.math.MathHelper;
@@ -18,6 +17,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.MultiNoiseBiomeSource;
+import net.minecraft.world.biome.source.util.VanillaTerrainParameters;
 import net.minecraft.world.gen.ChunkRandom;
 import de.martenschaefer.morecustomworldgen.terrainlayered.impl.EmptyTerrainBiomeSampler;
 
@@ -30,7 +30,7 @@ public class TerrainLayeredBiomeSource extends BiomeSource {
         TerrainLayerEntry.CODEC.listOf().fieldOf("layers").forGetter(TerrainLayeredBiomeSource::getLayers),
         RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(TerrainLayeredBiomeSource::getBiomeRegistry)
     ).apply(instance, instance.stable(TerrainLayeredBiomeSource::new)));
-    private static final class_6466 TERRAIN_SHAPER = new class_6466();
+    private static final VanillaTerrainParameters TERRAIN_PARAMETERS = new VanillaTerrainParameters();
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final long seed;
@@ -136,17 +136,17 @@ public class TerrainLayeredBiomeSource extends BiomeSource {
     }
 
     @Override
-    public double[] method_37612(int x, int z) {
+    public BiomeSource.TerrainParameters getTerrainParameters(int x, int z) {
         float continentalness = (float) this.sampleContinentalnessNoise(x, 0, z);
         float erosion = (float) this.sampleWeirdnessNoise(x, 0, z);
         float weirdness = (float) this.sampleErosionNoise(x, 0, z);
-        class_6466.TerrainNoisePoint lv = TERRAIN_SHAPER.createTerrainNoisePoint(continentalness, erosion, weirdness);
+        VanillaTerrainParameters.TerrainNoisePoint lv = TERRAIN_PARAMETERS.createTerrainNoisePoint(continentalness, erosion, weirdness);
 
-        return new double[] { TERRAIN_SHAPER.getOffset(lv), TERRAIN_SHAPER.getFactor(lv) };
+        return new BiomeSource.TerrainParameters(TERRAIN_PARAMETERS.getOffset(lv), TERRAIN_PARAMETERS.getFactor(lv), false);
     }
 
     public double sampleContinentalnessNoise(double x, double y, double z) {
-        if (SharedConstants.field_34061) {
+        if (SharedConstants.DEBUG_BIOME_SOURCE) {
             return SharedConstants.method_37481((int) x * 4, (int) z * 4) ? -1.0D : MathHelper.fractionalPart(x / 2048.0D) * 2.0D - 1.0D;
         } else {
             return this.continentalnessNoise.sample(x, y, z);
@@ -154,7 +154,7 @@ public class TerrainLayeredBiomeSource extends BiomeSource {
     }
 
     public double sampleErosionNoise(double x, double y, double z) {
-        if (SharedConstants.field_34061) {
+        if (SharedConstants.DEBUG_BIOME_SOURCE) {
             return SharedConstants.method_37481((int) x * 4, (int) z * 4) ? -1.0D : MathHelper.fractionalPart(z / 256.0D) * 2.0D - 1.0D;
         } else {
             return this.erosionNoise.sample(x, y, z);

@@ -12,9 +12,9 @@ public record FromSourceBiomeSampler(BiomeSource source, Registry<Biome> biomeRe
     public BiomeContext sample(int x, int y, int z) {
         RegistryKey<Biome> key = RegistryKey.of(Registry.BIOME_KEY, this.biomeRegistry.getId(this.source.getBiomeForNoiseGen(x, y, z)));
 
-        double[] offsetAndFactor = this.source.method_37612(x, z);
-        double offset = offsetAndFactor[0];
-        double factor = offsetAndFactor[1];
+        BiomeSource.TerrainParameters terrainParameters = this.source.getTerrainParameters(x, z);
+        double offset = terrainParameters.offset;
+        double factor = terrainParameters.factor;
 
         return new BiomeContext(key, 0, 0, 0, 0, 0, offset, factor);
     }

@@ -78,7 +78,7 @@ public final class BiomeDecoratorConfigs {
                     new BorderingReplaceBiomeDecorator(new BorderingReplaceBiomeEntry(
                         new BiomeContextPredicate(new BiomePredicate(BiomeKeys.PLAINS), ImmutableList.of(), Chance.simple(7)),
                         Chance.always(),
-                        new BiomeContext(BiomeKeys.MOUNTAINS, 0.3, 580)
+                        new BiomeContext(BiomeKeys.EXTREME_HILLS, 0.3, 580)
                     ))
                 ),
                 new BiomeDecoratorEntry(

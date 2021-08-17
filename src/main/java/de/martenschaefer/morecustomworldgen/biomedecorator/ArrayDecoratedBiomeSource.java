@@ -119,9 +119,9 @@ public class ArrayDecoratedBiomeSource extends BiomeSource {
     }
 
     @Override
-    public double[] method_37612(int x, int z) {
+    public BiomeSource.TerrainParameters getTerrainParameters(int x, int z) {
         BiomeContext context = this.sampler.sample(x, 0, z);
-        return new double[] { context.offset(), context.factor() };
+        return new BiomeSource.TerrainParameters(context.offset(), context.factor(), false);
     }
 
     @Override
