@@ -6,6 +6,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
+import de.martenschaefer.morecustomworldgen.test.multinoise.TestMultiNoiseConfigs;
 
 public class TestWorldType extends GeneratorType {
     public TestWorldType() {
@@ -15,7 +16,7 @@ public class TestWorldType extends GeneratorType {
 
     @Override
     protected ChunkGenerator getChunkGenerator(Registry<Biome> biomeRegistry, Registry<ChunkGeneratorSettings> chunkGeneratorSettingsRegistry, long seed) {
-        return new NoiseChunkGenerator(new TestBiomeSource(seed, biomeRegistry),
+        return new NoiseChunkGenerator(TestMultiNoiseConfigs.createTestBiomeSource(biomeRegistry, seed),
             seed, () -> chunkGeneratorSettingsRegistry.getOrThrow(ChunkGeneratorSettings.OVERWORLD));
     }
 }
